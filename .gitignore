@@ -1,0 +1,18 @@
+# Secrets / environment — never committed
+.env
+.env.*
+!.env.example
+**/config/*.json
+!**/config/*.example.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.iml
+*.iws
+
+# Claude Code local settings (personal, not shared with team)
+.claude/settings.local.json
