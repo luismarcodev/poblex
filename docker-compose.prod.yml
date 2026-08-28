@@ -1,0 +1,56 @@
+# Producción/staging: VPS propio, mismo servidor que Business Manager pero
+# red y base de datos aisladas. Ver "Despliegue" en CLAUDE.md/AGENTS.md.
+#
+#   deploy/bootstrap.sh   -> una vez, en el VPS
+#   deploy/gen-env.sh     -> una vez, genera .env y .env.production
+#   deploy/deploy.sh      -> en cada actualización
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: poblex_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: poblex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: poblex
+      LANG: es_ES.utf8
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    volumes:
+      - poblex_pgdata:/var/lib/postgresql/data
+    networks: [poblex]
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: poblex_api
+    restart: unless-stopped
+    depends_on: [postgres]
+    env_file: .env.production
+    networks: [poblex]
+
+  web:
+    build:
+      context: .
+      dockerfile: backoffice/Dockerfile
+    container_name: poblex_web
+    restart: unless-stopped
+    depends_on: [api]
+    ports:
+      # Sin dominio propio todavía: se sirve por IP en puertos propios, no
+      # en 80/443 (ya ocupados por el Caddy de Business Manager en este VPS).
+      - '8090:8090'
+      - '8091:8091'
+    volumes:
+      - poblex_caddy_data:/data
+      - poblex_caddy_config:/config
+    networks: [poblex]
+
+networks:
+  poblex:
+
+volumes:
+  poblex_pgdata:
+  poblex_caddy_data:
+  poblex_caddy_config:

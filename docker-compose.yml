@@ -1,0 +1,42 @@
+# PostgreSQL de desarrollo local.
+#
+# Este fichero es SOLO para desarrollar y para poder ejecutar las consultas
+# de Prisma contra una base de datos real. Producción/staging usa
+# docker-compose.prod.yml, en un VPS propio (región UE) — ver "Despliegue"
+# en CLAUDE.md/AGENTS.md y los scripts en deploy/.
+#
+#   docker compose up -d db
+#   docker compose ps                 # esperar a que esté healthy
+#   cd backend && npm run db:migrate && npm run db:seed
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: poblex-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: poblex
+      POSTGRES_PASSWORD: poblex_local_dev
+      POSTGRES_DB: poblex
+      # Español y ordenación correcta para acentos: si la base de datos se
+      # crea con la configuración regional por defecto, "Ávila" ordena después
+      # de "Zamora" y los listados de municipios salen mal.
+      LANG: es_ES.utf8
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    ports:
+      # 5433 en el host a propósito: si ya tienes un PostgreSQL local en el
+      # 5432, esto no lo pisa ni falla al arrancar.
+      - '5433:5432'
+    volumes:
+      - poblex_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Sin healthcheck, `migrate deploy` se lanza contra un contenedor que
+      # todavía no acepta conexiones y falla con un error que no dice eso.
+      test: ['CMD-SHELL', 'pg_isready -U poblex -d poblex']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  poblex_pgdata:

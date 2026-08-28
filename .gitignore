@@ -2,8 +2,18 @@
 .env
 .env.*
 !.env.example
+*-firebase-adminsdk-*.json
 **/config/*.json
 !**/config/*.example.json
+
+# Firebase client config carries a real API key tied to one Firebase project.
+# It was found committed in the working tree (app/android/app/google-services.json)
+# before any commit had ever been made — ignoring it now so it never enters
+# history. The key still needs to be rotated/restricted in the Firebase and
+# Google Cloud consoles: this .gitignore entry does not undo its exposure so
+# far, only stops it from getting worse.
+google-services.json
+GoogleService-Info.plist
 
 # OS
 .DS_Store
@@ -16,3 +26,9 @@ Thumbs.db
 
 # Claude Code local settings (personal, not shared with team)
 .claude/settings.local.json
+
+# Generated output
+**/dist/
+**/coverage/
+*.tsbuildinfo
+**/.tool-home/

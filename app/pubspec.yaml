@@ -1,0 +1,97 @@
+name: poblex
+description: "Poblex — comunicación municipal para pueblos pequeños."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  poblex_design_system:
+    path: ../packages/poblex_design_system
+
+  cupertino_icons: ^1.0.8
+
+  # Estado, SOLO en la capa de presentación. El AsyncNotifier es el ViewModel.
+  # Sin riverpod_generator: es build_runner y está prohibido.
+  flutter_riverpod: ^2.6.1
+
+  # Inyección de dependencias de dominio y datos. Nunca lo llama un widget.
+  get_it: ^9.2.1
+
+  # Cliente HTTP contra la API propia.
+  dio: ^5.11.0
+
+  # Navegación declarativa: shell con menú lateral (drawer) y deep links de push.
+  go_router: ^17.4.0
+
+  # Igualdad en entidades, value objects y estados de UI. Única concesión
+  # permitida frente a la prohibición de generación de código.
+  equatable: ^2.1.0
+
+  # UUID del dispositivo en almacenamiento seguro (exigido por CLAUDE.md).
+  flutter_secure_storage: ^11.0.0
+  uuid: ^4.6.0
+
+  # Municipio elegido e idioma. No son secretos: no ensucian el almacén seguro.
+  shared_preferences: ^2.5.5
+
+  # Caché de imágenes de noticia. Sin ella el scroll va a tirones en un
+  # terminal de 2019, que es justo el público objetivo.
+  cached_network_image: ^3.4.1
+
+  # Visor de PDF nativo DENTRO de la app. El PRD lo marca como diferenciador
+  # explícito: la competencia delega en el visor del sistema.
+  pdfrx: ^2.4.7
+
+  # La versión la fija flutter_localizations; no la fijamos nosotros.
+  intl: any
+
+  # Recepción FCM, topics por municipio/idioma y navegación desde el aviso.
+  firebase_core: ^4.13.0
+  firebase_messaging: ^16.5.0
+
+  # Foto opcional al reportar una incidencia. Paquete oficial del equipo de
+  # Flutter, sin generación de código.
+  image_picker: ^1.2.3
+
+  # Llamar a la farmacia de guardia desde el botón visible de la ficha.
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Dobles de prueba SIN generación de código. mockito exige build_runner.
+  mocktail: ^1.0.5
+
+flutter:
+  uses-material-design: true
+
+  # Activa gen-l10n. Es la ÚNICA excepción a la prohibición de generación de
+  # código: es herramienta del propio Flutter, no build_runner, y las reglas
+  # A-53/A-54 de accesibilidad exigen que toda cadena venga de ficheros ARB.
+  generate: true
+
+  fonts:
+    # El nombre de familia debe ser exactamente este, sin espacios: es el
+    # literal de AppTypography.fontFamily.
+    #
+    # Se usa Atkinson Hyperlegible NEXT y no la clásica porque la escala
+    # tipográfica necesita w600 real. Con la clásica (solo Regular y Bold),
+    # Flutter sintetiza un falso semibold justo en etiquetas de botón y de
+    # navegación, que es lo contrario de para lo que se eligió esta fuente.
+    - family: AtkinsonHyperlegible
+      fonts:
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/AtkinsonHyperlegibleNext-Bold.ttf
+          weight: 700

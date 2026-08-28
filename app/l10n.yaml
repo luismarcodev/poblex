@@ -1,0 +1,16 @@
+# Generación de las clases de localización a partir de los ARB.
+#
+# `gen-l10n` es la única excepción permitida a la prohibición de generación de
+# código del CLAUDE.md: es herramienta del propio SDK de Flutter, no
+# build_runner, y las reglas A-53/A-54 exigen que ninguna cadena de interfaz
+# esté escrita a mano dentro de un widget.
+#
+# Nomenclatura: la interfaz habla `ca` (Dart no admite el subtag de variante
+# `valencia` en un Locale), mientras que el CONTENIDO del backend habla `va`.
+# Los dos códigos conviven a propósito y no son intercambiables — ver
+# core/l10n/app_locales.dart.
+arb-dir: lib/l10n
+template-arb-file: app_es.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false

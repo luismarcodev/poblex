@@ -13,6 +13,14 @@ backend/      NestJS + Prisma + PostgreSQL
 docs/         PRD y documentación
 ```
 
+## Estado actual
+
+- `backend/`: API funcional con los 8 contextos de fase 1 implementados (municipios, dispositivos, noticias, eventos, alertas, incidencias, encuestas, formularios, farmacias de guardia, comercios locales), verificada contra PostgreSQL real.
+- `app/`: **las 8 secciones del vecino están completas y navegables** — Noticias, Eventos, Alertas (con reglas de severidad R1-R5), Incidencias (reporte con foto), Encuestas (votación), Formularios (motor genérico de campos), Farmacias de guardia y Comercios (directorio con galería de fotos y filtro de categoría). Arquitectura Clean + MVVM/Riverpod de punta a punta en cada una: dominio, datos, presentación, inyección de dependencias y router. `flutter analyze` limpio, suite de tests en verde.
+- `backoffice/`: Flutter Web con CRUD completo de gestión para noticias, eventos, alertas, incidencias, encuestas, formularios, farmacias de guardia y comercios (con subida múltiple de fotos, reordenar y desactivar).
+
+Pendiente antes de abrir la app a vecinos reales: separar entorno de desarrollo/producción, completar el backoffice, y el recorrido de aceptación en dispositivo real (fase 8 del plan de arranque).
+
 ## Arrancar cada subproyecto
 
 ### backend/
@@ -32,7 +40,7 @@ Swagger/OpenAPI disponible en desarrollo en `/api` (ver `main.ts`).
 
 ```
 cd app
-cp config/dev.json.example config/dev.json   # rellenar API_BASE_URL
+cp config/dev.json.example config/dev.json   # rellenar POBLEX_API_BASE_URL
 flutter pub get
 flutter run --dart-define-from-file=config/dev.json
 ```
@@ -43,7 +51,7 @@ flutter run --dart-define-from-file=config/dev.json
 cd backoffice
 cp config/dev.json.example config/dev.json
 flutter pub get
-flutter run -d chrome --dart-define-from-file=config/dev.json
+flutter run -d chrome --web-port 5000 --dart-define-from-file=config/dev.json
 ```
 
 ## Convenciones rápidas

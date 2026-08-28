@@ -1,0 +1,11 @@
+{
+  "name": "Poblex · Gestión municipal",
+  "short_name": "Poblex Gestión",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#8A461E",
+  "description": "Panel municipal de Poblex",
+  "orientation": "any",
+  "prefer_related_applications": false
+}

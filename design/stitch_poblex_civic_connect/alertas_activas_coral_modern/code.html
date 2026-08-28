@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alertas Activas - Poblex Sollana</title>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#404758",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#6bd8cb",
+                        "on-tertiary-container": "#003b36",
+                        "surface-container-high": "#dce9ff",
+                        "primary-container": "#ff7043",
+                        "on-secondary-fixed": "#141b2b",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed": "#3a0a00",
+                        "error": "#ba1a1a",
+                        "background": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-container": "#5c6274",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e5eeff",
+                        "primary": "#ac3509",
+                        "on-primary-container": "#641800",
+                        "inverse-primary": "#ffb59f",
+                        "secondary": "#575e70",
+                        "primary-fixed": "#ffdbd0",
+                        "outline-variant": "#e0bfb6",
+                        "outline": "#8d7169",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#3aada0",
+                        "tertiary": "#006a61",
+                        "inverse-surface": "#213145",
+                        "secondary-fixed": "#dce2f7",
+                        "on-surface-variant": "#59413a",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#d9dff5",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb59f",
+                        "on-primary-fixed-variant": "#852300",
+                        "surface-container-highest": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#00201d",
+                        "surface-tint": "#ac3509",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-fixed": "#89f5e7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "headline-md": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "headline-lg-mobile": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "display": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "body-md": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "headline-lg": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "body-lg": ["Atkinson Hyperlegible Next", "sans-serif"],
+                        "label-md": ["Atkinson Hyperlegible Next", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Atkinson Hyperlegible Next', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400; }
+        
+        /* Glassmorphic Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .ambient-shadow {
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex flex-col md:flex-row antialiased">
+<!-- Navigation Drawer (Desktop Sidebar) -->
+<aside class="hidden md:flex flex-col h-full p-stack-md fixed inset-y-0 left-0 w-72 z-[60] bg-surface dark:bg-surface-dim shadow-2xl">
+<div class="mb-stack-lg px-2 pt-4">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed">Poblex</h1>
+</div>
+<nav class="flex-1 space-y-2 overflow-y-auto">
+<!-- Nav Items -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">newspaper</span>
+<span class="font-label-md text-label-md">News</span>
+</a>
+<!-- Active Item: Alerts -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined icon-filled">notifications_active</span>
+<span class="font-label-md text-label-md">Alerts</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="font-label-md text-label-md">Report an Issue</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">poll</span>
+<span class="font-label-md text-label-md">Surveys</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Forms</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="font-label-md text-label-md">Duty Pharmacies</span>
+</a>
+</nav>
+<div class="mt-auto pt-stack-md border-t border-black/5">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low hover:scale-[0.98] transition-all duration-100 rounded-xl" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Wrapper (accounts for fixed sidebar on desktop) -->
+<div class="flex-1 flex flex-col md:ml-72 min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full md:w-[calc(100%-18rem)] z-50 bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-xl border-b border-black/5 dark:border-white/5 shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16">
+<button class="md:hidden flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low text-primary dark:text-primary-fixed hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed hidden md:block">Sollana</h1>
+<!-- Mobile Brand Placeholder -->
+<div class="font-headline-md text-headline-md font-bold text-primary md:hidden">Sollana</div>
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low text-primary dark:text-primary-fixed hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined">person</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-24 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Page Header & Filters -->
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<div>
+<h2 class="font-display text-display font-bold text-on-surface mb-2">Alertas Activas</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Información crítica y avisos para la ciudadanía.</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-sm hover:scale-[1.02] transition-transform">
+                        Todas
+                    </button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-lowest border border-black/5 text-on-surface hover:bg-surface-container-low transition-colors">
+                        Meteorología
+                    </button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-lowest border border-black/5 text-on-surface hover:bg-surface-container-low transition-colors">
+                        Servicios
+                    </button>
+</div>
+</div>
+<!-- Alerts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Alert Card: Critical (Red) -->
+<article class="bg-surface-container-lowest rounded-[16px] border border-black/5 ambient-shadow overflow-hidden flex flex-col md:col-span-2 lg:col-span-2 relative group hover:-translate-y-1 transition-transform duration-300">
+<!-- Decorator Line -->
+<div class="absolute top-0 left-0 w-full h-2 bg-error"></div>
+<div class="p-stack-md md:p-stack-lg flex-1 flex flex-col">
+<div class="flex items-start justify-between mb-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] icon-filled">warning</span>
+                                Severidad Alta
+                            </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Hace 2 horas</span>
+</div>
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-3">
+                            Alerta Meteorológica: Fuertes Lluvias y Vientos
+                        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-2xl">
+                            Se prevén precipitaciones intensas superiores a 40mm/h y rachas de viento que podrían superar los 80km/h en toda la zona este del municipio. Se recomienda evitar desplazamientos innecesarios y asegurar objetos en balcones.
+                        </p>
+<div class="mt-auto pt-4 flex items-center justify-between border-t border-black/5">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+<span class="font-label-md text-label-md">Todo el término municipal</span>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2.5 rounded-lg hover:scale-[1.02] transition-transform duration-200">
+                                Ver detalles
+                            </button>
+</div>
+</div>
+</article>
+<!-- Alert Card: Warning (Orange) -->
+<article class="bg-surface-container-lowest rounded-[16px] border border-black/5 ambient-shadow overflow-hidden flex flex-col relative group hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute top-0 left-0 w-full h-1.5 bg-primary-container"></div>
+<div class="p-stack-md flex-1 flex flex-col">
+<div class="flex items-start justify-between mb-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] icon-filled">construction</span>
+                                Precaución
+                            </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">
+                            Corte de Agua Programado
+                        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">
+                            Debido a obras de mantenimiento en la red principal, el suministro se verá interrumpido de 09:00 a 14:00 hrs.
+                        </p>
+<div class="mt-auto pt-4 flex flex-col gap-3 border-t border-black/5">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-sm text-label-sm">Barrio Centro y Norte</span>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors w-full">
+                                Más información
+                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Alert Card: Advisory (Yellow/Low - mapped to surface-container-highest per theme limitations for specific unmapped colors) -->
+<article class="bg-surface-container-lowest rounded-[16px] border border-black/5 ambient-shadow overflow-hidden flex flex-col relative group hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute top-0 left-0 w-full h-1.5 bg-tertiary-container"></div>
+<div class="p-stack-md flex-1 flex flex-col">
+<div class="flex items-start justify-between mb-4">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tertiary-container/30 text-on-tertiary-container font-label-sm text-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] icon-filled">info</span>
+                                Informativo
+                            </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Ayer</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">
+                            Desvíos de Tráfico por Fiestas
+                        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">
+                            Calles peatonales temporales en el centro histórico durante el fin de semana. Consulte rutas alternativas.
+                        </p>
+<div class="mt-auto pt-4 flex flex-col gap-3 border-t border-black/5">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span class="font-label-sm text-label-sm">Centro Histórico</span>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors w-full">
+                                Ver mapa
+                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Empty State / All Clear (Hidden for this specific layout, but good practice) -->
+<!-- 
+            <div class="mt-12 text-center py-16 bg-surface-container-lowest rounded-[16px] border border-black/5 hidden">
+                <span class="material-symbols-outlined text-6xl text-tertiary-container mb-4">check_circle</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">No hay alertas críticas en este momento</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mt-2">La situación en el municipio es de normalidad.</p>
+            </div>
+            -->
+</main>
+</div>
+</body></html>

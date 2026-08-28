@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SOLO DEPURACIÓN. Este fichero vive en src/debug/ a propósito y no debe
+  copiarse nunca a src/main/: en release no puede haber ninguna excepción de
+  tráfico en claro.
+
+  Android 10 (API 29) y superiores bloquean HTTP sin cifrar por defecto. Sin
+  esta excepción, `curl` contra el backend local funciona y la app no, sin
+  ningún mensaje que explique por qué.
+
+    10.0.2.2  -> el host visto desde el emulador de Android
+    localhost -> ejecución en el propio equipo
+
+  Si pruebas en un móvil físico en la misma wifi, añade aquí la IP local de
+  tu ordenador (por ejemplo 192.168.1.x).
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>

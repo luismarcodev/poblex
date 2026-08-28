@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sollana - Noticias</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#404758",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#6bd8cb",
+                        "on-tertiary-container": "#003b36",
+                        "surface-container-high": "#dce9ff",
+                        "primary-container": "#ff7043",
+                        "on-secondary-fixed": "#141b2b",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed": "#3a0a00",
+                        "error": "#ba1a1a",
+                        "background": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-container": "#5c6274",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e5eeff",
+                        "primary": "#ac3509",
+                        "on-primary-container": "#641800",
+                        "inverse-primary": "#ffb59f",
+                        "secondary": "#575e70",
+                        "primary-fixed": "#ffdbd0",
+                        "outline-variant": "#e0bfb6",
+                        "outline": "#8d7169",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#3aada0",
+                        "tertiary": "#006a61",
+                        "inverse-surface": "#213145",
+                        "secondary-fixed": "#dce2f7",
+                        "on-surface-variant": "#59413a",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#d9dff5",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb59f",
+                        "on-primary-fixed-variant": "#852300",
+                        "surface-container-highest": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#00201d",
+                        "surface-tint": "#ac3509",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-fixed": "#89f5e7"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "stack-md": "16px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["Atkinson Hyperlegible Next"],
+                        "headline-md": ["Atkinson Hyperlegible Next"],
+                        "headline-lg-mobile": ["Atkinson Hyperlegible Next"],
+                        "display": ["Atkinson Hyperlegible Next"],
+                        "body-md": ["Atkinson Hyperlegible Next"],
+                        "headline-lg": ["Atkinson Hyperlegible Next"],
+                        "body-lg": ["Atkinson Hyperlegible Next"],
+                        "label-md": ["Atkinson Hyperlegible Next"]
+                    },
+                    fontSize: {
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "display": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar (Mobile/Tablet Pivot) -->
+<header class="md:hidden bg-surface/90 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-black/5 shadow-sm">
+<div class="flex justify-between items-center px-margin-mobile h-16 w-full">
+<button class="text-primary hover:scale-105 transition-transform duration-200 active:scale-95 flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high" onclick="document.getElementById('mobile-drawer').classList.toggle('-translate-x-full')">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Sollana</h1>
+<button class="text-primary hover:scale-105 transition-transform duration-200 active:scale-95 flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-[24px]">person</span>
+</button>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop & Mobile Slide-out) -->
+<nav class="fixed inset-y-0 left-0 w-72 z-[60] bg-surface shadow-2xl transition-transform duration-300 transform -translate-x-full md:translate-x-0 md:flex flex-col h-full p-stack-md border-r border-black/5" id="mobile-drawer">
+<div class="flex items-center justify-between mb-stack-lg px-2">
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary">Poblex</h2>
+<button class="md:hidden text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors" onclick="document.getElementById('mobile-drawer').classList.add('-translate-x-full')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<ul class="flex flex-col gap-1 flex-1 overflow-y-auto">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">home</span>
+                    Home
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl transition-transform duration-100 active:scale-[0.98] font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">newspaper</span>
+                    News
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+                    Alerts
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Events
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+                    Report an Issue
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">poll</span>
+                    Surveys
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">description</span>
+                    Forms
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+                    Duty Pharmacies
+                </a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Overlay for mobile drawer -->
+<div class="fixed inset-0 bg-black/20 z-[55] hidden md:hidden" id="drawer-overlay" onclick="document.getElementById('mobile-drawer').classList.add('-translate-x-full'); this.classList.add('hidden')"></div>
+<!-- Main Content Canvas -->
+<main class="md:ml-72 pt-20 md:pt-margin-desktop p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto flex flex-col gap-stack-lg min-h-screen">
+<header class="flex flex-col gap-stack-sm">
+<h1 class="font-display text-display text-on-background">Noticias</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Mantente al día con las últimas novedades, proyectos y eventos en Sollana.</p>
+</header>
+<!-- Featured News Hero -->
+<section class="relative bg-surface-container-lowest rounded-[24px] border border-black/5 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.04)] overflow-hidden group cursor-pointer">
+<div class="flex flex-col lg:flex-row h-full">
+<div class="lg:w-2/3 h-64 lg:h-auto relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="A modern architectural rendering of a newly renovated public plaza in a smart city setting. Bright, optimistic daytime lighting with clear blue skies. People are walking and relaxing. Subtle warm coral accents in the street furniture and banners. High quality, realistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkSJZL1DiucijBZa2lowhxGWS4N04yjNw_FhL8nMWrh7PPwgDiYbSu9mTuYcEjE-FcmUxzf_LcgQkDm9BW99OxfSur6bzt31PEd0kX9SXkDiPs9sj3TKyB5eRsA-8f3A6uwl44uuNiZyUuFDWKyIDO8rf932KIy__Rt0RD8bgBTMSn4fRjlCm19iXltLhRhtVFVqhFiXJI6f9J3K7jwLzXa3GKY1Gjisaa3LrZkroN_OIHF43ofxcR"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary font-label-sm text-label-sm px-3 py-1.5 rounded-full uppercase tracking-wider font-bold shadow-md">
+                        Destacado
+                    </div>
+</div>
+<div class="p-6 lg:p-10 lg:w-1/3 flex flex-col justify-center bg-surface-container-lowest relative z-10">
+<div class="flex items-center gap-2 mb-3">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Obras Públicas</span>
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">12 Oct 2023</span>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4 group-hover:text-primary transition-colors">Renovación integral de la Plaza Mayor de Sollana</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">El proyecto de modernización incluye nuevas zonas verdes, iluminación inteligente y espacios accesibles para todos los ciudadanos. Las obras comenzarán el próximo mes.</p>
+<div class="mt-auto flex items-center gap-2 text-primary font-label-md text-label-md group-hover:gap-3 transition-all">
+                        Leer artículo completo
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Filters -->
+<section class="flex flex-wrap items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-5 py-2.5 rounded-full font-bold transition-transform active:scale-95 shadow-sm border border-primary/10 whitespace-nowrap">Todas</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md px-5 py-2.5 rounded-full transition-all active:scale-95 border border-black/5 whitespace-nowrap">Salud</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md px-5 py-2.5 rounded-full transition-all active:scale-95 border border-black/5 whitespace-nowrap">Obras</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md px-5 py-2.5 rounded-full transition-all active:scale-95 border border-black/5 whitespace-nowrap">Cultura</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md px-5 py-2.5 rounded-full transition-all active:scale-95 border border-black/5 whitespace-nowrap">Educación</button>
+</section>
+<!-- News Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest rounded-[20px] border border-black/5 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group cursor-pointer hover:-translate-y-1 transition-all duration-300">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern municipal health clinic interior. Clean, bright, and airy with large windows. A high-end minimalist aesthetic with subtle coral brand accents on the signage. Professional and welcoming mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtisJzHiSOQ-j0aLc_Wk8BA_kePx0UcNM8v9HV_3JKIpGxpDpBNS_qHBxbg8Qez_AZMi6CKj7v86NnrMENA6R4TPqyLRdCUjT0B8eGv1F7yiBIkHNFfZNbG7tQmQfFeoaejSI2PMLuLSNJnUcdEIujJP1tQbILt3QMMiGZF9TETabVpNAoFGrwlwFin30lAfgN4y530om2-_P_cwAQw0gOJvCBJ2QrR-TQM2x413ZUh1LLriHCIwSK"/>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Salud</div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-2">10 Oct 2023</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-primary transition-colors">Nueva campaña de vacunación local</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-4 flex-1">El centro de salud municipal anuncia las fechas para la campaña de vacunación de otoño, con horarios ampliados para mayor comodidad.</p>
+<div class="flex items-center gap-1 text-primary font-label-md text-label-md mt-auto">
+                        Leer más <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest rounded-[20px] border border-black/5 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group cursor-pointer hover:-translate-y-1 transition-all duration-300">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant outdoor cultural festival in a modern city square. Minimalist stage design. People enjoying the sunny day. High-quality bright lighting with optimistic warm tones. Clear atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfGweAgbiFWj4-7926TpOdY-8c0sqJAfLwwGKnKCobR-g6hplESnHALUnDhuz6FdEC8K930_JPCaygfKz2xnAnmPna9QwDcL12dQAzz9pGpBOZWUNbgZnm1Y4U_HF7WLYeJTfy4AxsJ8dZtb9r_UXLFaqX1U-QfH7KRNTT0sF8k4Ue7bR1XN9i-usnXCilg7kUwheHLlvoz-SpU47R9y-S3_y1zN7OinGru9kFbrCHxbjoWgLHriPv"/>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Cultura</div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-2">08 Oct 2023</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-primary transition-colors">Festival de Artes Escénicas este fin de semana</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-4 flex-1">Disfruta de teatro, danza y música en vivo en las diferentes plazas de la ciudad. Entrada gratuita para todos los residentes.</p>
+<div class="flex items-center gap-1 text-primary font-label-md text-label-md mt-auto">
+                        Leer más <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest rounded-[20px] border border-black/5 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group cursor-pointer hover:-translate-y-1 transition-all duration-300">
+<div class="h-48 overflow-hidden relative flex items-center justify-center bg-surface-container-high">
+<!-- Text-only card alternative for variety -->
+<span class="material-symbols-outlined text-[64px] text-secondary/20">school</span>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Educación</div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-2">05 Oct 2023</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-primary transition-colors">Abierto el plazo de becas municipales</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-4 flex-1">El Ayuntamiento destina 50.000€ en ayudas para material escolar y transporte para estudiantes del municipio.</p>
+<div class="flex items-center gap-1 text-primary font-label-md text-label-md mt-auto">
+                        Leer más <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</div>
+</div>
+</article>
+</section>
+<div class="flex justify-center mt-stack-md pb-stack-lg">
+<button class="bg-surface-container-low text-primary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-surface-container-high transition-colors border border-primary/20 flex items-center gap-2">
+                Cargar más noticias
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</main>
+<script>
+        // Simple drawer overlay toggle logic for mobile
+        const drawer = document.getElementById('mobile-drawer');
+        const overlay = document.getElementById('drawer-overlay');
+
+        // Observe class changes on drawer to toggle overlay
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "class") {
+                    const classList = mutation.target.classList;
+                    if (!classList.contains('-translate-x-full')) {
+                        overlay.classList.remove('hidden');
+                    } else {
+                        overlay.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        observer.observe(drawer, {
+            attributes: true
+        });
+    </script>
+</body></html>

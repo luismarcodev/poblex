@@ -1,0 +1,664 @@
+// Prisma schema — Poblex backend
+// Convención: campos del modelo en camelCase (idiomático TS), columnas Postgres
+// reales en snake_case vía @map/@@map. IDs uuid autogenerados por Prisma
+// (@default(uuid())) salvo Device.id, que lo aporta el cliente en X-Device-Id.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Municipios y gestores
+// ---------------------------------------------------------------------------
+
+model Municipality {
+  id            String   @id @default(uuid()) @db.Uuid
+  slug          String   @unique
+  name          String
+  province      String
+  aemetZoneCode String?  @map("aemet_zone_code")
+  primaryColor  String?  @map("primary_color")
+  logoUrl       String?  @map("logo_url")
+  languages     String[]
+  active        Boolean  @default(true)
+
+  managers       ManagerMunicipality[]
+  devices        Device[]
+  news           News[]
+  events         Event[]
+  alerts         Alert[]
+  incidents      Incident[]
+  surveys        Survey[]
+  forms          Form[]
+  dutyPharmacies DutyPharmacy[]
+  businesses     Business[]
+  socialAccounts SocialAccount[]
+  facilities     Facility[]
+
+  @@map("municipalities")
+}
+
+model Manager {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  displayName  String   @map("display_name")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  municipalities           ManagerMunicipality[]
+  refreshTokens            ManagerRefreshToken[]
+  passwordResets           ManagerPasswordReset[]
+  createdAlerts            Alert[]                   @relation("AlertCreatedBy")
+  updatedAlerts            Alert[]                   @relation("AlertUpdatedBy")
+  incidentStatusChanges    IncidentStatusHistory[]
+  connectedSocialAccounts  SocialAccount[]
+  reservationCancellations ReservationCancellation[]
+
+  @@map("managers")
+}
+
+// N:M — un gestor puede llevar varios municipios (ej. secretario-interventor
+// que atiende varios ayuntamientos agrupados), y publicar en varios de golpe.
+model ManagerMunicipality {
+  managerId      String @map("manager_id") @db.Uuid
+  municipalityId String @map("municipality_id") @db.Uuid
+
+  manager      Manager      @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  municipality Municipality @relation(fields: [municipalityId], references: [id], onDelete: Cascade)
+
+  @@id([managerId, municipalityId])
+  @@map("manager_municipalities")
+}
+
+// Añadida sobre el modelo de datos del CLAUDE.md: necesaria para el flujo de
+// refresh token rotado (revoked_at) exigido por las reglas de autenticación.
+// Nunca se guarda el token en claro, solo su hash.
+model ManagerRefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  managerId String    @map("manager_id") @db.Uuid
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  manager Manager @relation(fields: [managerId], references: [id], onDelete: Cascade)
+
+  @@index([managerId])
+  @@map("manager_refresh_tokens")
+}
+
+// Añadida sobre el modelo de datos del CLAUDE.md: soporta el flujo de
+// recuperación de contraseña (token de un solo uso, caducidad 1h).
+model ManagerPasswordReset {
+  id        String    @id @default(uuid()) @db.Uuid
+  managerId String    @map("manager_id") @db.Uuid
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  manager Manager @relation(fields: [managerId], references: [id], onDelete: Cascade)
+
+  @@index([managerId])
+  @@map("manager_password_resets")
+}
+
+// id aportado por el cliente vía X-Device-Id, no autogenerado.
+// Un dispositivo = un municipio en fase 1 (FK simple, no tabla intermedia).
+model Device {
+  id             String   @id @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  fcmToken       String?  @map("fcm_token")
+  locale         String
+  createdAt      DateTime @default(now()) @map("created_at")
+  lastSeenAt     DateTime @default(now()) @map("last_seen_at")
+
+  municipality Municipality @relation(fields: [municipalityId], references: [id])
+
+  @@index([municipalityId])
+  @@map("devices")
+}
+
+// ---------------------------------------------------------------------------
+// Noticias — única slice implementada de punta a punta en este scaffold
+// ---------------------------------------------------------------------------
+
+model News {
+  id             String   @id @default(uuid()) @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  title          Json
+  body           Json
+  imageUrl       String?  @map("image_url")
+  // Etiqueta abierta ("general", "sanitaria", ...), no enum — el propio
+  // CLAUDE.md la describe como categoría abierta, sin lista cerrada todavía.
+  category       String
+  pinned         Boolean  @default(false)
+  publishedAt    DateTime @map("published_at")
+  archived       Boolean  @default(false)
+
+  // Origen cuando la noticia proviene de una publicación importada de redes
+  // sociales (contexto `social`) — null en el resto de noticias, creadas por
+  // el gestor. Sirve para deduplicar el sondeo entrante y para que la
+  // publicación saliente nunca reenvíe una noticia a la misma plataforma de
+  // la que vino (evita el bucle publicar → detectar → republicar).
+  sourcePlatform       SocialPlatform? @map("source_platform")
+  sourceExternalPostId String?         @map("source_external_post_id")
+
+  municipality       Municipality        @relation(fields: [municipalityId], references: [id])
+  attachments        NewsAttachment[]
+  socialPublications SocialPublication[]
+
+  // Dedup del sondeo entrante: Postgres no colisiona filas con NULL en
+  // columnas de un unique compuesto, así que las noticias orgánicas
+  // (sourcePlatform/sourceExternalPostId ambos null) no se ven afectadas.
+  @@unique([municipalityId, sourcePlatform, sourceExternalPostId])
+  @@index([municipalityId, archived, publishedAt])
+  @@map("news")
+}
+
+model NewsAttachment {
+  id       String @id @default(uuid()) @db.Uuid
+  newsId   String @map("news_id") @db.Uuid
+  name     String
+  url      String
+  mimeType String @map("mime_type")
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@index([newsId])
+  @@map("news_attachments")
+}
+
+// ---------------------------------------------------------------------------
+// Eventos — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+model Event {
+  id             String    @id @default(uuid()) @db.Uuid
+  municipalityId String    @map("municipality_id") @db.Uuid
+  title          Json
+  description    Json
+  startAt        DateTime  @map("start_at")
+  endAt          DateTime? @map("end_at")
+  locationName   String?   @map("location_name")
+  lat            Float?
+  lng            Float?
+  category       String
+
+  municipality Municipality    @relation(fields: [municipalityId], references: [id])
+  reminders    EventReminder[]
+
+  @@index([municipalityId, startAt])
+  @@map("events")
+}
+
+model EventReminder {
+  id       String    @id @default(uuid()) @db.Uuid
+  eventId  String    @map("event_id") @db.Uuid
+  // Referencia lógica a Device.id, sin FK dura: un recordatorio debe
+  // sobrevivir a la limpieza semanal de dispositivos inactivos.
+  deviceId String    @map("device_id") @db.Uuid
+  remindAt DateTime  @map("remind_at")
+  sentAt   DateTime? @map("sent_at")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, deviceId])
+  @@index([deviceId])
+  @@map("event_reminders")
+}
+
+// ---------------------------------------------------------------------------
+// Alertas — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+enum AlertSource {
+  AEMET
+  MANUAL
+}
+
+enum AlertSeverity {
+  AMARILLO
+  NARANJA
+  ROJO
+}
+
+// Clasificación por tipo de fenómeno, independiente de la severidad — nunca
+// sustituye a AlertSeverity, se le añade. AEMET siempre METEOROLOGICO
+// (fijado en sync-aemet-alerts.use-case.ts); incendio/evacuación son siempre
+// de origen manual, no hay integración automática de datos de incendio.
+enum AlertPhenomenonType {
+  INCENDIO
+  EVACUACION
+  METEOROLOGICO
+  SANITARIO
+  OTRO
+}
+
+model Alert {
+  id             String              @id @default(uuid()) @db.Uuid
+  municipalityId String              @map("municipality_id") @db.Uuid
+  source         AlertSource
+  severity       AlertSeverity
+  phenomenonType AlertPhenomenonType @default(METEOROLOGICO) @map("phenomenon_type")
+  phenomenon     String
+  body           Json
+  startAt        DateTime            @map("start_at")
+  endAt          DateTime?           @map("end_at")
+  aemetId        String?             @map("aemet_id")
+  // Auditoría obligatoria: quién publicó/modificó. Null si origen AEMET.
+  createdBy      String?             @map("created_by") @db.Uuid
+  updatedBy      String?             @map("updated_by") @db.Uuid
+  createdAt      DateTime            @default(now()) @map("created_at")
+
+  municipality     Municipality @relation(fields: [municipalityId], references: [id])
+  createdByManager Manager?     @relation("AlertCreatedBy", fields: [createdBy], references: [id])
+  updatedByManager Manager?     @relation("AlertUpdatedBy", fields: [updatedBy], references: [id])
+
+  @@unique([municipalityId, aemetId])
+  @@index([municipalityId, severity])
+  @@map("alerts")
+}
+
+// ---------------------------------------------------------------------------
+// Incidencias — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+enum IncidentStatus {
+  RECIBIDO
+  EN_CURSO
+  RESUELTA
+}
+
+model Incident {
+  id             String         @id @default(uuid()) @db.Uuid
+  municipalityId String         @map("municipality_id") @db.Uuid
+  // Referencia lógica a Device.id, sin FK dura (ver EventReminder).
+  deviceId       String         @map("device_id") @db.Uuid
+  category       String
+  description    String
+  photoUrl       String?        @map("photo_url")
+  photoPurgeAt   DateTime?      @map("photo_purge_at")
+  lat            Float?
+  lng            Float?
+  status         IncidentStatus @default(RECIBIDO)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  municipality  Municipality            @relation(fields: [municipalityId], references: [id])
+  statusHistory IncidentStatusHistory[]
+
+  @@index([municipalityId, status])
+  @@index([deviceId])
+  @@map("incidents")
+}
+
+model IncidentStatusHistory {
+  id         String         @id @default(uuid()) @db.Uuid
+  incidentId String         @map("incident_id") @db.Uuid
+  status     IncidentStatus
+  note       String?
+  changedAt  DateTime       @default(now()) @map("changed_at")
+  changedBy  String         @map("changed_by") @db.Uuid
+
+  incident         Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  changedByManager Manager  @relation(fields: [changedBy], references: [id])
+
+  @@index([incidentId])
+  @@map("incident_status_history")
+}
+
+// ---------------------------------------------------------------------------
+// Encuestas — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+model Survey {
+  id             String   @id @default(uuid()) @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  question       Json
+  closesAt       DateTime @map("closes_at")
+  resultsVisible Boolean  @default(true) @map("results_visible")
+
+  municipality Municipality   @relation(fields: [municipalityId], references: [id])
+  options      SurveyOption[]
+  votes        SurveyVote[]
+
+  @@index([municipalityId, closesAt])
+  @@map("surveys")
+}
+
+model SurveyOption {
+  id       String @id @default(uuid()) @db.Uuid
+  surveyId String @map("survey_id") @db.Uuid
+  label    Json
+  position Int
+
+  survey Survey       @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  votes  SurveyVote[]
+
+  @@index([surveyId])
+  @@map("survey_options")
+}
+
+model SurveyVote {
+  id       String   @id @default(uuid()) @db.Uuid
+  surveyId String   @map("survey_id") @db.Uuid
+  optionId String   @map("option_id") @db.Uuid
+  // Referencia lógica a Device.id, sin FK dura (ver EventReminder).
+  deviceId String   @map("device_id") @db.Uuid
+  votedAt  DateTime @default(now()) @map("voted_at")
+
+  survey Survey       @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  option SurveyOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyId, deviceId])
+  @@index([optionId])
+  @@map("survey_votes")
+}
+
+// ---------------------------------------------------------------------------
+// Formularios — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+enum FormFieldType {
+  TEXT
+  NUMBER
+  SELECT
+  DATE
+  BOOLEAN
+}
+
+model Form {
+  id             String    @id @default(uuid()) @db.Uuid
+  municipalityId String    @map("municipality_id") @db.Uuid
+  title          Json
+  description    Json
+  deadline       DateTime?
+
+  municipality Municipality     @relation(fields: [municipalityId], references: [id])
+  fields       FormField[]
+  submissions  FormSubmission[]
+
+  @@index([municipalityId, deadline])
+  @@map("forms")
+}
+
+model FormField {
+  id       String        @id @default(uuid()) @db.Uuid
+  formId   String        @map("form_id") @db.Uuid
+  key      String
+  label    Json
+  type     FormFieldType
+  required Boolean       @default(false)
+  options  Json?
+  position Int
+
+  form    Form         @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers FormAnswer[]
+
+  @@index([formId])
+  @@map("form_fields")
+}
+
+model FormSubmission {
+  id          String   @id @default(uuid()) @db.Uuid
+  formId      String   @map("form_id") @db.Uuid
+  // Referencia lógica a Device.id, sin FK dura (ver EventReminder).
+  deviceId    String   @map("device_id") @db.Uuid
+  submittedAt DateTime @default(now()) @map("submitted_at")
+
+  form    Form         @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers FormAnswer[]
+
+  // Un envío por dispositivo y formulario. El CLAUDE.md lo exige ("la
+  // restricción UNIQUE impide el duplicado") y sin esto el censo de un evento
+  // se infla repitiendo la misma petición.
+  @@unique([formId, deviceId])
+  @@index([formId])
+  @@index([deviceId])
+  @@map("form_submissions")
+}
+
+model FormAnswer {
+  id           String @id @default(uuid()) @db.Uuid
+  submissionId String @map("submission_id") @db.Uuid
+  fieldId      String @map("field_id") @db.Uuid
+  // Serializado genéricamente como texto; el `type` de FormField gobierna
+  // la interpretación (número, fecha ISO, "true"/"false", ...).
+  value        String
+
+  submission FormSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  field      FormField      @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, fieldId])
+  @@index([submissionId])
+  @@map("form_answers")
+}
+
+// ---------------------------------------------------------------------------
+// Farmacias de guardia — fuera de la slice implementada, solo esquema
+// ---------------------------------------------------------------------------
+
+model DutyPharmacy {
+  id             String   @id @default(uuid()) @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  date           DateTime @db.Date
+  pharmacyName   String   @map("pharmacy_name")
+  address        String
+  phone          String
+  schedule       String
+
+  municipality Municipality @relation(fields: [municipalityId], references: [id])
+
+  @@unique([municipalityId, date])
+  @@map("duty_pharmacies")
+}
+
+// ---------------------------------------------------------------------------
+// Comercios locales — directorio de lectura para el vecino, alta solo gestor
+// ---------------------------------------------------------------------------
+
+model Business {
+  id             String   @id @default(uuid()) @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  name           String
+  // Slug abierto, mismo patrón que News.category — sin enum cerrado.
+  category       String
+  // {es?, va?} vía LocalizedText. Null si no hay descripción, nunca {}.
+  description    Json?
+  address        String?
+  phone          String?
+  email          String?
+  website        String?
+  schedule       String?
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  municipality Municipality    @relation(fields: [municipalityId], references: [id])
+  photos       BusinessPhoto[]
+
+  @@index([municipalityId, active, category])
+  @@map("businesses")
+}
+
+model BusinessPhoto {
+  id         String @id @default(uuid()) @db.Uuid
+  businessId String @map("business_id") @db.Uuid
+  url        String
+  mimeType   String @map("mime_type")
+  // Orden de galería. Sin @@unique: se reescribe entero al reordenar, un
+  // constraint solo complicaría el PATCH con colisiones transitorias.
+  position   Int
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+  @@map("business_photos")
+}
+
+// ---------------------------------------------------------------------------
+// Reservas de instalaciones municipales (pistas, salas, barbacoas...) — el
+// vecino reserva un hueco libre y queda confirmado al instante, sin
+// aprobación del gestor (mismo modelo que MyTurn, la app externa que Sollana
+// usa hoy). El gestor solo puede cancelar después.
+// ---------------------------------------------------------------------------
+
+model Facility {
+  id                    String   @id @default(uuid()) @db.Uuid
+  municipalityId        String   @map("municipality_id") @db.Uuid
+  name                  Json
+  description           Json?
+  // Etiqueta abierta, mismo patrón que Business.category — sin lista
+  // cerrada: el gestor escribe "Pádel", "Tenis", "Barbacoa"... y la app
+  // agrupa/filtra por el texto tal cual, igual que ya hace con comercios.
+  category              String
+  imageUrl              String?  @map("image_url")
+  slotDurationMinutes   Int      @map("slot_duration_minutes")
+  // {"mon": {"open":"09:00","close":"22:00"} | null, "tue": ..., ...}
+  // null = cerrado ese día. Un único rango por día: cubre pistas e
+  // instalaciones reales sin modelar horario partido en esta versión.
+  openingHours          Json     @map("opening_hours")
+  // {es?, va?}, texto libre informativo ("3€/hora, se abona en el
+  // ayuntamiento"). Sin importe estructurado ni cobro: no hay pasarela de
+  // pago en esta versión, ver CLAUDE.md.
+  feeNote               Json?    @map("fee_note")
+  maxAdvanceBookingDays Int      @default(14) @map("max_advance_booking_days")
+  active                Boolean  @default(true)
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  municipality             Municipality              @relation(fields: [municipalityId], references: [id])
+  reservations             Reservation[]
+  reservationCancellations ReservationCancellation[]
+
+  @@index([municipalityId, active])
+  @@map("facilities")
+}
+
+model Reservation {
+  id             String   @id @default(uuid()) @db.Uuid
+  facilityId     String   @map("facility_id") @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  // Referencia lógica a Device.id, sin FK dura — mismo criterio que
+  // event_reminders/incidents: una reserva sobrevive a la limpieza semanal
+  // de dispositivos inactivos.
+  deviceId       String   @map("device_id") @db.Uuid
+  slotStart      DateTime @map("slot_start")
+  slotEnd        DateTime @map("slot_end")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  facility Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+
+  // La garantía real contra doble reserva. Cancelar BORRA la fila (ver
+  // ReservationCancellation) en vez de marcar un estado: si quedara aquí con
+  // status=CANCELADA, esta combinación seguiría "ocupando" la restricción
+  // para siempre y el hueco no volvería a estar disponible nunca. Postgres
+  // soporta índices únicos parciales (WHERE status = ...) pero Prisma no los
+  // expresa de forma declarativa, así que se evita esa vía.
+  @@unique([facilityId, slotStart])
+  @@index([municipalityId, facilityId, slotStart])
+  @@index([deviceId])
+  @@map("reservations")
+}
+
+// Registro de solo-inserción, mismo espíritu que IncidentStatusHistory ("el
+// historial no se corrige, se amplía"): la reserva viva se borra al
+// cancelarse para liberar el hueco, pero queda constancia aquí de quién y
+// cuándo canceló.
+model ReservationCancellation {
+  id             String   @id @default(uuid()) @db.Uuid
+  facilityId     String   @map("facility_id") @db.Uuid
+  municipalityId String   @map("municipality_id") @db.Uuid
+  deviceId       String   @map("device_id") @db.Uuid
+  slotStart      DateTime @map("slot_start")
+  slotEnd        DateTime @map("slot_end")
+  // Null si canceló el propio vecino; id del gestor si canceló el ayuntamiento.
+  cancelledBy    String?  @map("cancelled_by") @db.Uuid
+  cancelNote     String?  @map("cancel_note")
+  cancelledAt    DateTime @default(now()) @map("cancelled_at")
+
+  facility           Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  cancelledByManager Manager? @relation(fields: [cancelledBy], references: [id])
+
+  @@index([facilityId])
+  @@index([deviceId])
+  @@map("reservation_cancellations")
+}
+
+// ---------------------------------------------------------------------------
+// Redes sociales — unifica publicación saliente (noticia → Instagram/
+// Facebook) y entrante (post detectado → noticia autopublicada)
+// ---------------------------------------------------------------------------
+
+enum SocialPlatform {
+  INSTAGRAM
+  FACEBOOK
+}
+
+enum SocialAccountStatus {
+  CONNECTED
+  EXPIRED
+  ERROR
+  REVOKED
+}
+
+enum SocialPublicationStatus {
+  PENDING
+  CONTAINER_CREATED
+  PROCESSING
+  PUBLISHED
+  FAILED
+}
+
+// Cuenta de Instagram/Facebook conectada por UN municipio vía OAuth propio
+// (Facebook Login for Business) — no una cuenta única de Poblex. El access
+// token nunca se guarda en claro, ver TokenCipherService.
+model SocialAccount {
+  id                   String              @id @default(uuid()) @db.Uuid
+  municipalityId       String              @map("municipality_id") @db.Uuid
+  platform             SocialPlatform
+  externalAccountId    String              @map("external_account_id")
+  accountName          String              @map("account_name")
+  accessTokenCipher    Bytes               @map("access_token_cipher")
+  tokenExpiresAt       DateTime            @map("token_expires_at")
+  status               SocialAccountStatus @default(CONNECTED)
+  lastErrorMessage     String?             @map("last_error_message")
+  connectedByManagerId String              @map("connected_by_manager_id") @db.Uuid
+  connectedAt          DateTime            @default(now()) @map("connected_at")
+  lastRefreshedAt      DateTime?           @map("last_refreshed_at")
+
+  municipality       Municipality @relation(fields: [municipalityId], references: [id])
+  connectedByManager Manager      @relation(fields: [connectedByManagerId], references: [id])
+
+  // Una cuenta conectada por plataforma y municipio en v1.
+  @@unique([municipalityId, platform])
+  @@map("social_accounts")
+}
+
+// Un intento de publicación saliente por noticia y plataforma. Instagram
+// exige un flujo asíncrono de dos pasos (crear contenedor → sondear →
+// publicar); Facebook es prácticamente síncrono. Fila reintentable, no se
+// crea una nueva por cada intento.
+model SocialPublication {
+  id             String                  @id @default(uuid()) @db.Uuid
+  newsId         String                  @map("news_id") @db.Uuid
+  municipalityId String                  @map("municipality_id") @db.Uuid
+  platform       SocialPlatform
+  status         SocialPublicationStatus @default(PENDING)
+  containerId    String?                 @map("container_id")
+  externalPostId String?                 @map("external_post_id")
+  lastError      String?                 @map("last_error")
+  attemptCount   Int                     @default(0) @map("attempt_count")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  publishedAt    DateTime?               @map("published_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, platform])
+  @@index([platform, status])
+  @@map("social_publications")
+}

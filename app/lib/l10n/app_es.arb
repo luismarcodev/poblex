@@ -1,0 +1,373 @@
+{
+  "@@locale": "es",
+
+  "appName": "Poblex",
+  "@appName": { "description": "Nombre de la aplicación." },
+
+  "navHome": "Inicio",
+  "@navHome": { "description": "Barra inferior: panel de inicio. Una sola palabra (§8.10)." },
+  "navNews": "Noticias",
+  "navEvents": "Eventos",
+  "navAlerts": "Alertas",
+  "navMore": "Más",
+
+  "sectionNews": "Noticias",
+  "sectionEvents": "Eventos",
+  "sectionAlerts": "Alertas",
+  "sectionIncidents": "Incidencias",
+  "sectionSurveys": "Encuestas",
+  "sectionForms": "Formularios",
+  "sectionPharmacies": "Farmacias de guardia",
+  "sectionBusinesses": "Comercios",
+  "sectionFacilities": "Instalaciones",
+  "sectionSettings": "Ajustes",
+
+  "sectionNewsDescription": "Bandos y avisos del ayuntamiento",
+  "sectionEventsDescription": "Agenda de actos del municipio",
+  "sectionAlertsDescription": "Avisos meteorológicos y de emergencia",
+  "sectionIncidentsDescription": "Comunica un problema en la vía pública",
+  "sectionSurveysDescription": "Consultas del ayuntamiento a los vecinos",
+  "sectionFormsDescription": "Inscripciones y solicitudes",
+  "sectionPharmaciesDescription": "Qué farmacia está de guardia",
+  "sectionBusinessesDescription": "Directorio de comercios locales",
+  "sectionFacilitiesDescription": "Reserva pistas y espacios municipales",
+
+  "homeGreeting": "Tu ayuntamiento, en el móvil",
+  "@homeGreeting": { "description": "Encabezado del panel de inicio." },
+  "homeSectionsHeading": "Secciones",
+  "homeLatestNewsHeading": "Últimas noticias",
+  "homeSeeAll": "Ver todas",
+
+  "drawerTitle": "Secciones",
+  "drawerOpenLabel": "Abrir el menú de secciones",
+  "drawerAccessibilityStatement": "Declaración de accesibilidad",
+
+  "newsTabCurrent": "Actualidad",
+  "@newsTabCurrent": { "description": "Pestaña de noticias vigentes." },
+  "newsTabArchive": "Histórico",
+  "@newsTabArchive": { "description": "Noticias archivadas automáticamente a los 90 días." },
+  "newsPinnedLabel": "Destacada",
+  "newsReadFullArticle": "Leer artículo completo",
+  "newsAttachmentsCount": "{count, plural, =0{Sin adjuntos} =1{1 adjunto} other{{count} adjuntos}}",
+  "@newsAttachmentsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "newsSemanticCard": "Noticia. {title}. Categoría {category}. Publicada el {date}. {attachments}.",
+  "@newsSemanticCard": {
+    "description": "Etiqueta agrupada de la tarjeta de noticia (A-27).",
+    "placeholders": {
+      "title": { "type": "String" },
+      "category": { "type": "String" },
+      "date": { "type": "String" },
+      "attachments": { "type": "String" }
+    }
+  },
+  "newsFilterAll": "Todas",
+  "newsFilterSemantic": "Filtrar por {category}",
+  "@newsFilterSemantic": {
+    "placeholders": { "category": { "type": "String" } }
+  },
+  "newsDetailAttachmentsHeading": "Adjuntos",
+  "newsDetailTitle": "Noticia",
+  "newsImageSemantic": "Imagen de la noticia: {title}",
+  "@newsImageSemantic": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "newsOpenAttachment": "Abrir {name}",
+  "@newsOpenAttachment": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "categoryGeneral": "General",
+  "categorySanitaria": "Sanitaria",
+  "categoryServicios": "Servicios",
+  "categoryCultural": "Cultural",
+  "categoryDeportes": "Deportes",
+  "categoryFiestas": "Fiestas",
+  "categoryObras": "Obras",
+
+  "languageFallbackNotice": "Solo disponible en castellano",
+  "@languageFallbackNotice": { "description": "Chip discreto cuando falta la traducción (A-55). Nunca se deja hueco vacío." },
+  "languageFallbackNoticeValencian": "Solo disponible en valenciano",
+
+  "loadingNews": "Cargando noticias",
+  "@loadingNews": { "description": "Anuncio del contenedor de skeletons (A-31)." },
+
+  "emptyNewsTitle": "Todavía no hay noticias",
+  "emptyNewsBody": "El ayuntamiento las irá publicando aquí.",
+  "emptyNewsArchiveTitle": "El histórico está vacío",
+  "emptyNewsArchiveBody": "Aquí aparecerán las noticias con más de 90 días.",
+  "emptyByFilterTitle": "No hay nada en esta categoría",
+  "emptyByFilterBody": "Prueba a quitar el filtro para ver todo el contenido.",
+  "emptyClearFilters": "Quitar filtros",
+  "loadMore": "Cargar más",
+
+  "errorNetworkTitle": "No hay conexión",
+  "errorNetworkBody": "Comprueba que tienes datos o wifi y vuelve a intentarlo.",
+  "errorTimeoutTitle": "La conexión va muy lenta",
+  "errorTimeoutBody": "No hemos podido cargar el contenido a tiempo. Inténtalo de nuevo.",
+  "errorServerTitle": "El servicio no responde",
+  "errorServerBody": "Es un problema nuestro, no tuyo. Vuelve a intentarlo en unos minutos.",
+  "errorNotFoundTitle": "Este contenido ya no está",
+  "errorNotFoundBody": "Puede que el ayuntamiento lo haya retirado.",
+  "errorTooManyRequestsTitle": "Demasiados intentos",
+  "errorTooManyRequestsBody": "Has hecho muchas peticiones seguidas. Espera unos minutos antes de volver a probar.",
+  "errorUnknownTitle": "Algo ha fallado",
+  "errorUnknownBody": "No hemos podido completar la operación. Inténtalo de nuevo.",
+  "errorConflictTitle": "Ya no está libre",
+  "errorConflictBody": "Alguien se te ha adelantado. Elige otra opción.",
+  "errorRetry": "Reintentar",
+  "errorRetrySemantic": "Reintentar cargar {section}",
+  "@errorRetrySemantic": {
+    "placeholders": { "section": { "type": "String" } }
+  },
+
+  "onboardingMunicipalityTitle": "¿De qué pueblo eres?",
+  "onboardingMunicipalityBody": "Elige tu municipio para recibir sus avisos. Podrás cambiarlo cuando quieras desde Ajustes.",
+  "onboardingMunicipalityContinue": "Continuar",
+  "onboardingSearchHint": "Buscar municipio...",
+  "onboardingSearchClear": "Borrar búsqueda",
+  "onboardingSearchNoResults": "No hay ningún municipio que coincida con \"{query}\"",
+  "@onboardingSearchNoResults": {
+    "placeholders": { "query": { "type": "String" } }
+  },
+  "onboardingMunicipalitySemantic": "Escudo de {name}",
+  "@onboardingMunicipalitySemantic": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "onboardingNoMunicipalitiesTitle": "Todavía no hay municipios disponibles",
+  "onboardingNoMunicipalitiesBody": "Estamos incorporando ayuntamientos. Vuelve a intentarlo más tarde.",
+
+  "comingSoonTitle": "Esta sección llega pronto",
+  "comingSoonBody": "Estamos terminándola. Mientras tanto puedes consultar las noticias del municipio.",
+
+  "settingsLanguageTitle": "Idioma",
+  "settingsLanguageBody": "El idioma elegido se aplica también a las notificaciones.",
+  "settingsLanguageChanged": "Idioma actualizado",
+  "languageSpanish": "Castellano",
+  "languageValencian": "Valenciano",
+
+  "notificationNewNews": "Nueva noticia del ayuntamiento",
+  "notificationOpen": "Abrir",
+  "notificationOtherMunicipality": "Esta noticia pertenece a otro municipio y ya no está disponible en tu selección actual.",
+
+  "pdfViewerSemantic": "Documento PDF: {name}",
+  "@pdfViewerSemantic": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pdfUnavailableTitle": "No podemos abrir este documento",
+  "pdfUnavailableBody": "Vuelve a la noticia y abre el adjunto de nuevo.",
+  "pdfBackToNews": "Volver a noticias",
+
+  "eventDetailTitle": "Evento",
+  "eventPastLabel": "Finalizado",
+  "eventReminderSet": "Avisarme",
+  "eventReminderActive": "Aviso activado",
+  "eventReminderCancelled": "Recordatorio cancelado",
+  "eventReminderConfirmed": "Te avisaremos antes del evento",
+  "eventReminderSemantic": "{active, select, true{Recordatorio activado para {title}} other{Avisarme de {title}}}",
+  "@eventReminderSemantic": {
+    "placeholders": {
+      "active": { "type": "String" },
+      "title": { "type": "String" }
+    }
+  },
+  "eventPickReminderTitle": "¿Cuándo quieres que te avisemos?",
+  "eventLocationSemantic": "Lugar: {location}",
+  "@eventLocationSemantic": {
+    "placeholders": { "location": { "type": "String" } }
+  },
+  "emptyEventsTitle": "Todavía no hay eventos",
+  "emptyEventsBody": "El ayuntamiento los irá añadiendo aquí.",
+
+  "alertDetailTitle": "Aviso",
+  "alertSeverityLabel": "{severity, select, rojo{Aviso rojo · Nivel 3} naranja{Aviso naranja · Nivel 2} other{Aviso amarillo · Nivel 1}}",
+  "@alertSeverityLabel": {
+    "description": "Etiqueta visible del chip de severidad (§8.5). Nunca solo el color.",
+    "placeholders": { "severity": { "type": "String" } }
+  },
+  "alertSourceAemet": "Fuente: AEMET",
+  "alertSourceManual": "Fuente: Ayuntamiento",
+  "alertActiveLabel": "Vigente",
+  "alertExpiredLabel": "Finalizada",
+  "alertForcedNotice": "Este aviso se muestra aunque tengas las alertas silenciadas",
+  "alertIncludeExpiredLabel": "Ver avisos finalizados",
+  "alertPhenomenonTypeLabel": "{type, select, incendio{Incendio} evacuacion{Evacuación} sanitario{Sanitario} meteorologico{Meteorológico} other{Otro}}",
+  "@alertPhenomenonTypeLabel": {
+    "description": "Etiqueta del chip de tipo de fenómeno, junto al de severidad. Clasificación aparte de la severidad.",
+    "placeholders": { "type": { "type": "String" } }
+  },
+  "homeActiveRedAlertBannerLabel": "Aviso rojo activo",
+  "@homeActiveRedAlertBannerLabel": {
+    "description": "Cabecera del banner de Inicio cuando hay una alerta roja vigente."
+  },
+  "emptyAlertsTitle": "No hay avisos activos",
+  "emptyAlertsBody": "Te avisaremos aquí si el ayuntamiento o AEMET publican algo.",
+
+  "incidentReportTitle": "Reportar incidencia",
+  "incidentCategoryLabel": "Categoría",
+  "incidentDescriptionLabel": "Describe el problema",
+  "incidentDescriptionHint": "Por ejemplo: farola fundida en el Carrer Major",
+  "incidentSubmit": "Enviar incidencia",
+  "incidentSubmitted": "Incidencia enviada. Te avisaremos de su seguimiento.",
+  "incidentPhotoAdd": "Añadir foto",
+  "incidentPhotoRemove": "Quitar foto",
+  "incidentPhotoSourceCamera": "Hacer foto",
+  "incidentPhotoSourceGallery": "Elegir de la galería",
+  "incidentDetailTitle": "Incidencia",
+  "incidentHistoryHeading": "Seguimiento",
+  "incidentStatusReceived": "Recibida",
+  "incidentStatusInProgress": "En curso",
+  "incidentStatusResolved": "Resuelta",
+  "emptyIncidentsTitle": "No has reportado ninguna incidencia",
+  "emptyIncidentsBody": "Cuando reportes un problema en la vía pública, aparecerá aquí.",
+  "incidentCategoryAlumbrado": "Alumbrado",
+  "incidentCategoryBaches": "Baches y firme",
+  "incidentCategoryLimpieza": "Limpieza",
+  "incidentCategoryJardines": "Jardines y parques",
+  "incidentCategoryMobiliario": "Mobiliario urbano",
+  "incidentCategoryAgua": "Agua y saneamiento",
+  "incidentCategoryOtros": "Otros",
+
+  "surveyDetailTitle": "Encuesta",
+  "surveyNonBinding": "Consulta no vinculante",
+  "surveyVote": "Votar",
+  "surveyVoted": "Voto registrado",
+  "surveyYourVote": "Tu voto",
+  "surveyClosedLabel": "Cerrada",
+  "surveyResultsHidden": "Los resultados se verán al cerrarse la encuesta",
+  "surveyIncludeClosedLabel": "Ver encuestas cerradas",
+  "emptySurveysTitle": "No hay encuestas abiertas",
+  "emptySurveysBody": "El ayuntamiento publicará aquí sus próximas consultas.",
+
+  "formDetailTitle": "Formulario",
+  "formSubmit": "Enviar",
+  "formSubmitted": "Formulario enviado",
+  "formAlreadySubmitted": "Ya has enviado este formulario",
+  "formRequiredLabel": "obligatorio",
+  "formDeadlineLabel": "Fecha límite: {date}",
+  "@formDeadlineLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "formIncludeClosedLabel": "Ver formularios cerrados",
+  "formSelectPlaceholder": "Elige una opción",
+  "formBooleanYes": "Sí",
+  "formBooleanNo": "No",
+  "formPickDate": "Elegir fecha",
+  "emptyFormsTitle": "No hay formularios abiertos",
+  "emptyFormsBody": "El ayuntamiento publicará aquí sus próximas inscripciones y solicitudes.",
+
+  "pharmacyTodayTitle": "Farmacia de guardia hoy",
+  "pharmacyUpcomingHeading": "Próximos días",
+  "pharmacyNoneToday": "No hay farmacia de guardia registrada para hoy",
+  "pharmacyCall": "Llamar",
+  "pharmacyCallSemantic": "Llamar a {name}, {phone}",
+  "@pharmacyCallSemantic": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "phone": { "type": "String" }
+    }
+  },
+
+  "backSemantic": "Volver",
+  "loading": "Cargando",
+
+  "businessesTitle": "Comercios",
+  "businessDetailTitle": "Comercio",
+  "businessCallSemantic": "Llamar a {name}, {phone}",
+  "@businessCallSemantic": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "phone": { "type": "String" }
+    }
+  },
+  "businessEmailSemantic": "Escribir a {name} por correo, {email}",
+  "@businessEmailSemantic": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "email": { "type": "String" }
+    }
+  },
+  "businessWebsiteSemantic": "Abrir la web de {name}",
+  "@businessWebsiteSemantic": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "businessCall": "Llamar",
+  "businessEmail": "Escribir",
+  "businessWebsite": "Ver web",
+  "businessNoPhotos": "Sin fotos",
+  "emptyBusinessesTitle": "No hay comercios registrados",
+  "emptyBusinessesBody": "El ayuntamiento irá añadiendo aquí los comercios del municipio.",
+
+  "galleryPrevious": "Foto anterior",
+  "galleryNext": "Foto siguiente",
+  "galleryGoToPhoto": "Ir a la foto {index} de {total}",
+  "@galleryGoToPhoto": {
+    "placeholders": {
+      "index": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "galleryPhotoOfTotal": "Foto {index} de {total}",
+  "@galleryPhotoOfTotal": {
+    "placeholders": {
+      "index": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "facilityDetailTitle": "Instalación",
+  "myReservationsTitle": "Mis reservas",
+  "emptyFacilitiesTitle": "No hay instalaciones registradas",
+  "emptyFacilitiesBody": "El ayuntamiento irá añadiendo aquí sus pistas y espacios reservables.",
+  "facilityFeeNoteHeading": "Tarifa",
+  "facilityOpeningHoursHeading": "Horario",
+  "facilityOpeningHoursClosed": "Cerrado",
+  "facilitySelectDateHeading": "Elige un día",
+  "facilitySlotsHeading": "Huecos disponibles",
+  "emptyFacilitySlotsTitle": "No hay huecos libres este día",
+  "emptyFacilitySlotsBody": "Prueba a elegir otro día.",
+  "facilitySlotSemantic": "Hueco de {start} a {end}",
+  "@facilitySlotSemantic": {
+    "placeholders": {
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "facilityBookConfirmTitle": "¿Reservar este hueco?",
+  "facilityBookConfirmBody": "{facility} · {date} · {start} - {end}",
+  "@facilityBookConfirmBody": {
+    "placeholders": {
+      "facility": { "type": "String" },
+      "date": { "type": "String" },
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "facilityBookConfirmAction": "Confirmar reserva",
+  "facilityBookedSnackbar": "Reserva confirmada",
+  "dialogCancel": "Cancelar",
+  "emptyReservationsTitle": "No tienes reservas",
+  "emptyReservationsBody": "Cuando reserves una instalación, aparecerá aquí.",
+  "reservationCardSemantic": "{facility}. {date}, de {start} a {end}",
+  "@reservationCardSemantic": {
+    "placeholders": {
+      "facility": { "type": "String" },
+      "date": { "type": "String" },
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "reservationCancelAction": "Cancelar reserva",
+  "reservationCancelSemantic": "Cancelar la reserva de {facility} del {date}",
+  "@reservationCancelSemantic": {
+    "placeholders": {
+      "facility": { "type": "String" },
+      "date": { "type": "String" }
+    }
+  },
+  "reservationCancelConfirmTitle": "¿Cancelar esta reserva?",
+  "reservationCancelConfirmBody": "Esta acción no se puede deshacer y el hueco quedará libre para otro vecino.",
+  "reservationCancelConfirmAction": "Sí, cancelar",
+  "reservationCancelledSnackbar": "Reserva cancelada"
+}

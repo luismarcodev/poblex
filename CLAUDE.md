@@ -41,13 +41,24 @@ Un único repositorio git. Los cambios de contrato de API tocan cliente y servid
 | Almacenamiento de ficheros | Object storage compatible con S3, jurisdicción UE, subidas por URL prefirmada |
 | Push | Firebase Cloud Messaging (único servicio de Firebase que se usa) |
 | Integración externa | AEMET OpenData |
-| Despliegue backend | Railway o Render, **región UE** |
+| Despliegue backend | VPS propio (Docker + Caddy), **región UE** — mismo servidor que Business Manager |
 
 **Versiones mínimas soportadas:** Android 10 (API 29) e iOS 15. Decisión de producto: parte del público objetivo son personas mayores con terminales antiguos. No subas el mínimo sin justificarlo.
 
 **Sin modo offline.** La app requiere conexión. No implementes persistencia local de contenido ni cola de escrituras diferidas. Lo que sí es obligatorio: estados de carga y de error explícitos y legibles en todas las pantallas — un fallo de red nunca deja una pantalla en blanco ni un spinner infinito. Mensaje claro y botón de reintentar.
 
 **Entornos:** solo producción por ahora. Antes de abrir la app a vecinos reales hay que separar entorno de desarrollo. No se prueba contra la base de datos donde vive el aviso real de corte de agua.
+
+**Despliegue:** backend y backoffice corren como contenedores Docker en el
+mismo VPS que Business Manager (`docker-compose.prod.yml`, scripts en
+`deploy/`), cada app con su propia red Docker y su propio Postgres — no
+comparten base de datos ni red entre sí. El Caddy de Poblex es un
+contenedor propio, independiente del de Business Manager. **Todavía no hay
+dominio de Poblex**: mientras tanto se sirve por la IP del VPS en puertos
+propios (8090 API, 8091 backoffice), sin TLS — es un despliegue de
+**pruebas/staging**, no el que reciba datos reales de vecinos ni al alcalde.
+En cuanto exista dominio, el `Caddyfile` pasa a bloques con hostname (TLS
+automático) y el compose vuelve a publicar 80/443.
 
 ---
 
@@ -151,7 +162,9 @@ event_reminders       id, event_id, device_id, remind_at, sent_at
                       UNIQUE (event_id, device_id)             -- un recordatorio por dispositivo
 
 alerts                id, municipality_id, source ('aemet'|'manual'),
-                      severity ('amarillo'|'naranja'|'rojo'), phenomenon,
+                      severity ('amarillo'|'naranja'|'rojo'),
+                      phenomenon_type ('incendio'|'evacuacion'|'meteorologico'|
+                      'sanitario'|'otro', independiente de severity), phenomenon,
                       body jsonb, start_at, end_at, aemet_id,
                       created_by (manager_id, null si origen aemet), updated_by
                       UNIQUE (municipality_id, aemet_id)       -- deduplicación
@@ -173,6 +186,17 @@ form_answers          id, submission_id, field_id, value
 
 duty_pharmacies       id, municipality_id, date, pharmacy_name, address, phone, schedule
                       UNIQUE (municipality_id, date)
+
+facilities            id, municipality_id, name jsonb, description jsonb, category,
+                      image_url, slot_duration_minutes, opening_hours jsonb,
+                      fee_note jsonb, max_advance_booking_days, active
+                      -- category: texto abierto ('Pádel', 'Tenis', 'Barbacoa'...), mismo
+                      -- criterio que news.category y businesses.category
+reservations          id, facility_id, municipality_id, device_id, slot_start, slot_end,
+                      created_at
+                      UNIQUE (facility_id, slot_start)          -- doble reserva imposible
+reservation_cancellations id, facility_id, municipality_id, device_id, slot_start, slot_end,
+                      cancelled_by, cancel_note, cancelled_at   -- cancelled_by: manager_id, null si cancela el propio vecino
 ```
 
 - **Toda tabla de contenido lleva `municipality_id`.** Ninguna consulta se escribe sin filtrar por municipio. El aislamiento entre municipios se verifica en el caso de uso.
@@ -194,6 +218,7 @@ duty_pharmacies       id, municipality_id, date, pharmacy_name, address, phone, 
 - Alertas rojas fuerzan push aunque el usuario tenga otras categorías silenciadas.
 - Si la llamada falla, se registra el error y cuenta para el umbral de fallos consecutivos anterior. En el cliente, un fallo de AEMET nunca deja la pantalla de alertas rota: se sigue mostrando el histórico ya cargado con el estado de error habitual (mensaje + reintentar).
 - El cliente de AEMET es un adaptador que implementa un puerto del dominio. El dominio no sabe que AEMET existe.
+- **`phenomenon_type` siempre `meteorologico` cuando el origen es AEMET** (fijado en el caso de uso de sincronización, el gestor no lo elige). Incendio y evacuación son siempre de origen manual — no hay integración automática de datos de incendio forestal, mismo criterio que con las farmacias de guardia.
 
 ## Notificaciones
 
@@ -325,17 +350,31 @@ Obligación legal (RD 1112/2018, WCAG 2.1 nivel AA) y petición expresa del alca
 
 # Identidad visual
 
-| Elemento | Valor |
-|---|---|
-| Verde Albufera (primario) | `#1F6F5C` |
-| Terracota (acento) | `#C75B39` |
-| Hueso (fondo) | `#FAF7F2` |
-| Tinta (texto) | `#1A1A1A` |
-| Alerta amarilla | `#E8A33D` |
-| Alerta naranja | `#D9772B` |
-| Alerta roja | `#B3261E` |
+**El primario es coral cálido (familia Stitch "Modern Civic Coral"), no verde.** El acento teal queda como secundario. Paleta rebrandeada el 12 de agosto de 2026 a partir de las pantallas generadas con Stitch en `design/stitch_poblex_civic_connect/`; motivo y comparativa completa en `docs/design-system.md` §0.1. Detalle completo, rampas y ratios en `docs/design-system.md`; los tokens vivos están en `packages/poblex_design_system/lib/src/` (reexportados desde `app/lib/core/theme/`).
 
-Cada municipio puede sobreescribir color primario y logo desde el backoffice, manteniendo estructura y contrastes validados.
+| Elemento | Valor | Uso |
+|---|---|---|
+| Coral marca (decorativo) | `#FF7043` | Superficies e ilustración. **~2,85:1 sobre blanco: nunca lleva texto encima ni es fondo de botón** |
+| Coral gráfico | `#641800` | Iconos y bordes con significado (11,9:1) |
+| Coral acción (claro) | `#AC3509` | Texto de enlace y fondo de botón primario (6,43:1 sobre blanco, 6,10:1 sobre fondo) |
+| Coral acción (oscuro) | `#FFB59F` | Equivalente en modo oscuro |
+| Teal (acento) | `#006A61` | Secundario |
+| Fondo | `#F8F9FF` | |
+| Tinta (texto) | `#0B1C30` | |
+| Alerta amarilla | `#E8A33D` | Solo chip sólido de severidad. 2,16:1: jamás lleva texto encima ni va sin borde |
+| Alerta naranja | `#D9772B` | Solo chip sólido de severidad |
+| Alerta roja | `#B3261E` | Solo chip sólido de severidad |
+
+**Las alertas de severidad NUNCA usan el coral de marca**, aunque ambos sean tonos cálidos cercanos: la pantalla de alertas generada por Stitch reutilizaba su `primary-container` como color de "alerta naranja", y se descartó deliberadamente ese punto del mockup por chocar con la regla de abajo.
+
+**El coral de marca y el naranja de alerta son tonos cálidos vecinos, y con el rebrand a Stitch el de marca es más saturado que la terracota anterior — más parecido al naranja de alerta, no menos.** (La cifra ΔE00 = 10,5 que documentaba esto era específica del hexadecimal `#D97757` anterior; no se ha recalculado para `#FF7043` y no debe reutilizarse.) Un vecino mayor, en la calle y con sol, no los distingue por color. La separación es estructural, no cromática:
+
+- Ningún color de marca dentro de una alerta; ningún color de severidad fuera de ella. Nunca comparten contenedor.
+- Relleno sólido cálido = severidad. Contorno = marca. Los chips de categoría son contorneados; los de severidad, sólidos.
+- La severidad se comunica por **cuatro canales redundantes**: color, silueta de icono, palabra visible ("Aviso naranja · Nivel 2") y grosor de barra lateral. Se lee en blanco y negro.
+- El naranja de marca nunca es banda horizontal a ancho completo. Radio 8 dp = alerta; 16 dp = contenido.
+
+Cada municipio puede sobreescribir color primario y logo desde el backoffice. El override pasa por `BrandPalette.fromSeed()`, que reancla la luminosidad hasta cumplir 4,5:1 y **nunca toca los tokens de severidad**: un ayuntamiento no puede romper la accesibilidad ni confundir su marca con un aviso meteorológico eligiendo mal el color.
 
 # Decisiones cerradas — no las reabras
 
@@ -348,13 +387,15 @@ Cada municipio puede sobreescribir color primario y logo desde el backoffice, ma
 - **Visor de PDF nativo dentro de la app**, no delegado al sistema operativo.
 - **`manager_municipalities` es N:M.** El backoffice soporta que un gestor lleve varios municipios y publique en varios de golpe. No asumas nunca un municipio por gestor.
 - **Un dispositivo sigue un único municipio en fase 1.** `devices.municipality_id` es una FK simple, no una tabla intermedia. Seguir varios pueblos a la vez es fase 2 y supone cambiar el modelo, no activar una opción.
-- Fuera de alcance en fase 1: reservas de instalaciones, comercios locales, viajes compartidos, compraventa. No los implementes salvo instrucción explícita.
+- **Reservas de instalaciones: confirmación instantánea, sin cobro en la app.** Sustituye a MyTurn. Cancelar una reserva **borra** la fila de `reservations` (libera la restricción `UNIQUE (facility_id, slot_start)` al instante) y añade una fila a `reservation_cancellations` — nunca un campo `status`, porque Prisma no expresa índices únicos parciales de forma declarativa y una reserva cancelada con `status` seguiría bloqueando ese hueco para siempre. No lo reabras pensando que es un descuido.
+- Fuera de alcance en fase 1: viajes compartidos, compraventa. No los implementes salvo instrucción explícita.
 
 # Backoffice — funciones mínimas
 
 - Login de gestor con recuperación de contraseña.
 - CRUD de noticias (con adjuntos y categoría), eventos, alertas manuales, encuestas, formularios y farmacias de guardia.
 - Bandeja de incidencias con filtro por estado y categoría, y cambio de estado con nota (queda registrado en `incident_status_history`).
+- CRUD de instalaciones reservables (nombre bilingüe, categoría, horario semanal, tarifa informativa) y gestión de reservas: listado filtrable por instalación y cancelación con nota obligatoria (queda registrado en `reservation_cancellations`).
 - **Exportación a CSV de las respuestas de formularios y de los resultados de encuestas.** Prometido en el PRD: el gestor necesita sacar el censo de paellas a una hoja de cálculo.
 - Selector de municipio cuando el gestor tiene varios, y publicación simultánea en varios municipios de su relación.
 - Editor bilingüe con los dos idiomas lado a lado, el segundo opcional.

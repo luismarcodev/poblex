@@ -1,0 +1,26 @@
+# Sin dominio de Poblex todavía: bloques ":PUERTO" sin hostname, Caddy los
+# sirve en HTTP plano y no intenta pedir certificado ACME. Esto es un
+# despliegue de pruebas/staging por IP, no producción real de cara al
+# vecino — ver "Despliegue" en CLAUDE.md/AGENTS.md.
+#
+# Cuando exista dominio real, sustituir por bloques con hostname (igual que
+# BUSSINESS_MANAGER/Caddyfile) y liberar 8090/8091 a favor de 80/443:
+#
+#   api.poblex.example {
+#   	reverse_proxy poblex_api:3000
+#   }
+#   admin.poblex.example {
+#   	root * /srv/backoffice
+#   	try_files {path} /index.html
+#   	file_server
+#   }
+
+:8090 {
+	reverse_proxy poblex_api:3000
+}
+
+:8091 {
+	root * /srv/backoffice
+	try_files {path} /index.html
+	file_server
+}

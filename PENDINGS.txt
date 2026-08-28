@@ -1,0 +1,116 @@
+POBLEX — TRABAJO PENDIENTE
+Actualizado: 10 de agosto de 2026
+
+Este fichero solo contiene trabajo que NO está completamente terminado o
+verificado. Cuando una tarea se cierre con pruebas, debe eliminarse de aquí.
+
+PRIORIDAD 0 — NECESARIO ANTES DE PRODUCCIÓN
+
+[ ] Configurar un proveedor real de correo para la recuperación de contraseña.
+    El backend usa actualmente ConsoleEmailSenderAdapter y solo escribe el
+    enlace de recuperación en los logs de desarrollo.
+
+[ ] Separar los entornos de desarrollo y producción, incluidas base de datos,
+    almacenamiento de ficheros, Firebase y credenciales.
+
+[ ] Configurar despliegue en región UE, copias diarias y semanales, y ejecutar
+    una restauración real documentada antes del piloto.
+
+[ ] Ejecutar una revisión manual completa del backoffice en Chrome, Firefox y
+    Safari, con teclado, zoom al 200 % y lector de pantalla.
+
+[ ] Configurar en el alojamiento del backoffice el fallback SPA hacia
+    index.html para cualquier ruta desconocida. El panel usa URLs limpias con
+    PathUrlStrategy; sin esa reescritura, recargar directamente rutas como
+    /noticias/editar/:id o /reset-password devolverá un 404 del servidor antes
+    de que go_router pueda resolverlas.
+
+[ ] Aumentar la cobertura automatizada del backend. La última medición global
+    fue del 13,4 % de sentencias; las rutas principales tienen E2E, pero varios
+    adaptadores y casos de error siguen con poca protección frente a regresiones.
+
+[ ] Eliminar dependencias desde application hacia shared/infrastructure en el
+    backend para cumplir completamente la arquitectura hexagonal documentada.
+
+
+PRIORIDAD 1 — BACKOFFICE
+
+[ ] Permitir borrar individualmente un adjunto de noticia. El backend permite
+    solicitar la subida y confirmarla, pero no expone DELETE para un adjunto.
+    Al implementarlo también hay que borrar el objeto del almacenamiento.
+
+[ ] Endurecer la subida prefirmada de adjuntos en el servidor: verificar tamaño,
+    firma real/MIME y pertenencia de la URL al bucket al confirmar. La validación
+    del cliente mejora la experiencia, pero no constituye una garantía de seguridad.
+
+[ ] Añadir GET /v1/admin/events/:id. El editor puede recuperar el evento mediante
+    el endpoint público filtrado por municipio, pero el contrato administrativo
+    específico es más coherente y permite auditar autorización explícitamente.
+
+[ ] Corregir la consulta administrativa de eventos cuando includePast=true:
+    actualmente ordena ascendente desde 1970 y enseña primero los eventos más
+    antiguos en vez de los más recientes o relevantes.
+
+[ ] Sustituir el margen fijo de seis horas usado para detectar eventos vigentes.
+    Un evento de larga duración puede quedar oculto aunque aún esté en curso.
+
+[ ] Hacer atómica la publicación de eventos en varios municipios. La creación
+    actual es secuencial y un fallo intermedio puede dejar una publicación parcial.
+
+[ ] Añadir GET /v1/admin/incidents/:id con el historial completo. El backend solo
+    ofrece listado y cambio de estado; el panel puede mostrar los datos de la fila,
+    pero no puede recuperar ni auditar incident_status_history desde la interfaz.
+
+[ ] Verificar las exportaciones CSV de encuestas y formularios desde la interfaz,
+    incluido UTF-8, valenciano, campos opcionales y conjuntos grandes.
+
+[ ] Completar el contrato administrativo de encuestas: no existe edición PATCH,
+    detalle GET administrativo ni creación simultánea para varios municipios.
+    Actualmente una encuesta publicada debe cerrarse/borrarse y recrearse para
+    corregir contenido, y la publicación se limita a un municipio por petición.
+    Además, resultsVisible no se devuelve explícitamente y el panel tiene que
+    inferirlo por la presencia de votos, una ambigüedad que debe eliminarse.
+
+[ ] Completar el contrato administrativo de alertas: la creación solo admite un
+    municipio por petición y las respuestas no exponen createdBy/updatedBy, aunque
+    la auditoría es obligatoria para avisos de emergencia.
+
+[ ] Completar el contrato de farmacias de guardia: solo existe upsert y listado
+    público. Faltan DELETE y detalle administrativo; ahora se puede corregir una
+    guardia, pero no retirarla expresamente desde el panel. La publicación para
+    varios municipios usa varios PUT no atómicos y la protección contra sobrescribir
+    una fecha existente solo está en cliente; el upsert no admite precondición ni versión.
+
+[ ] Completar el contrato administrativo de formularios: faltan edición PATCH,
+    publicación simultánea en varios municipios y consulta JSON de envíos/conteo.
+    El CSV permite extraer respuestas, pero no sustituye una vista resumida ni
+    permite corregir un formulario ya publicado.
+
+
+PRIORIDAD 1 — APP MÓVIL (TRABAJO ASIGNADO A OTRA IA)
+
+[ ] Revalidar este apartado cuando termine el trabajo paralelo de la app móvil.
+    No se modifica app/ desde la tarea actual para evitar conflictos.
+
+[ ] Probar notificaciones FCM reales, deep links y rotación de token en al menos
+    un dispositivo Android físico y un iPhone.
+
+[ ] Añadir GoogleService-Info.plist para iOS y verificar recepción en segundo
+    plano, aplicación cerrada y cambio de idioma/municipio.
+
+[ ] Configurar firma release de Android; actualmente no debe publicarse con la
+    clave de depuración.
+
+[ ] Probar PDFs reales, TalkBack y VoiceOver en dispositivos físicos.
+
+
+PRIORIDAD 2 — OPERACIÓN Y CALIDAD
+
+[ ] Configurar observabilidad: errores, latencia, fallos de cron y alerta externa
+    del endpoint de salud de AEMET.
+
+[ ] Verificar el código real de zona AEMET de Sollana contra la documentación
+    oficial antes de activar avisos meteorológicos para vecinos.
+
+[ ] Documentar titularidad de cuentas de tiendas y condiciones de salida de un
+    municipio en el contrato comercial.

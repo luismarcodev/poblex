@@ -69,6 +69,7 @@ No se verifica empadronamiento. Consecuencia asumida y a comunicar al alcalde: l
 - Manual: el gestor publica alertas sanitarias, cortes de agua, etc.
 - Niveles de severidad visualmente diferenciados (amarillo / naranja / rojo).
 - Las alertas rojas fuerzan notificación, aunque el usuario tenga otras categorías silenciadas.
+- **Clasificación adicional por tipo de fenómeno** (incendio, evacuación, sanitario, meteorológico, otro), independiente de la severidad: un incendio y una inundación pueden ser ambos severidad roja, y esto es lo que los distingue en icono y etiqueta. Palanca de venta explícita para ayuntamientos con riesgo de incendio forestal, no solo para el perfil de riesgo de inundación de Sollana. **Incendio y evacuación son siempre de origen manual** — no hay integración automática de datos de incendio forestal (AEMET solo cubre fenómenos meteorológicos; mismo criterio que con las farmacias de guardia, no se scrapea una fuente frágil de terceros para un canal de seguridad crítico). Cualquier alerta roja activa se destaca de inmediato en la pantalla de Inicio, sin necesidad de navegar a la sección de alertas.
 
 **Incidencias (buzón vecinal privado)**
 - Formulario: categoría, descripción, foto opcional, ubicación opcional.
@@ -93,11 +94,17 @@ No se verifica empadronamiento. Consecuencia asumida y a comunicar al alcalde: l
 - **Carga manual mensual por el gestor.** No existe API oficial abierta de la Comunidad Valenciana para este dato; los Colegios de Farmacéuticos publican en web/PDF y los agregadores de terceros son frágiles. Se descarta scraping por riesgo de rotura silenciosa en un dato de interés sanitario.
 - Sección de "Información sanitaria de interés" como subcategoría de noticias etiquetada.
 
+**Reservas de instalaciones municipales**
+- El vecino reserva un hueco libre en una pista o espacio municipal (pádel, tenis, barbacoa...); el gestor da de alta las instalaciones y gestiona su calendario, sustituyendo a la app externa MyTurn que usa hoy Sollana.
+- **Confirmación instantánea**, sin aprobación manual del gestor: un hueco libre queda reservado en el momento.
+- **Sin cobro en la app.** La tarifa, si existe, se muestra como texto informativo en la ficha ("3€/hora, se abona en el ayuntamiento") — cero pasarela de pago en esta versión.
+- Prevención de dobles reservas garantizada por restricción de unicidad `(facility_id, slot_start)` en base de datos, igual criterio que farmacias de guardia y encuestas.
+- El gestor puede cancelar una reserva (obras, mantenimiento) con nota obligatoria; el vecino recibe aviso dirigido a su dispositivo.
+
 ### 4.3 Fuera de alcance (fase 2, no prometer al alcalde como incluido)
 
 | Módulo | Motivo del aplazamiento |
 |---|---|
-| Reservas de pistas municipales | Proyecto en sí mismo: calendario de disponibilidad, prevención de dobles reservas, posible cobro de tasas. Candidato natural a módulo de pago |
 | Listado de comercios locales | Requiere definir **quién** mantiene el listado. Sin proceso de actualización queda obsoleto en 3 meses y perjudica la imagen del producto |
 | Viajes compartidos | Problema de doble cara: sin masa crítica no hay oferta, sin oferta no hay usuarios. No viable con un solo municipio |
 | Compraventa local | Compite con Wallapop/Milanuncios, que ya concentran inventario y confianza |
@@ -127,17 +134,22 @@ Requisitos concretos:
 
 Diseñada para legibilidad institucional, no para tendencia de diseño.
 
+**Actualizado el 12 de agosto de 2026:** rebrand a la paleta "Modern Civic Coral" generada
+con Stitch (IA de diseño de Google) a partir de las pantallas de referencia en
+`design/stitch_poblex_civic_connect/`. Detalle y motivo en `docs/design-system.md` §0.1.
+
 | Elemento | Valor |
 |---|---|
-| Verde Albufera (primario) | `#1F6F5C` |
-| Terracota (acento) | `#C75B39` |
-| Hueso (fondo) | `#FAF7F2` |
-| Tinta (texto) | `#1A1A1A` |
+| Coral (marca decorativa) | `#FF7043` |
+| Coral (acción accesible) | `#AC3509` |
+| Teal (acento secundario) | `#006A61` |
+| Fondo | `#F8F9FF` |
+| Tinta (texto) | `#0B1C30` |
 | Alerta amarilla | `#E8A33D` |
 | Alerta naranja | `#D9772B` |
 | Alerta roja | `#B3261E` |
 
-Paleta cálida y terrosa, deliberadamente alejada del azul corporativo genérico del sector, con contrastes verificados contra fondo hueso para cumplir AA. Cada municipio puede sobreescribir color primario y logo desde el backoffice (theming multi-tenant), manteniendo la estructura y los contrastes validados.
+Paleta cálida, deliberadamente alejada del azul corporativo genérico del sector. El coral decorativo no se usa con texto blanco: las acciones usan el tono `#AC3509`, verificado para cumplir AA (6,43:1 sobre blanco, 6,10:1 sobre el fondo). Los colores de alerta se mantienen intactos y bloqueados frente al rebrand — ver la nota de seguridad en `CLAUDE.md` sobre por qué el coral de marca nunca puede aparecer dentro de una alerta. Cada municipio puede sobreescribir color primario y logo desde el backoffice, manteniendo la estructura, los contrastes validados y los colores de severidad intactos.
 
 Logotipo: marca tipográfica "Poblex" con un punto sobre la "o" que evoca un marcador de mapa. Sin ilustración compleja: debe funcionar en 48 px de icono de app.
 

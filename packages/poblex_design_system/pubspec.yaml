@@ -1,0 +1,16 @@
+name: poblex_design_system
+description: Shared accessible visual system for Poblex Flutter clients.
+publish_to: none
+
+version: 1.0.0
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

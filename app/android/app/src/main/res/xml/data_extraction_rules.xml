@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sin copias de seguridad ni transferencia entre dispositivos.
+
+  Motivo concreto: el identificador de dispositivo vive en EncryptedSharedPreferences,
+  cuya clave está en el Keystore y NO se restaura con la copia de seguridad. Si
+  Android restaurase el fichero cifrado sin su clave, la app arrancaría contra
+  datos que no puede descifrar. Es más limpio no respaldar nada: el UUID se
+  regenera, que solo cuesta la garantía de "un voto por dispositivo".
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

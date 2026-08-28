@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Sin esto, `prisma.config.ts` y `prisma/seed.ts` entran en la compilación,
+    // TypeScript sube la raíz común a la del paquete y el resultado sale en
+    // `dist/src/main.js`. El script `start:prod` ejecuta `node dist/main`, así
+    // que el arranque en producción fallaba con MODULE_NOT_FOUND.
+    "rootDir": "./src",
+    // Keep incremental state inside dist so Nest's deleteOutDir removes it
+    // together with the emitted files. A stale root-level state can otherwise
+    // skip main.js after dist is cleaned and make `nest start` fail.
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo"
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "prisma",
+    "prisma.config.ts"
+  ]
+}

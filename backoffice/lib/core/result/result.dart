@@ -1,0 +1,16 @@
+import '../errors/app_failure.dart';
+
+sealed class Result<T> {
+  const Result();
+  bool get isSuccess => this is Success<T>;
+}
+
+final class Success<T> extends Result<T> {
+  const Success(this.value);
+  final T value;
+}
+
+final class Failure<T> extends Result<T> {
+  const Failure(this.error);
+  final AppFailure error;
+}
