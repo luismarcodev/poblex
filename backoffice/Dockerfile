@@ -1,15 +1,7 @@
-# Imagen "stable" de Flutter: el proyecto no fija versión de Flutter (solo
-# el SDK de Dart en pubspec.yaml, ^3.12.0). Si el equipo empieza a fijar
-# versión con fvm/.fvmrc, cambia este tag para que coincida.
-FROM ghcr.io/cirruslabs/flutter:stable AS build
-WORKDIR /app
-
-COPY pubspec.yaml pubspec.lock ./
-RUN flutter pub get
-
-COPY . .
-RUN flutter build web --release
-
+# Solo Caddy sirviendo estático — SIN SDK de Flutter en esta imagen. La build
+# (`flutter build web --release`) se hace en local o en CI, donde ya está el
+# SDK instalado y no penaliza al servidor; aquí solo se copia el resultado.
+# Ver "Despliegue" en CLAUDE.md/AGENTS.md.
 FROM caddy:2-alpine
-COPY --from=build /app/build/web /srv/backoffice
+COPY backoffice/build/web /srv/backoffice
 COPY Caddyfile /etc/caddy/Caddyfile

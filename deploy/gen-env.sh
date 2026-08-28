@@ -46,24 +46,35 @@ THROTTLE_LOGIN_TTL_SECONDS=900
 CORS_ORIGIN=http://${VPS_IP}:8091
 BACKOFFICE_PUBLIC_URL=http://${VPS_IP}:8091
 
-# Object storage (R2) — CHANGE_ME: solo el usuario tiene estas credenciales.
-R2_ENDPOINT=CHANGE_ME
-R2_BUCKET=CHANGE_ME
-R2_ACCESS_KEY=CHANGE_ME
-R2_SECRET_KEY=CHANGE_ME
-R2_PUBLIC_BASE_URL=CHANGE_ME
+# Integraciones opcionales — DEJAR VACÍAS hasta tener credenciales reales.
+# IMPORTANTE: no pongas un placeholder tipo "CHANGE_ME" aquí. Varios módulos
+# (NotificationsModule, SocialModule) deciden entre el adaptador real y uno
+# falso con "if (config.get('X'))" — cualquier string no vacío cuenta como
+# "configurado" y entra al adaptador real, que puede reventar el arranque
+# (p. ej. FcmNotificationSenderAdapter hace JSON.parse(FCM_CREDENTIALS_JSON)
+# sin comprobar que sea JSON válido). Vacío de verdad = cae al fallback
+# (consola / adaptadores Fake), que es el comportamiento correcto sin
+# configurar. R2 y AEMET no tienen ese gate (usan valor por defecto ''), así
+# que vacíos tampoco rompen el arranque, solo dejan esa función sin efecto.
 
-# AEMET OpenData — CHANGE_ME: clave solicitada por correo a AEMET.
-AEMET_API_KEY=CHANGE_ME
-OPS_ALERT_EMAIL=CHANGE_ME
+# Object storage (R2)
+R2_ENDPOINT=
+R2_BUCKET=
+R2_ACCESS_KEY=
+R2_SECRET_KEY=
+R2_PUBLIC_BASE_URL=
 
-# Firebase Cloud Messaging — CHANGE_ME.
-FCM_PROJECT_ID=CHANGE_ME
-FCM_CREDENTIALS_JSON=CHANGE_ME
+# AEMET OpenData — clave solicitada por correo a AEMET.
+AEMET_API_KEY=
+OPS_ALERT_EMAIL=
 
-# Meta (redes sociales) — CHANGE_ME.
-META_APP_ID=CHANGE_ME
-META_APP_SECRET=CHANGE_ME
+# Firebase Cloud Messaging
+FCM_PROJECT_ID=
+FCM_CREDENTIALS_JSON=
+
+# Meta (redes sociales)
+META_APP_ID=
+META_APP_SECRET=
 META_OAUTH_REDIRECT_URI=http://${VPS_IP}:8090/v1/social/oauth/callback
 SOCIAL_TOKEN_ENCRYPTION_KEY=${SOCIAL_TOKEN_ENCRYPTION_KEY}
 EOF
@@ -71,4 +82,5 @@ EOF
 chmod 600 .env .env.production
 echo "Generados .env y .env.production."
 echo "Recuerda: 1) editar VPS_IP en este script o sustituirlo a mano en .env.production,"
-echo "2) rellenar los CHANGE_ME (R2, AEMET, FCM, Meta) antes de levantar los servicios."
+echo "2) rellenar R2/AEMET/FCM/Meta cuando tengas las credenciales reales — déjalas"
+echo "   vacías hasta entonces, nunca con un placeholder tipo CHANGE_ME."

@@ -1,12 +1,12 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY backend/package.json backend/package-lock.json ./
 RUN npm ci
 
-COPY prisma ./prisma
-COPY tsconfig.json tsconfig.build.json nest-cli.json ./
-COPY src ./src
+COPY backend/prisma ./prisma
+COPY backend/prisma.config.ts backend/tsconfig.json backend/tsconfig.build.json backend/nest-cli.json ./
+COPY backend/src ./src
 RUN npx prisma generate
 RUN npm run build
 
