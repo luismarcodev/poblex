@@ -71,29 +71,27 @@ class AlertCard extends StatelessWidget {
                           spacing: AppSpacing.xs,
                           runSpacing: AppSpacing.xs,
                           children: <Widget>[
-                            Chip(
-                              backgroundColor: palette.identity,
-                              side: BorderSide.none,
-                              avatar: ExcludeSemantics(
-                                child: Icon(
-                                  phenomenonIcon(
-                                    alert.phenomenonType,
-                                    alert.severity,
-                                  ),
-                                  size: AppSize.iconSm,
-                                  color: palette.onIdentity,
-                                ),
-                              ),
-                              label: Text(
-                                severityLabel,
-                                style: TextStyle(color: palette.onIdentity),
-                              ),
+                            SeverityBadge(
+                              label: severityLabel,
+                              severity: alert.severity,
+                              palette: palette,
                             ),
                             if (alert.phenomenonType !=
                                     AlertPhenomenonType.meteorologico &&
                                 alert.phenomenonType !=
                                     AlertPhenomenonType.otro)
                               Chip(
+                                avatar: ExcludeSemantics(
+                                  child: Icon(
+                                    phenomenonIcon(
+                                      alert.phenomenonType,
+                                      alert.severity,
+                                    ),
+                                    color: palette.heading,
+                                    size: AppSize.iconSm,
+                                  ),
+                                ),
+                                labelStyle: TextStyle(color: palette.heading),
                                 label: Text(
                                   l10n.alertPhenomenonTypeLabel(
                                     alert.phenomenonType.slug,
@@ -103,6 +101,7 @@ class AlertCard extends StatelessWidget {
                               ),
                             if (!active)
                               Chip(
+                                labelStyle: TextStyle(color: palette.heading),
                                 label: Text(statusLabel),
                                 side: BorderSide(color: palette.border),
                               ),

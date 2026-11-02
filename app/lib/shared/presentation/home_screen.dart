@@ -248,9 +248,13 @@ class _FeaturedSectionCard extends StatelessWidget {
               padding: AppSpacing.cardPadding,
               child: Row(
                 children: <Widget>[
-                  AppIconBadge(
-                    icon: section.icon,
-                    size: AppIconBadgeSize.large,
+                  Container(
+                    width: 4,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: context.semantic.brandGraphic,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
@@ -280,8 +284,9 @@ class _FeaturedSectionCard extends StatelessWidget {
   }
 }
 
-/// Compact icon-over-label tile for the section grid — the equivalent of
-/// Stitch's small bento tiles (icon, then label, no description).
+/// Text-led shortcut. The label and description carry the meaning; the arrow
+/// is the only icon, so the home screen feels more like a town guide than an
+/// icon catalogue.
 class _SectionTile extends StatelessWidget {
   const _SectionTile({required this.section});
 
@@ -303,19 +308,29 @@ class _SectionTile extends StatelessWidget {
               minHeight: AppSize.comfortableTouchTarget * 1.4,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.md,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Row(
                 children: <Widget>[
-                  AppIconBadge(icon: section.icon),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    section.label,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.labelLarge,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          section.label,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: AppSpacing.xxs),
+                        Text(
+                          section.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  const ExcludeSemantics(
+                    child: Icon(Icons.arrow_forward_rounded),
                   ),
                 ],
               ),
@@ -344,49 +359,55 @@ class _ActiveRedAlertBanner extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       button: true,
-      label: '${l10n.homeActiveRedAlertBannerLabel}. ${alert.phenomenon}',
+      label:
+          '${l10n.alertSeverityLabel(alert.severity.slug)}. '
+          '${l10n.homeActiveRedAlertBannerLabel}. ${alert.phenomenon}',
+      excludeSemantics: true,
       child: Material(
         color: palette.surface,
         shape: RoundedRectangleBorder(
           borderRadius: AppRadius.xsAll,
           side: BorderSide(color: palette.border),
         ),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
           borderRadius: AppRadius.xsAll,
           onTap: () => context.go('/alerts'),
-          child: Padding(
-            padding: AppSpacing.cardPadding,
+          child: IntrinsicHeight(
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                ExcludeSemantics(
-                  child: Icon(
-                    phenomenonIcon(alert.phenomenonType, alert.severity),
-                    color: palette.heading,
-                    size: AppSize.iconLg,
-                  ),
+                Container(
+                  width: toDesignSeverity(alert.severity).barWidth,
+                  color: palette.bar,
                 ),
-                const SizedBox(width: AppSpacing.sm),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        l10n.homeActiveRedAlertBannerLabel,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(color: palette.heading),
-                      ),
-                      const SizedBox(height: AppSpacing.xxs),
-                      Text(
-                        alert.phenomenon,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: palette.onSurface,
+                  child: Padding(
+                    padding: AppSpacing.cardPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SeverityBadge(
+                          label: l10n.alertSeverityLabel(alert.severity.slug),
+                          severity: alert.severity,
+                          palette: palette,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          l10n.homeActiveRedAlertBannerLabel,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(color: palette.heading),
+                        ),
+                        const SizedBox(height: AppSpacing.xxs),
+                        Text(
+                          alert.phenomenon,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(color: palette.onSurface),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const ExcludeSemantics(child: Icon(Icons.chevron_right)),
               ],
             ),
           ),
@@ -396,11 +417,7 @@ class _ActiveRedAlertBanner extends StatelessWidget {
   }
 }
 
-/// Full-bleed photo with a dark gradient scrim and the headline sitting on
-/// top of it in white — the "Última hora" treatment from the Stitch
-/// reference (Inicio screen). The only place in the resident app that puts
-/// text directly over a photo, which is exactly why it stays limited to
-/// this one high-visibility slot instead of becoming a general pattern.
+/// Featured news uses the municipality's own photography as the visual anchor.
 class _LatestNewsHero extends StatelessWidget {
   const _LatestNewsHero({required this.item, required this.locale});
 
@@ -413,78 +430,77 @@ class _LatestNewsHero extends StatelessWidget {
     final ResolvedLocalizedText title = item.title.resolve(locale);
     return Semantics(
       button: true,
+      excludeSemantics: true,
       label: '${l10n.homeLatestNewsHeading}. ${title.text}',
-      child: ClipRRect(
-        borderRadius: AppRadius.xlAll,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => context.go('/news/${item.id}'),
-            child: SizedBox(
-              height: 260,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  ExcludeSemantics(
-                    child: CachedNetworkImage(
-                      imageUrl: item.imageUrl!,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, _, _) => const SizedBox.shrink(),
-                    ),
-                  ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.black.withValues(alpha: 0),
-                          Colors.black.withValues(alpha: 0.75),
-                        ],
-                        stops: const <double>[0.4, 1.0],
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.go('/news/${item.id}'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 240,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    ExcludeSemantics(
+                      child: CachedNetworkImage(
+                        imageUrl: item.imageUrl!,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, _, _) => ColoredBox(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: AppSpacing.lg,
-                    right: AppSpacing.lg,
-                    bottom: AppSpacing.lg,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.sm,
-                            vertical: AppSpacing.xxs,
-                          ),
-                          decoration: BoxDecoration(
-                            color: context.semantic.brandDecorative,
-                            borderRadius: AppRadius.pillAll,
-                          ),
-                          child: Text(
-                            l10n.homeLatestNewsHeading,
-                            style: Theme.of(context).textTheme.labelSmall
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.transparent,
+                            Color(0xCC111820),
+                          ],
+                          stops: <double>[0.34, 1],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: AppSpacing.lg,
+                      right: AppSpacing.lg,
+                      bottom: AppSpacing.lg,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            l10n.homeLatestNewsHeading.toUpperCase(),
+                            style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(
-                                  color: AppPalette.neutral900,
+                                  color: Colors.white,
+                                  letterSpacing: 1.2,
+                                ),
+                          ),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            title.text,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          title.text,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(color: AppPalette.neutral0),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

@@ -340,9 +340,10 @@ class _TabChip extends StatelessWidget {
       label: label,
       excludeSemantics: true,
       child: FilterChip(
-        avatar: Icon(icon),
+        avatar: Icon(selected ? Icons.check_circle_outline : icon),
         label: Text(label),
         selected: selected,
+        showCheckmark: false,
         onSelected: (_) => onTap(),
       ),
     );

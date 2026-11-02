@@ -50,11 +50,7 @@ class MunicipalityOnboardingScreen extends ConsumerWidget {
   }
 }
 
-/// Hero photo up top (decorative only, same reasoning as the news/home
-/// heroes: professional-looking stock photography, not a claim to be a real
-/// photo of any specific municipality — a vecino hasn't picked one yet, so
-/// there is nothing real to show), the actual picker below in the search +
-/// list pattern from the Stitch onboarding reference.
+/// The municipality picker follows a neutral, locally rendered introduction.
 class _OnboardingContent extends ConsumerStatefulWidget {
   const _OnboardingContent({required this.state});
   final MunicipalitiesUiState state;
@@ -179,67 +175,40 @@ class _OnboardingHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     return ExcludeSemantics(
-      child: SizedBox(
-        height: 220,
-        child: Stack(
-          fit: StackFit.expand,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 220),
+        color: AppPalette.neutral900,
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        alignment: Alignment.bottomLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            CachedNetworkImage(
-              imageUrl: 'https://picsum.photos/id/1043/1200/800',
-              fit: BoxFit.cover,
-              errorWidget: _emptyOnError,
-            ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Colors.black.withValues(alpha: 0.15),
-                    Colors.black.withValues(alpha: 0.65),
-                  ],
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const PoblexMark(size: 32, color: Colors.white),
+                const SizedBox(width: AppSpacing.xxs),
+                Text(
+                  l10n.appName,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Colors.white),
                 ),
-              ),
+              ],
             ),
-            Positioned(
-              left: AppSpacing.lg,
-              right: AppSpacing.lg,
-              bottom: AppSpacing.lg,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(Icons.location_city, color: Colors.white),
-                      const SizedBox(width: AppSpacing.xxs),
-                      Text(
-                        l10n.appName,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium?.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.xxs),
-                  Text(
-                    l10n.homeGreeting,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineMedium?.copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
+            const SizedBox(height: AppSpacing.xxs),
+            Text(
+              l10n.homeGreeting,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(color: Colors.white),
             ),
           ],
         ),
       ),
     );
   }
-
-  static Widget _emptyOnError(BuildContext context, String url, Object error) =>
-      const SizedBox.shrink();
 }
 
 class _MunicipalityTile extends ConsumerWidget {

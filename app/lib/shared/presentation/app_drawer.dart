@@ -97,7 +97,7 @@ class AppDrawer extends StatelessWidget {
                 header: true,
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.location_city, color: scheme.primary),
+                    PoblexMark(size: 32, color: scheme.primary),
                     const SizedBox(width: AppSpacing.xs),
                     Text(
                       l10n.drawerTitle,
