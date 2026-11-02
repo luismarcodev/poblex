@@ -70,6 +70,8 @@ void main() {
       await tester.ensureVisible(pinButton);
       await tester.pumpAndSettle();
       await tester.tap(pinButton);
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Destacar'));
       await tester.pump();
       expect(fake.pinCalls, 1);
       expect(tester.takeException(), isNull);

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/viewmodels/auth_view_model.dart';
 import '../../../auth/presentation/viewmodels/municipality_view_model.dart';
@@ -357,13 +358,13 @@ class _BusinessEditorScreenState extends ConsumerState<BusinessEditorScreen> {
             municipalityId: municipalityId,
             name: _name.text.trim(),
             category: _category.text.trim(),
-            descriptionEs: _optional(_descriptionEs.text),
-            descriptionVa: _optional(_descriptionVa.text),
-            address: _optional(_address.text),
-            phone: _optional(_phone.text),
-            email: _optional(_email.text),
-            website: _optional(_website.text),
-            schedule: _optional(_schedule.text),
+            descriptionEs: optionalText(_descriptionEs.text),
+            descriptionVa: optionalText(_descriptionVa.text),
+            address: optionalText(_address.text),
+            phone: optionalText(_phone.text),
+            email: optionalText(_email.text),
+            website: optionalText(_website.text),
+            schedule: optionalText(_schedule.text),
           ),
         );
     if (!mounted) return;
@@ -385,11 +386,6 @@ class _BusinessEditorScreenState extends ConsumerState<BusinessEditorScreen> {
       ),
     );
     context.go('/comercios');
-  }
-
-  String? _optional(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 
   Future<void> _pickAndUploadPhotos() async {

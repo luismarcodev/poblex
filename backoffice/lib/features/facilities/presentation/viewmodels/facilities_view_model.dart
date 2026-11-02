@@ -8,10 +8,7 @@ import '../../domain/entities/managed_facility.dart';
 import '../../domain/usecases/facility_usecases.dart';
 
 class FacilitiesUiState extends Equatable {
-  const FacilitiesUiState({
-    required this.municipalityId,
-    required this.items,
-  });
+  const FacilitiesUiState({required this.municipalityId, required this.items});
 
   final String municipalityId;
   final List<ManagedFacility> items;

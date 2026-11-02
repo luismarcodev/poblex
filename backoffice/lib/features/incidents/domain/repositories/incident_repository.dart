@@ -10,4 +10,8 @@ abstract interface class IncidentRepository {
   });
 
   Future<Result<ManagedIncident>> changeStatus(ChangeIncidentStatusInput input);
+
+  Future<Result<List<IncidentStatusChange>>> getHistory(String incidentId);
+
+  Future<Result<List<String>>> getCategories(String municipalityId);
 }

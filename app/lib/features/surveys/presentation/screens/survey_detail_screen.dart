@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/l10n/app_locales.dart';
 import '../../../../core/session/session_view_model.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/domain/value_objects/localized_text.dart';
@@ -97,7 +98,8 @@ class _SurveyDetail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final locale = ref.watch(sessionViewModelProvider).value!.locale;
+    final locale =
+        ref.watch(sessionViewModelProvider).valueOrNull?.locale ?? AppLocale.es;
     final ResolvedLocalizedText question = survey.question.resolve(locale);
     // Voting stays open only while the device hasn't voted and the survey
     // is still open; everything else — including a closed survey this

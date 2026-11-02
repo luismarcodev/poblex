@@ -1081,6 +1081,12 @@ abstract class AppLocalizations {
   /// **'obligatorio'**
   String get formRequiredLabel;
 
+  /// No description provided for @formFieldRequiredError.
+  ///
+  /// In es, this message translates to:
+  /// **'Este campo es obligatorio.'**
+  String get formFieldRequiredError;
+
   /// No description provided for @formDeadlineLabel.
   ///
   /// In es, this message translates to:

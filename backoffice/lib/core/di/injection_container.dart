@@ -53,6 +53,7 @@ void configureDependencies() {
   getIt.registerFactory(() => SetNewsPinned(getIt()));
   getIt.registerFactory(() => SetNewsArchived(getIt()));
   getIt.registerFactory(() => DeleteNews(getIt()));
+  getIt.registerFactory(() => ListNewsCategories(getIt()));
 
   configureEventDependencies(getIt);
   configureAlertDependencies(getIt);

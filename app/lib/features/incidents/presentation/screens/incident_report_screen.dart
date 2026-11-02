@@ -115,10 +115,15 @@ class _IncidentReportScreenState extends ConsumerState<IncidentReportScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      IconButton.filledTonal(
-                        onPressed: notifier.clearPhoto,
-                        icon: const Icon(Icons.close),
-                        tooltip: l10n.incidentPhotoRemove,
+                      Semantics(
+                        button: true,
+                        label: l10n.incidentPhotoRemove,
+                        excludeSemantics: true,
+                        child: IconButton.filledTonal(
+                          onPressed: notifier.clearPhoto,
+                          icon: const Icon(Icons.close),
+                          tooltip: l10n.incidentPhotoRemove,
+                        ),
                       ),
                     ],
                   )

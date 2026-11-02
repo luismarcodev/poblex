@@ -60,6 +60,24 @@ final incidentsViewModelProvider =
       IncidentsViewModel.new,
     );
 
+final incidentCategoriesProvider = FutureProvider.autoDispose
+    .family<List<String>, String>((ref, municipalityId) async {
+      final result = await getIt<ListIncidentCategories>()(municipalityId);
+      return switch (result) {
+        Success(value: final categories) => categories,
+        Failure() => const <String>[],
+      };
+    });
+
+final incidentHistoryProvider = FutureProvider.autoDispose
+    .family<List<IncidentStatusChange>, String>((ref, incidentId) async {
+      final result = await getIt<GetIncidentHistory>()(incidentId);
+      return switch (result) {
+        Success(value: final history) => history,
+        Failure(error: final error) => throw error,
+      };
+    });
+
 class IncidentsViewModel extends AsyncNotifier<IncidentsUiState> {
   IncidentStatus? _statusFilter;
   String? _categoryFilter;

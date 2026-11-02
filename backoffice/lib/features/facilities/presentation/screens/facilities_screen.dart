@@ -103,11 +103,18 @@ class _Header extends StatelessWidget {
         if (compact) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [title, const SizedBox(height: AppSpacing.sm), actions],
+            children: [
+              title,
+              const SizedBox(height: AppSpacing.sm),
+              actions,
+            ],
           );
         }
         return Row(
-          children: [Expanded(child: title), actions],
+          children: [
+            Expanded(child: title),
+            actions,
+          ],
         );
       },
     );

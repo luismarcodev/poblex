@@ -182,9 +182,7 @@ class ReservationsViewModel extends AsyncNotifier<ReservationsUiState> {
     }
     state = AsyncData(
       latest.copyWith(
-        items: latest.items
-            .where((item) => item.id != reservationId)
-            .toList(),
+        items: latest.items.where((item) => item.id != reservationId).toList(),
         busyIds: {...latest.busyIds}..remove(reservationId),
       ),
     );

@@ -57,12 +57,7 @@ class FacilitiesUiState extends Equatable {
   );
 
   @override
-  List<Object?> get props => <Object?>[
-    allItems,
-    refreshing,
-    failure,
-    category,
-  ];
+  List<Object?> get props => <Object?>[allItems, refreshing, failure, category];
 }
 
 class FacilitiesViewModel extends AsyncNotifier<FacilitiesUiState> {

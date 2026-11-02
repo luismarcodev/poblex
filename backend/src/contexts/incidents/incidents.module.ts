@@ -4,7 +4,9 @@ import { DevicesModule } from '../devices/devices.module';
 import { ManagersModule } from '../managers/managers.module';
 import { MunicipalitiesModule } from '../municipalities/municipalities.module';
 import { ChangeIncidentStatusUseCase } from './application/use-cases/change-incident-status.use-case';
+import { GetManagedIncidentHistoryUseCase } from './application/use-cases/get-managed-incident-history.use-case';
 import { GetMyIncidentDetailUseCase } from './application/use-cases/get-my-incident-detail.use-case';
+import { ListIncidentCategoriesUseCase } from './application/use-cases/list-incident-categories.use-case';
 import { ListManagedIncidentsUseCase } from './application/use-cases/list-managed-incidents.use-case';
 import { ListMyIncidentsUseCase } from './application/use-cases/list-my-incidents.use-case';
 import { PurgeIncidentPhotosUseCase } from './application/use-cases/purge-incident-photos.use-case';
@@ -26,6 +28,8 @@ import { IncidentPrismaRepository } from './infrastructure/persistence/prisma/in
     GetMyIncidentDetailUseCase,
     ListManagedIncidentsUseCase,
     ChangeIncidentStatusUseCase,
+    GetManagedIncidentHistoryUseCase,
+    ListIncidentCategoriesUseCase,
     PurgeIncidentPhotosUseCase,
     IncidentPhotoPurgeCron,
     IncidentPrismaRepository,

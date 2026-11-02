@@ -16,15 +16,13 @@ abstract final class FacilityMapper {
     imageUrl: model.imageUrl,
     slotDurationMinutes: model.slotDurationMinutes,
     openingHours: model.openingHours.map(
-      (String day, FacilityDayHoursModel? hours) => MapEntry<
-        String,
-        FacilityDayHours?
-      >(
-        day,
-        hours == null
-            ? null
-            : FacilityDayHours(open: hours.open, close: hours.close),
-      ),
+      (String day, FacilityDayHoursModel? hours) =>
+          MapEntry<String, FacilityDayHours?>(
+            day,
+            hours == null
+                ? null
+                : FacilityDayHours(open: hours.open, close: hours.close),
+          ),
     ),
     feeNote: _toLocalizedText(model.feeNote),
     maxAdvanceBookingDays: model.maxAdvanceBookingDays,
@@ -34,12 +32,11 @@ abstract final class FacilityMapper {
   static AvailabilitySlot toSlotDomain(AvailabilitySlotModel model) =>
       AvailabilitySlot(start: model.start, end: model.end);
 
-  static Reservation toReservationDomain(ReservationModel model) =>
-      Reservation(
-        id: model.id,
-        facilityId: model.facilityId,
-        municipalityId: model.municipalityId,
-        slotStart: model.slotStart,
-        slotEnd: model.slotEnd,
-      );
+  static Reservation toReservationDomain(ReservationModel model) => Reservation(
+    id: model.id,
+    facilityId: model.facilityId,
+    municipalityId: model.municipalityId,
+    slotStart: model.slotStart,
+    slotEnd: model.slotEnd,
+  );
 }

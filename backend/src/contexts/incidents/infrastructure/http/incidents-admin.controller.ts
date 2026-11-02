@@ -11,11 +11,14 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentManagerId } from '../../../managers/infrastructure/http/decorators/current-manager-id.decorator';
 import { ManagerJwtAuthGuard } from '../../../managers/infrastructure/security/manager-jwt-auth.guard';
 import { ChangeIncidentStatusUseCase } from '../../application/use-cases/change-incident-status.use-case';
+import { GetManagedIncidentHistoryUseCase } from '../../application/use-cases/get-managed-incident-history.use-case';
+import { ListIncidentCategoriesUseCase } from '../../application/use-cases/list-incident-categories.use-case';
 import { ListManagedIncidentsUseCase } from '../../application/use-cases/list-managed-incidents.use-case';
 import { IncidentHttpMapper } from '../mappers/incident-http.mapper';
 import {
   IncidentListResponseDto,
   IncidentResponseDto,
+  IncidentStatusChangeDto,
 } from './dto/incident-response.dto';
 import {
   ChangeIncidentStatusDto,
@@ -30,7 +33,22 @@ export class IncidentsAdminController {
   constructor(
     private readonly listManagedIncidents: ListManagedIncidentsUseCase,
     private readonly changeIncidentStatus: ChangeIncidentStatusUseCase,
+    private readonly getManagedIncidentHistory: GetManagedIncidentHistoryUseCase,
+    private readonly listIncidentCategories: ListIncidentCategoriesUseCase,
   ) {}
+
+  @Get('categories')
+  async categories(
+    @CurrentManagerId() managerId: string,
+    @Query('municipalityId') municipalityId: string,
+  ): Promise<{ categories: string[] }> {
+    const result = await this.listIncidentCategories.execute({
+      municipalityId,
+      managerId,
+    });
+    if (result.isFailure) throw result.error;
+    return { categories: result.value };
+  }
 
   @Get()
   async list(
@@ -53,6 +71,21 @@ export class IncidentsAdminController {
       ),
       nextCursor: result.value.nextCursor,
     };
+  }
+
+  @Get(':id/history')
+  async history(
+    @CurrentManagerId() managerId: string,
+    @Param('id') id: string,
+  ): Promise<IncidentStatusChangeDto[]> {
+    const result = await this.getManagedIncidentHistory.execute({
+      incidentId: id,
+      managerId,
+    });
+    if (result.isFailure) throw result.error;
+    return result.value.map((change) =>
+      IncidentHttpMapper.toStatusChangeDto(change),
+    );
   }
 
   @Patch(':id/status')

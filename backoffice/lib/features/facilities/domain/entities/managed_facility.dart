@@ -146,7 +146,13 @@ class ManagedReservation extends Equatable {
   final DateTime slotEnd;
 
   @override
-  List<Object?> get props => [id, facilityId, municipalityId, slotStart, slotEnd];
+  List<Object?> get props => [
+    id,
+    facilityId,
+    municipalityId,
+    slotStart,
+    slotEnd,
+  ];
 }
 
 class ManagedReservationPage extends Equatable {

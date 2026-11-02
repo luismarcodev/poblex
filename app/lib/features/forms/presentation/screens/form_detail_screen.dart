@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/l10n/app_locales.dart';
 import '../../../../core/session/session_view_model.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/domain/value_objects/localized_text.dart';
@@ -60,7 +61,8 @@ class _FormDetail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final locale = ref.watch(sessionViewModelProvider).value!.locale;
+    final locale =
+        ref.watch(sessionViewModelProvider).valueOrNull?.locale ?? AppLocale.es;
     final MunicipalForm form = state.form!;
     final ResolvedLocalizedText title = form.title.resolve(locale);
     final ResolvedLocalizedText description = form.description.resolve(locale);
@@ -134,6 +136,7 @@ class _FormDetail extends ConsumerWidget {
                     field: field,
                     value: state.answers[field.id],
                     locale: locale,
+                    showRequiredError: state.showValidationErrors,
                     onChanged: (String value) =>
                         notifier.setAnswer(field.id, value),
                   ),
@@ -151,7 +154,9 @@ class _FormDetail extends ConsumerWidget {
                     width: double.infinity,
                     height: AppSize.comfortableTouchTarget,
                     child: FilledButton(
-                      onPressed: state.canSubmit ? notifier.submit : null,
+                      onPressed: state.submitting
+                          ? null
+                          : notifier.attemptSubmit,
                       child: state.submitting
                           ? const SizedBox(
                               height: 24,

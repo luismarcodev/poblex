@@ -17,4 +17,6 @@ void configureIncidentDependencies(GetIt getIt) {
   );
   getIt.registerFactory(() => GetManagedIncidents(getIt()));
   getIt.registerFactory(() => ChangeManagedIncidentStatus(getIt()));
+  getIt.registerFactory(() => GetIncidentHistory(getIt()));
+  getIt.registerFactory(() => ListIncidentCategories(getIt()));
 }

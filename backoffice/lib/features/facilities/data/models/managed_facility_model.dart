@@ -60,9 +60,9 @@ class ManagedFacilityListModel {
     return ManagedFacilityListModel(
       rawItems
           .map(
-            (raw) =>
-                ManagedFacilityModel.fromJson(raw as Map<String, dynamic>)
-                    .entity,
+            (raw) => ManagedFacilityModel.fromJson(
+              raw as Map<String, dynamic>,
+            ).entity,
           )
           .toList(growable: false),
     );
@@ -95,9 +95,9 @@ class ManagedReservationPageModel {
     return ManagedReservationPageModel(
       items: rawItems
           .map(
-            (raw) =>
-                ManagedReservationModel.fromJson(raw as Map<String, dynamic>)
-                    .entity,
+            (raw) => ManagedReservationModel.fromJson(
+              raw as Map<String, dynamic>,
+            ).entity,
           )
           .toList(growable: false),
       nextCursor: json['nextCursor'] as String?,

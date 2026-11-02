@@ -52,6 +52,24 @@ class ChangeManagedIncidentStatus {
   }
 }
 
+class GetIncidentHistory {
+  const GetIncidentHistory(this._repository);
+
+  final IncidentRepository _repository;
+
+  Future<Result<List<IncidentStatusChange>>> call(String incidentId) =>
+      _repository.getHistory(incidentId);
+}
+
+class ListIncidentCategories {
+  const ListIncidentCategories(this._repository);
+
+  final IncidentRepository _repository;
+
+  Future<Result<List<String>>> call(String municipalityId) =>
+      _repository.getCategories(municipalityId);
+}
+
 String? _normalizedCategory(String? category) {
   final value = category?.trim().toLowerCase();
   return value == null || value.isEmpty ? null : value;

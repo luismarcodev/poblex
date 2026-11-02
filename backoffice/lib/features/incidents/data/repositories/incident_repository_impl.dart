@@ -36,4 +36,12 @@ class IncidentRepositoryImpl implements IncidentRepository {
   Future<Result<ManagedIncident>> changeStatus(
     ChangeIncidentStatusInput input,
   ) => _capture(() => _remote.changeStatus(input));
+
+  @override
+  Future<Result<List<IncidentStatusChange>>> getHistory(String incidentId) =>
+      _capture(() => _remote.getHistory(incidentId));
+
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) =>
+      _capture(() => _remote.getCategories(municipalityId));
 }

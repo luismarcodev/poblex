@@ -199,8 +199,7 @@ class MyReservationsViewModel extends AsyncNotifier<MyReservationsUiState> {
           current.copyWith(
             items: current.items
                 .where(
-                  (Reservation reservation) =>
-                      reservation.id != reservationId,
+                  (Reservation reservation) => reservation.id != reservationId,
                 )
                 .toList(growable: false),
             clearCancellingId: true,

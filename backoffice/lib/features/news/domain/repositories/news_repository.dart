@@ -31,4 +31,5 @@ abstract interface class NewsRepository {
     required String mimeType,
   });
   Future<Result<void>> delete(String id);
+  Future<Result<List<String>>> getCategories(String municipalityId);
 }

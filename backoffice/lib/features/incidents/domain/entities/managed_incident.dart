@@ -91,6 +91,21 @@ class ManagedIncidentsPage extends Equatable {
   List<Object?> get props => [items, nextCursor];
 }
 
+class IncidentStatusChange extends Equatable {
+  const IncidentStatusChange({
+    required this.status,
+    required this.note,
+    required this.changedAt,
+  });
+
+  final IncidentStatus status;
+  final String? note;
+  final DateTime changedAt;
+
+  @override
+  List<Object?> get props => [status, note, changedAt];
+}
+
 class ChangeIncidentStatusInput extends Equatable {
   const ChangeIncidentStatusInput({
     required this.incident,

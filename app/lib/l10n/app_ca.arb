@@ -232,6 +232,7 @@
   "formSubmitted": "Formulari enviat",
   "formAlreadySubmitted": "Ja has enviat este formulari",
   "formRequiredLabel": "obligatori",
+  "formFieldRequiredError": "Este camp és obligatori.",
   "formDeadlineLabel": "Data límit: {date}",
   "@formDeadlineLabel": {
     "placeholders": { "date": { "type": "String" } }

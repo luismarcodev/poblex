@@ -18,6 +18,7 @@ abstract interface class FormsCopy {
   String get noDeadline;
   String deadline(String value);
   String fieldsCount(int count);
+  String get noEditNote;
   String get exportSubmissions;
   String get exportSuccess;
   String get exportUnsupported;
@@ -92,6 +93,8 @@ class AppFormsCopy implements FormsCopy {
   String deadline(String value) => _l10n.formDeadline(value);
   @override
   String fieldsCount(int count) => _l10n.formFieldsCount(count);
+  @override
+  String get noEditNote => _l10n.formNoEditNote;
   @override
   String get exportSubmissions => _l10n.formExportSubmissions;
   @override

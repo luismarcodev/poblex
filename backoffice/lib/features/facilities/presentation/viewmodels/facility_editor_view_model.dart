@@ -15,6 +15,26 @@ class FacilityEditorUiState extends Equatable {
   List<Object?> get props => [facility];
 }
 
+// Las instalaciones de un municipio son pocas por diseño de producto (no
+// hay endpoint paginado para ellas), así que derivar las categorías ya
+// usadas de la lista completa ya cargada es seguro: nunca es un volcado de
+// una colección grande.
+final facilityCategoriesProvider = FutureProvider.autoDispose
+    .family<List<String>, String>((ref, municipalityId) async {
+      final result = await getIt<GetManagedFacilities>()(
+        municipalityId: municipalityId,
+      );
+      return switch (result) {
+        Success(value: final page) =>
+          page.items
+              .map((facility) => facility.category)
+              .toSet()
+              .toList(growable: false)
+            ..sort(),
+        Failure() => const <String>[],
+      };
+    });
+
 final facilityEditorViewModelProvider =
     AsyncNotifierProvider.autoDispose<
       FacilityEditorViewModel,

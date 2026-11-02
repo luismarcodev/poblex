@@ -94,4 +94,8 @@ class NewsRepositoryImpl implements NewsRepository {
 
   @override
   Future<Result<void>> delete(String id) => _capture(() => _remote.delete(id));
+
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) =>
+      _capture(() => _remote.getCategories(municipalityId));
 }

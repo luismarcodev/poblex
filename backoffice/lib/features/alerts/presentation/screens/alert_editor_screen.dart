@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/viewmodels/municipality_view_model.dart';
 import '../../domain/entities/managed_alert.dart';
@@ -168,17 +169,19 @@ class _AlertEditorScreenState extends ConsumerState<AlertEditorScreen> {
                   const SizedBox(height: AppSpacing.xl),
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final start = _DateTimeField(
+                      final start = AppDateTimeField(
                         label: l10n.alertStartField,
-                        value: _formatDateTime(context, _startAt),
-                        onPressed: busy ? null : _selectStart,
+                        valueLabel: _formatDateTime(context, _startAt),
+                        chooseLabel: l10n.chooseDateTime,
+                        onChoose: busy ? null : _selectStart,
                       );
-                      final end = _DateTimeField(
+                      final end = AppDateTimeField(
                         label: l10n.alertEndField,
-                        value: _endAt == null
+                        valueLabel: _endAt == null
                             ? l10n.alertWithoutEnd
                             : _formatDateTime(context, _endAt!),
-                        onPressed: busy ? null : _selectEnd,
+                        chooseLabel: l10n.chooseDateTime,
+                        onChoose: busy ? null : _selectEnd,
                         clearLabel: _endAt == null ? null : l10n.clearAlertEnd,
                         onClear: _endAt == null || busy
                             ? null
@@ -304,7 +307,7 @@ class _AlertEditorScreenState extends ConsumerState<AlertEditorScreen> {
             phenomenon: _phenomenon.text,
             body: AlertLocalizedText(
               es: _bodyEs.text,
-              va: _optional(_bodyVa.text),
+              va: optionalText(_bodyVa.text),
             ),
             startAt: _startAt,
             endAt: _endAt,
@@ -331,11 +334,6 @@ class _AlertEditorScreenState extends ConsumerState<AlertEditorScreen> {
       ),
     );
     context.go('/alertas');
-  }
-
-  String? _optional(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 
   String _formatDateTime(BuildContext context, DateTime value) =>
@@ -688,46 +686,6 @@ class _RedNotificationNotice extends StatelessWidget {
       ),
     );
   }
-}
-
-class _DateTimeField extends StatelessWidget {
-  const _DateTimeField({
-    required this.label,
-    required this.value,
-    required this.onPressed,
-    this.clearLabel,
-    this.onClear,
-  });
-
-  final String label;
-  final String value;
-  final VoidCallback? onPressed;
-  final String? clearLabel;
-  final VoidCallback? onClear;
-
-  @override
-  Widget build(BuildContext context) => InputDecorator(
-    decoration: InputDecoration(labelText: label),
-    child: Wrap(
-      spacing: AppSpacing.sm,
-      runSpacing: AppSpacing.sm,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text(value),
-        IconButton(
-          onPressed: onPressed,
-          tooltip: label,
-          icon: const Icon(Icons.calendar_month_outlined),
-        ),
-        if (clearLabel != null)
-          TextButton.icon(
-            onPressed: onClear,
-            icon: const Icon(Icons.clear),
-            label: Text(clearLabel!),
-          ),
-      ],
-    ),
-  );
 }
 
 class _AemetReadOnlyState extends StatelessWidget {

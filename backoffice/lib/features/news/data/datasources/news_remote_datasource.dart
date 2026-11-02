@@ -16,6 +16,21 @@ class NewsRemoteDataSource {
     return _entity(response.data);
   }
 
+  // Endpoint público de /news, reutilizado desde el backoffice: solo
+  // devuelve etiquetas de categoría, nada sensible, y evita duplicar esta
+  // consulta bajo /admin.
+  Future<List<String>> getCategories(String municipalityId) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/news/categories',
+      queryParameters: {'municipalityId': municipalityId},
+    );
+    final categories = response.data?['categories'];
+    if (categories is! List<dynamic>) {
+      throw const FormatException('Missing news categories');
+    }
+    return categories.cast<String>();
+  }
+
   Future<ManagedNewsPage> getManagedNews({
     required String municipalityId,
     required bool includeArchived,

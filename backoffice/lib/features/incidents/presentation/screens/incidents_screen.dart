@@ -111,6 +111,7 @@ class _FiltersState extends ConsumerState<_Filters> {
   late final TextEditingController _category = TextEditingController(
     text: widget.category,
   );
+  final FocusNode _categoryFocusNode = FocusNode();
 
   @override
   void didUpdateWidget(covariant _Filters oldWidget) {
@@ -125,12 +126,22 @@ class _FiltersState extends ConsumerState<_Filters> {
   @override
   void dispose() {
     _category.dispose();
+    _categoryFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final municipalityId = ref.watch(
+      incidentsViewModelProvider.select(
+        (value) => value.valueOrNull?.municipalityId,
+      ),
+    );
+    final categorySuggestions = municipalityId == null
+        ? const <String>[]
+        : ref.watch(incidentCategoriesProvider(municipalityId)).valueOrNull ??
+              const <String>[];
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -162,15 +173,31 @@ class _FiltersState extends ConsumerState<_Filters> {
                   ],
                   onChanged: (value) => setState(() => _status = value),
                 );
-                final category = TextField(
-                  key: const Key('incident-category-filter'),
-                  controller: _category,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    labelText: l10n.categoryLabel,
-                    hintText: l10n.categoryHint,
-                  ),
-                  onSubmitted: (_) => _apply(),
+                final category = Autocomplete<String>(
+                  textEditingController: _category,
+                  focusNode: _categoryFocusNode,
+                  optionsBuilder: (value) {
+                    if (value.text.trim().isEmpty) {
+                      return categorySuggestions;
+                    }
+                    final query = value.text.trim().toLowerCase();
+                    return categorySuggestions.where(
+                      (option) => option.toLowerCase().contains(query),
+                    );
+                  },
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onSubmitted) =>
+                          TextField(
+                            key: const Key('incident-category-filter'),
+                            controller: controller,
+                            focusNode: focusNode,
+                            textInputAction: TextInputAction.search,
+                            decoration: InputDecoration(
+                              labelText: l10n.categoryLabel,
+                              hintText: l10n.categoryHint,
+                            ),
+                            onSubmitted: (_) => _apply(),
+                          ),
                 );
                 if (compact) {
                   return Column(
@@ -440,10 +467,7 @@ class _IncidentDetailSheet extends ConsumerWidget {
               const SizedBox(height: AppSpacing.xl),
               _SectionTitle(l10n.incidentHistoryTitle),
               const SizedBox(height: AppSpacing.xs),
-              Semantics(
-                liveRegion: true,
-                child: Text(l10n.incidentHistoryUnavailable),
-              ),
+              _IncidentHistoryList(incidentId: incident.id, format: format),
               if (incident.status != IncidentStatus.resolved) ...[
                 const SizedBox(height: AppSpacing.xl),
                 FilledButton.icon(
@@ -485,6 +509,78 @@ class _SectionTitle extends StatelessWidget {
     header: true,
     child: Text(text, style: context.text.titleLarge),
   );
+}
+
+class _IncidentHistoryList extends ConsumerWidget {
+  const _IncidentHistoryList({required this.incidentId, required this.format});
+
+  final String incidentId;
+  final DateFormat format;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final history = ref.watch(incidentHistoryProvider(incidentId));
+    return history.when(
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              error is NetworkFailure ? l10n.networkError : l10n.genericError,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () =>
+                    ref.invalidate(incidentHistoryProvider(incidentId)),
+                child: Text(l10n.retry),
+              ),
+            ),
+          ],
+        ),
+      ),
+      data: (changes) {
+        if (changes.isEmpty) {
+          return Text(l10n.incidentHistoryEmpty);
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final change in changes)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxs),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(_statusIcon(change.status), size: AppSize.iconSm),
+                    const SizedBox(width: AppSpacing.xs),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${_statusLabel(l10n, change.status)} · '
+                            '${format.format(change.changedAt.toLocal())}',
+                          ),
+                          if (change.note case final note? when note.isNotEmpty)
+                            Text(note, style: context.text.bodyMedium),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 Future<bool> _showStatusDialog(
@@ -614,6 +710,7 @@ class _ChangeStatusDialogState extends ConsumerState<_ChangeStatusDialog> {
         );
     if (!mounted) return;
     if (failure == null) {
+      ref.invalidate(incidentHistoryProvider(widget.incident.id));
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.incidentStatusSaved)));

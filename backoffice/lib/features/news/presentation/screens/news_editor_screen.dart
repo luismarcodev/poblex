@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/viewmodels/auth_view_model.dart';
 import '../../../auth/domain/entities/manager_profile.dart';
@@ -40,6 +41,7 @@ class _NewsEditorScreenState extends ConsumerState<NewsEditorScreen> {
   final _bodyEs = TextEditingController();
   final _bodyVa = TextEditingController();
   final _category = TextEditingController();
+  final _categoryFocusNode = FocusNode();
   final _imageUrl = TextEditingController();
   final _municipalityIds = <String>{};
   final _shareToChannels = <String>{};
@@ -72,6 +74,7 @@ class _NewsEditorScreenState extends ConsumerState<NewsEditorScreen> {
     _bodyEs.dispose();
     _bodyVa.dispose();
     _category.dispose();
+    _categoryFocusNode.dispose();
     _imageUrl.dispose();
     super.dispose();
   }
@@ -130,21 +133,46 @@ class _NewsEditorScreenState extends ConsumerState<NewsEditorScreen> {
                 const SizedBox(height: AppSpacing.xl),
                 LayoutBuilder(
                   builder: (context, constraints) {
+                    final categorySuggestions =
+                        ref
+                            .watch(
+                              newsCategoriesProvider(
+                                ref.watch(selectedMunicipalityProvider).id,
+                              ),
+                            )
+                            .valueOrNull ??
+                        const <String>[];
                     final fields = [
-                      TextFormField(
-                        controller: _category,
-                        decoration: InputDecoration(
-                          labelText: l10n.categoryLabel,
-                          hintText: l10n.categoryHint,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return l10n.requiredField;
+                      Autocomplete<String>(
+                        textEditingController: _category,
+                        focusNode: _categoryFocusNode,
+                        optionsBuilder: (value) {
+                          if (value.text.trim().isEmpty) {
+                            return categorySuggestions;
                           }
-                          return isValidNewsCategory(value)
-                              ? null
-                              : l10n.invalidCategory;
+                          final query = value.text.trim().toLowerCase();
+                          return categorySuggestions.where(
+                            (option) => option.toLowerCase().contains(query),
+                          );
                         },
+                        fieldViewBuilder:
+                            (context, controller, focusNode, onSubmitted) =>
+                                TextFormField(
+                                  controller: controller,
+                                  focusNode: focusNode,
+                                  decoration: InputDecoration(
+                                    labelText: l10n.categoryLabel,
+                                    hintText: l10n.categoryHint,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return l10n.requiredField;
+                                    }
+                                    return isValidNewsCategory(value)
+                                        ? null
+                                        : l10n.invalidCategory;
+                                  },
+                                ),
                       ),
                       TextFormField(
                         controller: _imageUrl,
@@ -365,11 +393,14 @@ class _NewsEditorScreenState extends ConsumerState<NewsEditorScreen> {
             id: widget.newsId,
             title: LocalizedText(
               es: _titleEs.text,
-              va: _optional(_titleVa.text),
+              va: optionalText(_titleVa.text),
             ),
-            body: LocalizedText(es: _bodyEs.text, va: _optional(_bodyVa.text)),
+            body: LocalizedText(
+              es: _bodyEs.text,
+              va: optionalText(_bodyVa.text),
+            ),
             category: _category.text.trim(),
-            imageUrl: _optional(_imageUrl.text),
+            imageUrl: optionalText(_imageUrl.text),
             pinned: _pinned,
             municipalityIds: _municipalityIds.toList(growable: false),
             shareToChannels: _shareToChannels,
@@ -392,11 +423,6 @@ class _NewsEditorScreenState extends ConsumerState<NewsEditorScreen> {
       ),
     );
     context.go('/noticias');
-  }
-
-  String? _optional(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 }
 

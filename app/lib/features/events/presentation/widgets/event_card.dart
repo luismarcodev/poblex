@@ -36,109 +36,141 @@ class EventCard extends StatelessWidget {
       languageTag,
     ).format(event.startAt.toLocal());
 
-    final String semanticLabel = <String>[
+    final String cardSemanticLabel = <String>[
       title.text,
       fullDate,
       time,
       if (event.locationName != null)
         l10n.eventLocationSemantic(event.locationName!),
       if (isPast) l10n.eventPastLabel,
-      l10n.eventReminderSemantic(hasReminder.toString(), title.text),
     ].join('. ');
+    final String reminderSemanticLabel = l10n.eventReminderSemantic(
+      hasReminder.toString(),
+      title.text,
+    );
 
-    return Semantics(
-      button: true,
-      excludeSemantics: true,
-      label: semanticLabel,
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: AppSpacing.cardPadding,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _DateBadge(startAt: event.startAt, languageTag: languageTag),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      if (isPast)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: AppSpacing.xxs,
-                          ),
-                          child: Chip(
-                            label: Text(l10n.eventPastLabel),
-                            visualDensity: VisualDensity.compact,
-                          ),
-                        ),
-                      Text(
-                        title.text,
-                        style: Theme.of(context).textTheme.titleMedium,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: AppSpacing.xxs),
-                      Row(
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Semantics(
+            button: true,
+            excludeSemantics: true,
+            label: cardSemanticLabel,
+            child: InkWell(
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.xs,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _DateBadge(
+                      startAt: event.startAt,
+                      languageTag: languageTag,
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const ExcludeSemantics(
-                            child: Icon(
-                              Icons.schedule_outlined,
-                              size: AppSize.iconSm,
+                          if (isPast)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.xxs,
+                              ),
+                              child: Chip(
+                                label: Text(l10n.eventPastLabel),
+                                visualDensity: VisualDensity.compact,
+                              ),
                             ),
+                          Text(
+                            title.text,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: AppSpacing.xxs),
-                          Text(time),
-                        ],
-                      ),
-                      if (event.locationName != null) ...<Widget>[
-                        const SizedBox(height: AppSpacing.xxs),
-                        Row(
-                          children: <Widget>[
-                            const ExcludeSemantics(
-                              child: Icon(
-                                Icons.place_outlined,
-                                size: AppSize.iconSm,
+                          const SizedBox(height: AppSpacing.xxs),
+                          Row(
+                            children: <Widget>[
+                              const ExcludeSemantics(
+                                child: Icon(
+                                  Icons.schedule_outlined,
+                                  size: AppSize.iconSm,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: AppSpacing.xxs),
-                            Expanded(
-                              child: Text(
-                                event.locationName!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              const SizedBox(width: AppSpacing.xxs),
+                              Text(time),
+                            ],
+                          ),
+                          if (event.locationName != null) ...<Widget>[
+                            const SizedBox(height: AppSpacing.xxs),
+                            Row(
+                              children: <Widget>[
+                                const ExcludeSemantics(
+                                  child: Icon(
+                                    Icons.place_outlined,
+                                    size: AppSize.iconSm,
+                                  ),
+                                ),
+                                const SizedBox(width: AppSpacing.xxs),
+                                Expanded(
+                                  child: Text(
+                                    event.locationName!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ],
-                      const SizedBox(height: AppSpacing.xs),
-                      // A visible button, never a swipe-only action (A-21).
-                      ExcludeSemantics(
-                        child: OutlinedButton.icon(
-                          onPressed: onToggleReminder,
-                          icon: Icon(
-                            hasReminder
-                                ? Icons.notifications_active
-                                : Icons.notifications_none_outlined,
-                          ),
-                          label: Text(
-                            hasReminder
-                                ? l10n.eventReminderActive
-                                : l10n.eventReminderSet,
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          // A visible button, never a swipe-only action (A-21). Kept
+          // outside the card's excludeSemantics tree above so a screen
+          // reader can reach it as its own control, not just as text
+          // folded into the card's combined label.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              0,
+              AppSpacing.md,
+              AppSpacing.md,
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Semantics(
+                button: true,
+                excludeSemantics: true,
+                label: reminderSemanticLabel,
+                child: OutlinedButton.icon(
+                  onPressed: onToggleReminder,
+                  icon: Icon(
+                    hasReminder
+                        ? Icons.notifications_active
+                        : Icons.notifications_none_outlined,
+                  ),
+                  label: Text(
+                    hasReminder
+                        ? l10n.eventReminderActive
+                        : l10n.eventReminderSet,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

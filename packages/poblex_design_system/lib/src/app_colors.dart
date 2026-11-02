@@ -47,8 +47,12 @@ abstract final class AppPalette {
   static const Color accent500 = Color(
     0xFF006A61,
   ); // Stitch tertiary — light accent, 6.17:1
-  static const Color accent600 = Color(0xFF005049); // Stitch on-tertiary-fixed-variant
-  static const Color accent700 = Color(0xFF003B36); // Stitch on-tertiary-container
+  static const Color accent600 = Color(
+    0xFF005049,
+  ); // Stitch on-tertiary-fixed-variant
+  static const Color accent700 = Color(
+    0xFF003B36,
+  ); // Stitch on-tertiary-container
   static const Color accent800 = Color(0xFF00201D); // Stitch on-tertiary-fixed
 
   static const Color neutral0 = Color(

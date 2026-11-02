@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/viewmodels/municipality_view_model.dart';
 import '../../domain/entities/managed_form.dart';
@@ -113,11 +114,19 @@ class _FormEditorScreenState extends ConsumerState<FormEditorScreen> {
                         ),
                       ),
                       const SizedBox(height: AppSpacing.lg),
-                      _DeadlineField(
-                        copy: _copy,
-                        deadline: _deadline,
+                      AppDateTimeField(
+                        label: _copy.optionalDeadline,
+                        valueLabel: _deadline == null
+                            ? _copy.noDeadline
+                            : DateFormat.yMMMd(
+                                Localizations.localeOf(context).languageCode,
+                              ).add_Hm().format(_deadline!),
+                        chooseLabel: _copy.chooseDeadline,
                         errorText: _deadlineError,
                         onChoose: saving ? null : _chooseDeadline,
+                        clearLabel: _deadline == null
+                            ? null
+                            : _copy.clearDeadline,
                         onClear: saving || _deadline == null
                             ? null
                             : () => setState(() {
@@ -254,11 +263,11 @@ class _FormEditorScreenState extends ConsumerState<FormEditorScreen> {
             municipalityId: municipalityId,
             title: FormLocalizedText(
               es: _titleEs.text,
-              va: _optional(_titleVa.text),
+              va: optionalText(_titleVa.text),
             ),
             description: FormLocalizedText(
               es: _descriptionEs.text,
-              va: _optional(_descriptionVa.text),
+              va: optionalText(_descriptionVa.text),
             ),
             deadline: _deadline,
             fields: _fields
@@ -267,7 +276,7 @@ class _FormEditorScreenState extends ConsumerState<FormEditorScreen> {
                     key: field.key.text,
                     label: FormLocalizedText(
                       es: field.labelEs.text,
-                      va: _optional(field.labelVa.text),
+                      va: optionalText(field.labelVa.text),
                     ),
                     type: field.type,
                     required: field.required,
@@ -289,8 +298,6 @@ class _FormEditorScreenState extends ConsumerState<FormEditorScreen> {
     _showMessage(_copy.created);
     widget.onCreated();
   }
-
-  String? _optional(String value) => value.trim().isEmpty ? null : value.trim();
 
   String _failureText(AppFailure failure) {
     if (failure is NetworkFailure) return _copy.networkError;
@@ -357,55 +364,6 @@ class _LocalizedPair extends StatelessWidget {
       );
     },
   );
-}
-
-class _DeadlineField extends StatelessWidget {
-  const _DeadlineField({
-    required this.copy,
-    required this.deadline,
-    required this.onChoose,
-    required this.onClear,
-    this.errorText,
-  });
-  final FormsCopy copy;
-  final DateTime? deadline;
-  final VoidCallback? onChoose;
-  final VoidCallback? onClear;
-  final String? errorText;
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: copy.optionalDeadline,
-        errorText: errorText,
-      ),
-      child: Wrap(
-        spacing: AppSpacing.sm,
-        runSpacing: AppSpacing.sm,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text(
-            deadline == null
-                ? copy.noDeadline
-                : DateFormat.yMMMd(locale).add_Hm().format(deadline!),
-          ),
-          OutlinedButton.icon(
-            onPressed: onChoose,
-            icon: const Icon(Icons.calendar_month_outlined),
-            label: Text(copy.chooseDeadline),
-          ),
-          if (deadline != null)
-            TextButton.icon(
-              onPressed: onClear,
-              icon: const Icon(Icons.clear),
-              label: Text(copy.clearDeadline),
-            ),
-        ],
-      ),
-    );
-  }
 }
 
 class _FieldEditor extends StatefulWidget {

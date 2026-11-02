@@ -30,6 +30,11 @@ export interface IncidentReaderPort {
   ): Promise<IncidentListResult>;
   findById(id: string): Promise<Incident | null>;
   findStatusHistory(incidentId: string): Promise<IncidentStatusChange[]>;
+
+  // Categorías realmente usadas en el municipio, para que el backoffice
+  // pueda sugerirlas al gestor y evitar variantes accidentales ("Sanitaria"
+  // vs "sanitaria") de un campo que es texto libre a propósito.
+  findCategories(municipalityId: MunicipalityId): Promise<string[]>;
 }
 
 export const INCIDENT_READER_PORT = Symbol('INCIDENT_READER_PORT');

@@ -49,7 +49,8 @@ abstract final class ApiEndpoints {
 
   static const String facilities = '/facilities';
   static String facilityDetail(String id) => '/facilities/$id';
-  static String facilityAvailability(String id) => '/facilities/$id/availability';
+  static String facilityAvailability(String id) =>
+      '/facilities/$id/availability';
 
   static const String reservations = '/reservations';
   static String reservationCancel(String id) => '/reservations/$id/cancel';

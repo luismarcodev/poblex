@@ -151,3 +151,10 @@ class DeleteNews {
   final NewsRepository _repository;
   Future<Result<void>> call(String id) => _repository.delete(id);
 }
+
+class ListNewsCategories {
+  const ListNewsCategories(this._repository);
+  final NewsRepository _repository;
+  Future<Result<List<String>>> call(String municipalityId) =>
+      _repository.getCategories(municipalityId);
+}

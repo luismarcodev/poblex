@@ -92,6 +92,10 @@ class FakeNewsRepository implements NewsRepository {
     required Uint8List bytes,
     required String mimeType,
   }) => throw UnimplementedError();
+
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) async =>
+      const Success([]);
 }
 
 void main() {

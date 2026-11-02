@@ -117,10 +117,22 @@ class _Header extends ConsumerWidget {
           icon: const Icon(Icons.add),
           label: Text(l10n.newNews),
         );
-        final socialConnections = IconButton(
+        final socialConnections = OutlinedButton.icon(
           onPressed: () => context.go('/noticias/conexiones'),
           icon: const Icon(Icons.share_outlined),
-          tooltip: l10n.socialConnectionsTooltip,
+          label: Text(l10n.socialConnectionsShortLabel),
+        );
+        // Compact header: no room for a labelled button next to the title,
+        // but the icon still needs its own accessible name — not just a
+        // tooltip, which a touch screen reader never triggers.
+        final socialConnectionsCompact = Semantics(
+          button: true,
+          label: l10n.socialConnectionsShortLabel,
+          excludeSemantics: true,
+          child: IconButton(
+            onPressed: () => context.go('/noticias/conexiones'),
+            icon: const Icon(Icons.share_outlined),
+          ),
         );
         if (compact) {
           return Column(
@@ -129,7 +141,7 @@ class _Header extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(child: title),
-                  socialConnections,
+                  socialConnectionsCompact,
                 ],
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -275,10 +287,14 @@ class _NewsCard extends ConsumerWidget {
                     label: Text(l10n.edit),
                   ),
                   TextButton.icon(
-                    onPressed: () => _runMutation(
-                      context,
-                      ref.read(newsViewModelProvider.notifier).setPinned(item),
-                    ),
+                    onPressed: () => item.pinned
+                        ? _runMutation(
+                            context,
+                            ref
+                                .read(newsViewModelProvider.notifier)
+                                .setPinned(item),
+                          )
+                        : _confirmPin(context, ref),
                     icon: Icon(
                       item.pinned ? Icons.push_pin : Icons.push_pin_outlined,
                     ),
@@ -311,6 +327,32 @@ class _NewsCard extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _confirmPin(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.pinConfirmTitle),
+        content: Text(l10n.pinConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.pin),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await _runMutation(
+      context,
+      ref.read(newsViewModelProvider.notifier).setPinned(item),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/viewmodels/municipality_view_model.dart';
 import '../../domain/entities/managed_survey.dart';
@@ -215,7 +216,7 @@ class _SurveyEditorScreenState extends ConsumerState<SurveyEditorScreen> {
             municipalityId: municipalityId,
             question: SurveyLocalizedText(
               es: _questionEs.text,
-              va: _optional(_questionVa.text),
+              va: optionalText(_questionVa.text),
             ),
             closesAt: _closesAt,
             resultsVisible: _resultsVisible,
@@ -223,7 +224,7 @@ class _SurveyEditorScreenState extends ConsumerState<SurveyEditorScreen> {
                 .map(
                   (option) => SurveyLocalizedText(
                     es: option.spanish.text,
-                    va: _optional(option.valencian.text),
+                    va: optionalText(option.valencian.text),
                   ),
                 )
                 .toList(growable: false),
@@ -240,11 +241,6 @@ class _SurveyEditorScreenState extends ConsumerState<SurveyEditorScreen> {
       context,
     ).showSnackBar(SnackBar(content: Text(l10n.surveyCreatedMessage)));
     context.go('/encuestas');
-  }
-
-  String? _optional(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 
   String _failureMessage(AppLocalizations l10n, AppFailure failure) {

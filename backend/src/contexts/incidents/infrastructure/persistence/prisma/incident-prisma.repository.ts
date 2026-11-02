@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { MunicipalityId } from '../../../../../shared/domain/value-objects/municipality-id';
 import { PrismaService } from '../../../../../shared/infrastructure/prisma/prisma.service';
 import { IncidentStatusChange } from '../../../domain/entities/incident-status-change.entity';
 import { Incident } from '../../../domain/entities/incident.entity';
@@ -84,6 +85,16 @@ export class IncidentPrismaRepository
       orderBy: { changedAt: 'asc' },
     });
     return rows.map((row) => IncidentMapper.historyToDomain(row));
+  }
+
+  async findCategories(municipalityId: MunicipalityId): Promise<string[]> {
+    const rows = await this.prisma.incident.findMany({
+      where: { municipalityId: municipalityId.value },
+      distinct: ['category'],
+      select: { category: true },
+      orderBy: { category: 'asc' },
+    });
+    return rows.map((row) => row.category);
   }
 
   async create(params: CreateIncidentParams): Promise<Incident> {

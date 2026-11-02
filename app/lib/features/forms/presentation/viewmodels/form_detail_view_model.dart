@@ -21,6 +21,7 @@ class FormDetailUiState extends Equatable {
     this.submitting = false,
     this.submitted = false,
     this.failure,
+    this.showValidationErrors = false,
   });
 
   final MunicipalForm? form;
@@ -28,16 +29,15 @@ class FormDetailUiState extends Equatable {
   final bool submitting;
   final bool submitted;
   final AppFailure? failure;
+  final bool showValidationErrors;
+
+  bool isFieldMissing(FormFieldDefinition field) =>
+      field.required && (answers[field.id] ?? '').trim().isEmpty;
 
   bool get canSubmit {
     final MunicipalForm? current = form;
     if (current == null || !current.canSubmit || submitting) return false;
-    for (final FormFieldDefinition field in current.fields) {
-      if (field.required && (answers[field.id] ?? '').trim().isEmpty) {
-        return false;
-      }
-    }
-    return true;
+    return !current.fields.any(isFieldMissing);
   }
 
   FormDetailUiState copyWith({
@@ -47,12 +47,14 @@ class FormDetailUiState extends Equatable {
     bool? submitted,
     AppFailure? failure,
     bool clearFailure = false,
+    bool? showValidationErrors,
   }) => FormDetailUiState(
     form: form ?? this.form,
     answers: answers ?? this.answers,
     submitting: submitting ?? this.submitting,
     submitted: submitted ?? this.submitted,
     failure: clearFailure ? null : failure ?? this.failure,
+    showValidationErrors: showValidationErrors ?? this.showValidationErrors,
   );
 
   @override
@@ -62,6 +64,7 @@ class FormDetailUiState extends Equatable {
     submitting,
     submitted,
     failure,
+    showValidationErrors,
   ];
 }
 
@@ -106,6 +109,20 @@ class FormDetailViewModel
         answers: <String, String>{...current.answers, fieldId: value},
       ),
     );
+  }
+
+  /// Called from the submit button, which stays enabled even when some
+  /// required field is still empty — this reveals the per-field errors
+  /// instead of leaving a disabled button with no explanation (A-21).
+  Future<void> attemptSubmit() async {
+    final FormDetailUiState current = state.requireValue;
+    if (!current.canSubmit) {
+      state = AsyncData<FormDetailUiState>(
+        current.copyWith(showValidationErrors: true),
+      );
+      return;
+    }
+    await submit();
   }
 
   Future<void> submit() async {

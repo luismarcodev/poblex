@@ -245,6 +245,7 @@
   "formSubmitted": "Formulario enviado",
   "formAlreadySubmitted": "Ya has enviado este formulario",
   "formRequiredLabel": "obligatorio",
+  "formFieldRequiredError": "Este campo es obligatorio.",
   "formDeadlineLabel": "Fecha límite: {date}",
   "@formDeadlineLabel": {
     "placeholders": { "date": { "type": "String" } }

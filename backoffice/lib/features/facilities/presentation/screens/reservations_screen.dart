@@ -62,16 +62,13 @@ class ReservationsScreen extends ConsumerWidget {
                       else ...[
                         SliverList.builder(
                           itemCount: state.items.length,
-                          itemBuilder: (context, index) =>
-                              _ReservationCard(
-                                reservation: state.items[index],
-                                facility: state.facilityFor(
-                                  state.items[index].facilityId,
-                                ),
-                                busy: state.busyIds.contains(
-                                  state.items[index].id,
-                                ),
-                              ),
+                          itemBuilder: (context, index) => _ReservationCard(
+                            reservation: state.items[index],
+                            facility: state.facilityFor(
+                              state.items[index].facilityId,
+                            ),
+                            busy: state.busyIds.contains(state.items[index].id),
+                          ),
                         ),
                         if (state.nextCursor != null)
                           SliverToBoxAdapter(
@@ -105,7 +102,10 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.xs),
         Expanded(
-          child: Text(l10n.reservationsTitle, style: context.text.headlineLarge),
+          child: Text(
+            l10n.reservationsTitle,
+            style: context.text.headlineLarge,
+          ),
         ),
       ],
     );
@@ -257,9 +257,9 @@ class _ReservationCard extends ConsumerWidget {
       );
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.reservationCancelledMessage)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.reservationCancelledMessage)));
   }
 }
 

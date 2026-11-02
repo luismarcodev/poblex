@@ -139,6 +139,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get unpin => 'Llevar destacat';
 
   @override
+  String get pinConfirmTitle => 'Vols destacar esta notícia?';
+
+  @override
+  String get pinConfirmBody =>
+      'Es mostrarà immediatament a dalt de tot per a tots els veïns del municipi.';
+
+  @override
   String get archive => 'Arxivar';
 
   @override
@@ -434,8 +441,8 @@ class AppLocalizationsCa extends AppLocalizations {
   String get incidentHistoryTitle => 'Historial de canvis';
 
   @override
-  String get incidentHistoryUnavailable =>
-      'L\'historial detallat encara no està disponible en este panell.';
+  String get incidentHistoryEmpty =>
+      'Encara no hi ha canvis d\'estat registrats.';
 
   @override
   String get incidentStatusChangeTitle => 'Canviar l\'estat';
@@ -737,6 +744,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get alertBodyValencian => 'Missatge en valencià (opcional)';
 
   @override
+  String get chooseDateTime => 'Triar data';
+
+  @override
   String get alertStartField => 'Inici';
 
   @override
@@ -862,6 +872,10 @@ class AppLocalizationsCa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get formNoEditNote =>
+      'No es pot editar una vegada creat, per no alterar les respostes ja enviades. Pots tancar-lo o esborrar-lo.';
 
   @override
   String get formExportSubmissions => 'Exportar respostes CSV';
@@ -1151,7 +1165,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get socialConnectionsTooltip => 'Connexions amb xarxes socials';
+  String get socialConnectionsShortLabel => 'Xarxes socials';
 
   @override
   String get socialConnectionsTitle => 'Connexions amb xarxes socials';
@@ -1287,8 +1301,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get facilityCloseTimeLabel => 'Tanca';
 
   @override
-  String get facilityInvalidHours =>
-      'Revisa l\'horari: l\'hora d\'obertura ha de ser anterior a la de tancament, en format HH:mm.';
+  String facilityInvalidHoursForDay(String day) {
+    return 'Revisa l\'horari del $day: l\'hora d\'obertura ha de ser anterior a la de tancament.';
+  }
 
   @override
   String get facilityDayMon => 'Dilluns';

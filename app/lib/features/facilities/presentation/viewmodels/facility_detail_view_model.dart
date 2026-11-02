@@ -99,9 +99,7 @@ class FacilityDetailViewModel
     };
   }
 
-  Future<FacilityDetailUiState> _loadSlots(
-    FacilityDetailUiState base,
-  ) async {
+  Future<FacilityDetailUiState> _loadSlots(FacilityDetailUiState base) async {
     final Result<List<AvailabilitySlot>> result = await _getAvailability(
       facilityId: arg,
       date: formatApiDate(base.selectedDate),

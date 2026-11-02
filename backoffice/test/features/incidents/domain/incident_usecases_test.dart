@@ -27,6 +27,15 @@ class FakeIncidentRepository implements IncidentRepository {
     listedCategory = category;
     return const Success(ManagedIncidentsPage(items: [], nextCursor: null));
   }
+
+  @override
+  Future<Result<List<IncidentStatusChange>>> getHistory(
+    String incidentId,
+  ) async => const Success([]);
+
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) async =>
+      const Success([]);
 }
 
 void main() {

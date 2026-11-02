@@ -193,8 +193,7 @@ class _FacilityTile extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final String categoryLabel = prettifyCategorySlug(facility.category);
     final AppLocale locale =
-        ref.watch(sessionViewModelProvider).valueOrNull?.locale ??
-        AppLocale.es;
+        ref.watch(sessionViewModelProvider).valueOrNull?.locale ?? AppLocale.es;
     final String name = facility.name.resolve(locale).text;
 
     return Semantics(
@@ -218,7 +217,10 @@ class _FacilityTile extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(name, style: Theme.of(context).textTheme.titleMedium),
+                      Text(
+                        name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       const SizedBox(height: AppSpacing.xxs),
                       Wrap(
                         spacing: AppSpacing.xs,
@@ -227,7 +229,10 @@ class _FacilityTile extends ConsumerWidget {
                           Chip(label: Text(categoryLabel)),
                           if (facility.feeNote != null)
                             Chip(
-                              avatar: const Icon(Icons.payments_outlined, size: 16),
+                              avatar: const Icon(
+                                Icons.payments_outlined,
+                                size: 16,
+                              ),
                               label: Text(l10n.facilityFeeNoteHeading),
                             ),
                         ],

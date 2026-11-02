@@ -7,6 +7,7 @@ import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
 import '../../../../core/result/result.dart';
+import '../../../../core/text/filename_slug.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/managed_survey.dart';
 import '../platform/survey_csv_downloader.dart';
@@ -524,7 +525,10 @@ class _SurveyResultsDialog extends ConsumerWidget {
     if (!context.mounted) return;
     switch (result) {
       case Success(value: final csv):
-        downloadSurveyCsv(filename: 'resultados-${detail.id}.csv', csv: csv);
+        downloadSurveyCsv(
+          filename: 'resultados-${filenameSlug(detail.question.es)}.csv',
+          csv: csv,
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context).surveyCsvDownloaded),

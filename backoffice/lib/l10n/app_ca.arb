@@ -41,6 +41,8 @@
   "edit": "Editar",
   "pin": "Destacar",
   "unpin": "Llevar destacat",
+  "pinConfirmTitle": "Vols destacar esta notícia?",
+  "pinConfirmBody": "Es mostrarà immediatament a dalt de tot per a tots els veïns del municipi.",
   "archive": "Arxivar",
   "restore": "Restaurar",
   "delete": "Esborrar",
@@ -152,7 +154,7 @@
     }
   },
   "incidentHistoryTitle": "Historial de canvis",
-  "incidentHistoryUnavailable": "L'historial detallat encara no està disponible en este panell.",
+  "incidentHistoryEmpty": "Encara no hi ha canvis d'estat registrats.",
   "incidentStatusChangeTitle": "Canviar l'estat",
   "incidentNewStatusLabel": "Estat nou",
   "incidentNoteLabel": "Nota interna",
@@ -278,6 +280,7 @@
   "alertSeverityField": "Nivell de l'avís",
   "alertBodySpanish": "Missatge en castellà",
   "alertBodyValencian": "Missatge en valencià (opcional)",
+  "chooseDateTime": "Triar data",
   "alertStartField": "Inici",
   "alertEndField": "Final",
   "clearAlertEnd": "Llevar la data de finalització",
@@ -321,6 +324,7 @@
   "@formFieldsCount": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "formNoEditNote": "No es pot editar una vegada creat, per no alterar les respostes ja enviades. Pots tancar-lo o esborrar-lo.",
   "formExportSubmissions": "Exportar respostes CSV",
   "formExportSuccess": "Respostes descarregades",
   "formExportUnsupported": "La descàrrega només està disponible en la versió web del panell.",
@@ -428,7 +432,7 @@
     "placeholders": { "index": { "type": "int" } }
   },
 
-  "socialConnectionsTooltip": "Connexions amb xarxes socials",
+  "socialConnectionsShortLabel": "Xarxes socials",
   "socialConnectionsTitle": "Connexions amb xarxes socials",
   "socialConnectionsSubtitle": "Connecta els comptes d'Instagram i Facebook de l'ajuntament per a publicar notícies també ahí.",
   "socialPlatformInstagram": "Instagram",
@@ -475,7 +479,14 @@
   "facilityOpenLabel": "Obert",
   "facilityOpenTimeLabel": "Obri",
   "facilityCloseTimeLabel": "Tanca",
-  "facilityInvalidHours": "Revisa l'horari: l'hora d'obertura ha de ser anterior a la de tancament, en format HH:mm.",
+  "facilityInvalidHoursForDay": "Revisa l'horari del {day}: l'hora d'obertura ha de ser anterior a la de tancament.",
+  "@facilityInvalidHoursForDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "facilityDayMon": "Dilluns",
   "facilityDayTue": "Dimarts",
   "facilityDayWed": "Dimecres",

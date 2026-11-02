@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
+import '../../../../core/text/optional_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/manager_profile.dart';
 import '../../../auth/presentation/viewmodels/auth_view_model.dart';
@@ -352,15 +353,15 @@ class _EventEditorScreenState extends ConsumerState<EventEditorScreen> {
             id: widget.eventId,
             title: EventLocalizedText(
               es: _titleEs.text,
-              va: _optional(_titleVa.text),
+              va: optionalText(_titleVa.text),
             ),
             description: EventLocalizedText(
               es: _descriptionEs.text,
-              va: _optional(_descriptionVa.text),
+              va: optionalText(_descriptionVa.text),
             ),
             startAt: _startAt,
             endAt: _endAt,
-            locationName: _optional(_location.text),
+            locationName: optionalText(_location.text),
             latitude: _parseCoordinate(_latitude.text),
             longitude: _parseCoordinate(_longitude.text),
             category: _category.text.trim(),
@@ -382,11 +383,6 @@ class _EventEditorScreenState extends ConsumerState<EventEditorScreen> {
       ),
     );
     context.go('/eventos');
-  }
-
-  String? _optional(String value) {
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 
   double? _parseCoordinate(String value) =>

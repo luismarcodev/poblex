@@ -578,6 +578,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get formRequiredLabel => 'obligatorio';
 
   @override
+  String get formFieldRequiredError => 'Este campo es obligatorio.';
+
+  @override
   String formDeadlineLabel(String date) {
     return 'Fecha límite: $date';
   }

@@ -50,9 +50,7 @@ class FacilityRepositoryImpl implements FacilityRepository {
         date: date,
       );
       return Success<List<AvailabilitySlot>>(
-        result.slots
-            .map(FacilityMapper.toSlotDomain)
-            .toList(growable: false),
+        result.slots.map(FacilityMapper.toSlotDomain).toList(growable: false),
       );
     } on Object catch (error) {
       return Failed<List<AvailabilitySlot>>(mapDioError(error));
@@ -78,9 +76,7 @@ class FacilityRepositoryImpl implements FacilityRepository {
   @override
   Future<Result<ReservationPage>> listMyReservations({String? cursor}) async {
     try {
-      final ReservationPageModel page = await _remote.listMine(
-        cursor: cursor,
-      );
+      final ReservationPageModel page = await _remote.listMine(cursor: cursor);
       return Success<ReservationPage>(
         ReservationPage(
           items: page.items

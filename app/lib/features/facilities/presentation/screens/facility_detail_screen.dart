@@ -30,13 +30,13 @@ class FacilityDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final AppLocale locale =
-        ref.watch(sessionViewModelProvider).valueOrNull?.locale ??
-        AppLocale.es;
+        ref.watch(sessionViewModelProvider).valueOrNull?.locale ?? AppLocale.es;
     final String languageTag = Localizations.localeOf(context).toLanguageTag();
 
     ref.listen<AsyncValue<FacilityDetailUiState>>(
       facilityDetailViewModelProvider(facilityId),
-      (AsyncValue<FacilityDetailUiState>? previous,
+      (
+        AsyncValue<FacilityDetailUiState>? previous,
         AsyncValue<FacilityDetailUiState> next,
       ) {
         final AvailabilitySlot? previousBooked = previous?.value?.bookedSlot;
@@ -77,18 +77,16 @@ class FacilityDetailScreen extends ConsumerWidget {
         error: (_, _) => FailureView(
           failure: const UnknownFailure(),
           sectionName: l10n.sectionFacilities,
-          onRetry: () => ref.invalidate(
-            facilityDetailViewModelProvider(facilityId),
-          ),
+          onRetry: () =>
+              ref.invalidate(facilityDetailViewModelProvider(facilityId)),
         ),
         data: (FacilityDetailUiState state) {
           if (state.facility == null) {
             return FailureView(
               failure: state.failure ?? const UnknownFailure(),
               sectionName: l10n.sectionFacilities,
-              onRetry: () => ref.invalidate(
-                facilityDetailViewModelProvider(facilityId),
-              ),
+              onRetry: () =>
+                  ref.invalidate(facilityDetailViewModelProvider(facilityId)),
             );
           }
           return _FacilityDetailContent(
@@ -209,8 +207,14 @@ class _FacilityDetailContent extends ConsumerWidget {
                     booking: state.booking,
                     locale: locale,
                     languageTag: languageTag,
-                    onBook: (AvailabilitySlot slot) =>
-                        _confirmBooking(context, notifier, facility, slot, l10n, languageTag),
+                    onBook: (AvailabilitySlot slot) => _confirmBooking(
+                      context,
+                      notifier,
+                      facility,
+                      slot,
+                      l10n,
+                      languageTag,
+                    ),
                   ),
               ],
             ),
@@ -240,12 +244,12 @@ class _FacilityDetailContent extends ConsumerWidget {
     final String dateLabel = DateFormat.yMMMMEEEEd(
       languageTag,
     ).format(slot.start.toLocal());
-    final String startLabel = DateFormat.Hm(languageTag).format(
-      slot.start.toLocal(),
-    );
-    final String endLabel = DateFormat.Hm(languageTag).format(
-      slot.end.toLocal(),
-    );
+    final String startLabel = DateFormat.Hm(
+      languageTag,
+    ).format(slot.start.toLocal());
+    final String endLabel = DateFormat.Hm(
+      languageTag,
+    ).format(slot.end.toLocal());
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) => AlertDialog(
@@ -337,9 +341,7 @@ class _OpeningHoursTable extends StatelessWidget {
           children: <Widget>[
             for (int index = 0; index < _dayKeys.length; index++)
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppSpacing.xxs,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxs),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -504,7 +506,9 @@ class _SlotChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String label = DateFormat.Hm(languageTag).format(slot.start.toLocal());
+    final String label = DateFormat.Hm(
+      languageTag,
+    ).format(slot.start.toLocal());
     return Semantics(
       button: true,
       enabled: enabled,

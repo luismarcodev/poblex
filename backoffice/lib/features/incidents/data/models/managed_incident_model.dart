@@ -27,3 +27,18 @@ class ManagedIncidentModel {
     );
   }
 }
+
+class IncidentStatusChangeModel {
+  const IncidentStatusChangeModel(this.entity);
+
+  final IncidentStatusChange entity;
+
+  factory IncidentStatusChangeModel.fromJson(Map<String, dynamic> json) =>
+      IncidentStatusChangeModel(
+        IncidentStatusChange(
+          status: IncidentStatus.fromApi(json['status'] as String),
+          note: json['note'] as String?,
+          changedAt: DateTime.parse(json['changedAt'] as String),
+        ),
+      );
+}

@@ -66,8 +66,7 @@ class _MyReservationsContent extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final notifier = ref.read(myReservationsViewModelProvider.notifier);
     final AppLocale locale =
-        ref.watch(sessionViewModelProvider).valueOrNull?.locale ??
-        AppLocale.es;
+        ref.watch(sessionViewModelProvider).valueOrNull?.locale ?? AppLocale.es;
     final String languageTag = Localizations.localeOf(context).toLanguageTag();
 
     if (state.failure != null && state.isEmpty) {
@@ -202,8 +201,8 @@ class _ReservationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final String name = facility?.name.resolve(locale).text ??
-        l10n.facilityDetailTitle;
+    final String name =
+        facility?.name.resolve(locale).text ?? l10n.facilityDetailTitle;
     final String dateLabel = DateFormat.yMMMMEEEEd(
       languageTag,
     ).format(reservation.slotStart.toLocal());

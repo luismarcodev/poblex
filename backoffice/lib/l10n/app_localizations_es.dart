@@ -139,6 +139,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get unpin => 'Quitar destacado';
 
   @override
+  String get pinConfirmTitle => '¿Destacar esta noticia?';
+
+  @override
+  String get pinConfirmBody =>
+      'Se mostrará de inmediato arriba de todo para todos los vecinos del municipio.';
+
+  @override
   String get archive => 'Archivar';
 
   @override
@@ -434,8 +441,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get incidentHistoryTitle => 'Historial de cambios';
 
   @override
-  String get incidentHistoryUnavailable =>
-      'El historial detallado todavía no está disponible en este panel.';
+  String get incidentHistoryEmpty =>
+      'Todavía no hay cambios de estado registrados.';
 
   @override
   String get incidentStatusChangeTitle => 'Cambiar estado';
@@ -739,6 +746,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get alertBodyValencian => 'Mensaje en valenciano (opcional)';
 
   @override
+  String get chooseDateTime => 'Elegir fecha';
+
+  @override
   String get alertStartField => 'Inicio';
 
   @override
@@ -863,6 +873,10 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get formNoEditNote =>
+      'No se puede editar una vez creado, para no alterar las respuestas ya enviadas. Puedes cerrarlo o borrarlo.';
 
   @override
   String get formExportSubmissions => 'Exportar respuestas CSV';
@@ -1154,7 +1168,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get socialConnectionsTooltip => 'Conexiones con redes sociales';
+  String get socialConnectionsShortLabel => 'Redes sociales';
 
   @override
   String get socialConnectionsTitle => 'Conexiones con redes sociales';
@@ -1292,8 +1306,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get facilityCloseTimeLabel => 'Cierra';
 
   @override
-  String get facilityInvalidHours =>
-      'Revisa el horario: la hora de apertura debe ser anterior a la de cierre, en formato HH:mm.';
+  String facilityInvalidHoursForDay(String day) {
+    return 'Revisa el horario del $day: la hora de apertura debe ser anterior a la de cierre.';
+  }
 
   @override
   String get facilityDayMon => 'Lunes';

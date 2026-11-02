@@ -46,6 +46,15 @@ class NewsEditorUiState extends Equatable {
   ];
 }
 
+final newsCategoriesProvider = FutureProvider.autoDispose
+    .family<List<String>, String>((ref, municipalityId) async {
+      final result = await getIt<ListNewsCategories>()(municipalityId);
+      return switch (result) {
+        Success(value: final categories) => categories,
+        Failure() => const <String>[],
+      };
+    });
+
 final newsEditorViewModelProvider =
     AsyncNotifierProvider.autoDispose<NewsEditorViewModel, NewsEditorUiState>(
       NewsEditorViewModel.new,

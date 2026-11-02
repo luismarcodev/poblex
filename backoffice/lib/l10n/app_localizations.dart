@@ -344,6 +344,18 @@ abstract class AppLocalizations {
   /// **'Quitar destacado'**
   String get unpin;
 
+  /// No description provided for @pinConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Destacar esta noticia?'**
+  String get pinConfirmTitle;
+
+  /// No description provided for @pinConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se mostrará de inmediato arriba de todo para todos los vecinos del municipio.'**
+  String get pinConfirmBody;
+
   /// No description provided for @archive.
   ///
   /// In es, this message translates to:
@@ -884,11 +896,11 @@ abstract class AppLocalizations {
   /// **'Historial de cambios'**
   String get incidentHistoryTitle;
 
-  /// No description provided for @incidentHistoryUnavailable.
+  /// No description provided for @incidentHistoryEmpty.
   ///
   /// In es, this message translates to:
-  /// **'El historial detallado todavía no está disponible en este panel.'**
-  String get incidentHistoryUnavailable;
+  /// **'Todavía no hay cambios de estado registrados.'**
+  String get incidentHistoryEmpty;
 
   /// No description provided for @incidentStatusChangeTitle.
   ///
@@ -1388,6 +1400,12 @@ abstract class AppLocalizations {
   /// **'Mensaje en valenciano (opcional)'**
   String get alertBodyValencian;
 
+  /// No description provided for @chooseDateTime.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir fecha'**
+  String get chooseDateTime;
+
   /// No description provided for @alertStartField.
   ///
   /// In es, this message translates to:
@@ -1609,6 +1627,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count, plural, =1{1 campo} other{{count} campos}}'**
   String formFieldsCount(int count);
+
+  /// No description provided for @formNoEditNote.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede editar una vez creado, para no alterar las respuestas ya enviadas. Puedes cerrarlo o borrarlo.'**
+  String get formNoEditNote;
 
   /// No description provided for @formExportSubmissions.
   ///
@@ -2132,11 +2156,11 @@ abstract class AppLocalizations {
   /// **'Mover la foto {index} hacia delante'**
   String businessPhotoMoveRightSemantic(int index);
 
-  /// No description provided for @socialConnectionsTooltip.
+  /// No description provided for @socialConnectionsShortLabel.
   ///
   /// In es, this message translates to:
-  /// **'Conexiones con redes sociales'**
-  String get socialConnectionsTooltip;
+  /// **'Redes sociales'**
+  String get socialConnectionsShortLabel;
 
   /// No description provided for @socialConnectionsTitle.
   ///
@@ -2384,11 +2408,11 @@ abstract class AppLocalizations {
   /// **'Cierra'**
   String get facilityCloseTimeLabel;
 
-  /// No description provided for @facilityInvalidHours.
+  /// No description provided for @facilityInvalidHoursForDay.
   ///
   /// In es, this message translates to:
-  /// **'Revisa el horario: la hora de apertura debe ser anterior a la de cierre, en formato HH:mm.'**
-  String get facilityInvalidHours;
+  /// **'Revisa el horario del {day}: la hora de apertura debe ser anterior a la de cierre.'**
+  String facilityInvalidHoursForDay(String day);
 
   /// No description provided for @facilityDayMon.
   ///

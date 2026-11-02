@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:poblex_backoffice/core/di/injection_container.dart';
 import 'package:poblex_backoffice/core/errors/app_failure.dart';
+import 'package:poblex_backoffice/core/result/result.dart';
 import 'package:poblex_backoffice/features/incidents/domain/entities/managed_incident.dart';
+import 'package:poblex_backoffice/features/incidents/domain/repositories/incident_repository.dart';
+import 'package:poblex_backoffice/features/incidents/domain/usecases/incident_usecases.dart';
 import 'package:poblex_backoffice/features/incidents/presentation/screens/incidents_screen.dart';
 import 'package:poblex_backoffice/features/incidents/presentation/viewmodels/incidents_view_model.dart';
 import 'package:poblex_backoffice/l10n/app_localizations.dart';
 import 'package:poblex_design_system/poblex_design_system.dart';
+
+class _FakeHistoryRepository implements IncidentRepository {
+  const _FakeHistoryRepository();
+
+  @override
+  Future<Result<List<IncidentStatusChange>>> getHistory(
+    String incidentId,
+  ) async => const Success(<IncidentStatusChange>[]);
+
+  @override
+  Future<Result<ManagedIncidentsPage>> getManagedIncidents({
+    required String municipalityId,
+    IncidentStatus? status,
+    String? category,
+    String? cursor,
+  }) => throw UnimplementedError();
+
+  @override
+  Future<Result<ManagedIncident>> changeStatus(
+    ChangeIncidentStatusInput input,
+  ) => throw UnimplementedError();
+
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) async =>
+      const Success([]);
+}
 
 class FakeIncidentsViewModel extends IncidentsViewModel {
   FakeIncidentsViewModel(this.loader);
@@ -39,6 +69,19 @@ class FakeIncidentsViewModel extends IncidentsViewModel {
 }
 
 void main() {
+  setUp(() {
+    getIt.registerFactory(
+      () => GetIncidentHistory(const _FakeHistoryRepository()),
+    );
+    getIt.registerFactory(
+      () => ListIncidentCategories(const _FakeHistoryRepository()),
+    );
+  });
+
+  tearDown(() async {
+    await getIt.reset();
+  });
+
   testWidgets(
     'renders the list and detail without overflow at 320dp and 200% text',
     (tester) async {
@@ -69,9 +112,7 @@ void main() {
       final history = find.text('Historial de cambios');
       await _dragUntilBuilt(tester, history, find.byType(ListView).last);
       expect(
-        find.text(
-          'El historial detallado todavía no está disponible en este panel.',
-        ),
+        find.text('Todavía no hay cambios de estado registrados.'),
         findsOneWidget,
       );
       expect(tester.takeException(), isNull);

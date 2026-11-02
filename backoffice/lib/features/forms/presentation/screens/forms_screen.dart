@@ -6,6 +6,7 @@ import 'package:poblex_design_system/poblex_design_system.dart';
 
 import '../../../../core/errors/app_failure.dart';
 import '../../../../core/result/result.dart';
+import '../../../../core/text/filename_slug.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/managed_form.dart';
 import '../forms_copy.dart';
@@ -239,6 +240,13 @@ class _FormCard extends ConsumerWidget {
               icon: Icons.dynamic_form_outlined,
               text: copy.fieldsCount(form.fields.length),
             ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              copy.noEditNote,
+              style: context.text.bodySmall?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
+            ),
             const Divider(height: AppSpacing.xl),
             if (busy)
               Semantics(
@@ -286,7 +294,7 @@ class _FormCard extends ConsumerWidget {
     }
     final csv = (result as Success<String>).value;
     final downloaded = downloadFormCsv(
-      filename: 'respuestas-${form.id}.csv',
+      filename: 'respuestas-${filenameSlug(form.title.es)}.csv',
       csv: csv,
     );
     ScaffoldMessenger.of(context).showSnackBar(

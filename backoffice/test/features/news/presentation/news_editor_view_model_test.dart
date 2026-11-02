@@ -138,4 +138,7 @@ class RetryAttachmentRepository implements NewsRepository {
   @override
   Future<Result<NewsItem>> update(SaveNewsInput input) =>
       throw UnimplementedError();
+  @override
+  Future<Result<List<String>>> getCategories(String municipalityId) async =>
+      const Success([]);
 }

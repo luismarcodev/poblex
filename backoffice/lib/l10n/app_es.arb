@@ -41,6 +41,8 @@
   "edit": "Editar",
   "pin": "Destacar",
   "unpin": "Quitar destacado",
+  "pinConfirmTitle": "¿Destacar esta noticia?",
+  "pinConfirmBody": "Se mostrará de inmediato arriba de todo para todos los vecinos del municipio.",
   "archive": "Archivar",
   "restore": "Restaurar",
   "delete": "Borrar",
@@ -152,7 +154,7 @@
     }
   },
   "incidentHistoryTitle": "Historial de cambios",
-  "incidentHistoryUnavailable": "El historial detallado todavía no está disponible en este panel.",
+  "incidentHistoryEmpty": "Todavía no hay cambios de estado registrados.",
   "incidentStatusChangeTitle": "Cambiar estado",
   "incidentNewStatusLabel": "Estado nuevo",
   "incidentNoteLabel": "Nota interna",
@@ -278,6 +280,7 @@
   "alertSeverityField": "Nivel de aviso",
   "alertBodySpanish": "Mensaje en castellano",
   "alertBodyValencian": "Mensaje en valenciano (opcional)",
+  "chooseDateTime": "Elegir fecha",
   "alertStartField": "Inicio",
   "alertEndField": "Fin",
   "clearAlertEnd": "Quitar fecha de finalización",
@@ -321,6 +324,7 @@
   "@formFieldsCount": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "formNoEditNote": "No se puede editar una vez creado, para no alterar las respuestas ya enviadas. Puedes cerrarlo o borrarlo.",
   "formExportSubmissions": "Exportar respuestas CSV",
   "formExportSuccess": "Respuestas descargadas",
   "formExportUnsupported": "La descarga solo está disponible en la versión web del panel.",
@@ -428,7 +432,7 @@
     "placeholders": { "index": { "type": "int" } }
   },
 
-  "socialConnectionsTooltip": "Conexiones con redes sociales",
+  "socialConnectionsShortLabel": "Redes sociales",
   "socialConnectionsTitle": "Conexiones con redes sociales",
   "socialConnectionsSubtitle": "Conecta las cuentas de Instagram y Facebook del ayuntamiento para publicar noticias también ahí.",
   "socialPlatformInstagram": "Instagram",
@@ -475,7 +479,14 @@
   "facilityOpenLabel": "Abierto",
   "facilityOpenTimeLabel": "Abre",
   "facilityCloseTimeLabel": "Cierra",
-  "facilityInvalidHours": "Revisa el horario: la hora de apertura debe ser anterior a la de cierre, en formato HH:mm.",
+  "facilityInvalidHoursForDay": "Revisa el horario del {day}: la hora de apertura debe ser anterior a la de cierre.",
+  "@facilityInvalidHoursForDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "facilityDayMon": "Lunes",
   "facilityDayTue": "Martes",
   "facilityDayWed": "Miércoles",
