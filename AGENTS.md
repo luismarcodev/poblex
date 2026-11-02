@@ -1,5 +1,11 @@
 # AGENTS.md — Poblex
 
+## Guía por agente
+
+- Codex: lee `CODEX.md` para los flujos de trabajo y herramientas de este agente.
+- Claude: lee `CLAUDE.md` para su contexto detallado.
+- Las reglas comunes y obligatorias están en este `AGENTS.md`; las guías por agente las referencian y no deben contradecirlas.
+
 ## Idioma de trabajo
 
 - **Responde siempre en castellano de España.** Vocabulario peninsular: "ordenador" (no computadora), "móvil" (no celular), "vale" (no okay), "fichero/archivo", "borrar", "actualizar". Evita anglicismos cuando existe término castellano corriente.

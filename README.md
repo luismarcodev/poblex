@@ -2,7 +2,7 @@
 
 App móvil Flutter + backoffice web + backend propio para centralizar la comunicación municipal en pueblos pequeños. Pueblo piloto: Sollana (Valencia).
 
-Especificación técnica completa: [`CLAUDE.md`](./CLAUDE.md). Referencia funcional/producto: [`docs/PRD-Poblex.md`](./docs/PRD-Poblex.md). Ante cualquier duda de arquitectura o alcance, esos dos documentos mandan.
+Guía de trabajo para Codex: [`CODEX.md`](./CODEX.md). Especificación técnica y decisiones detalladas: [`CLAUDE.md`](./CLAUDE.md). Reglas comunes para todos los agentes: [`AGENTS.md`](./AGENTS.md). Referencia funcional/producto: [`docs/PRD-Poblex.md`](./docs/PRD-Poblex.md).
 
 ## Estructura
 
