@@ -48,11 +48,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        ExcludeSemantics(
-                          child: Icon(
-                            Icons.location_city_rounded,
-                            size: 56,
-                            color: context.semantic.brandGraphic,
+                        Center(
+                          child: PoblexMark(
+                            size: 64,
+                            color: context.colors.primary,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.lg),

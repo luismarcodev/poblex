@@ -183,9 +183,17 @@ class _WideShell extends ConsumerWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    l10n.appName,
-                                    style: context.text.headlineSmall,
+                                  Row(
+                                    children: [
+                                      const PoblexMark(size: 36),
+                                      const SizedBox(width: AppSpacing.xs),
+                                      Flexible(
+                                        child: Text(
+                                          l10n.appName,
+                                          style: context.text.headlineSmall,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Text(
                                     l10n.backofficeTitle,
