@@ -197,8 +197,9 @@ class _BusinessEditorScreenState extends ConsumerState<BusinessEditorScreen> {
                             labelText: l10n.businessEmailLabel,
                           ),
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty)
+                            if (value == null || value.trim().isEmpty) {
                               return null;
+                            }
                             return value.contains('@')
                                 ? null
                                 : l10n.invalidEmail;
