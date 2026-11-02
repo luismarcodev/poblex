@@ -120,11 +120,6 @@ async function seedNews(municipalityId: string): Promise<void> {
       },
       category: 'servicios',
       pinned: true,
-      // Imágenes de archivo (Picsum, estables por id) — el propio mockup de
-      // Stitch usa fotografía genérica de alta calidad, no fotos reales de
-      // Sollana (sus prompts lo dicen explícitamente: "architectural
-      // rendering", no una foto real del pueblo). Mismo criterio aquí.
-      imageUrl: 'https://picsum.photos/id/1040/1200/675',
       publishedAt: new Date(now - DAY_MS),
       archived: false,
     },
@@ -140,7 +135,6 @@ async function seedNews(municipalityId: string): Promise<void> {
       },
       category: 'servicios',
       pinned: false,
-      imageUrl: 'https://picsum.photos/id/1074/1200/675',
       publishedAt: new Date(now - 3 * DAY_MS),
       archived: false,
     },
@@ -153,7 +147,6 @@ async function seedNews(municipalityId: string): Promise<void> {
       },
       category: 'general',
       pinned: false,
-      imageUrl: 'https://picsum.photos/id/1076/1200/675',
       publishedAt: new Date(now - 10 * DAY_MS),
       archived: false,
     },
@@ -169,7 +162,6 @@ async function seedNews(municipalityId: string): Promise<void> {
       },
       category: 'general',
       pinned: true,
-      imageUrl: 'https://picsum.photos/id/1080/1200/675',
       publishedAt: new Date(now - 2 * DAY_MS),
       archived: false,
     },
@@ -182,7 +174,6 @@ async function seedNews(municipalityId: string): Promise<void> {
       },
       category: 'sanitaria',
       pinned: false,
-      imageUrl: 'https://picsum.photos/id/1059/1200/675',
       publishedAt: new Date(now - 200 * DAY_MS),
       archived: true,
     },
@@ -580,7 +571,10 @@ async function seedFacilities(municipalityId: string): Promise<void> {
     },
     {
       municipalityId,
-      name: { es: 'Zona de barbacoa municipal', va: 'Zona de barbacoa municipal' },
+      name: {
+        es: 'Zona de barbacoa municipal',
+        va: 'Zona de barbacoa municipal',
+      },
       description: {
         es: 'Zona de barbacoa con mesas, en el área recreativa del río.',
         va: 'Zona de barbacoa amb taules, a l’àrea recreativa del riu.',
