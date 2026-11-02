@@ -1,85 +1,39 @@
 import 'package:flutter/material.dart';
 
-/// Raw, unverified colour ramps. Never referenced from a widget — only
-/// [AppTheme] and [AppSemanticColors] read these; everyone else goes through
-/// the theme so a colour decision is made once, not scattered.
-///
-/// Sourced from the "Modern Civic Coral" Material 3 scheme (Stitch,
-/// `design/stitch_poblex_civic_connect/modern_civic_coral/DESIGN.md`): the
-/// primary ramp anchors on Stitch's `primary` (#AC3509) and
-/// `primary-container` (#FF7043) tokens, the accent ramp on Stitch's
-/// `tertiary` teal, and the neutral ramp on Stitch's `surface`/`on-surface`
-/// family. Every step below that maps to a literal Stitch token says so in
-/// its comment; the handful that don't (light tints with no Stitch
-/// equivalent) are interpolated within the same hue and are not
-/// contrast-critical.
+/// Shared Poblex brand palette. Widgets consume semantic theme roles.
 abstract final class AppPalette {
   const AppPalette._();
 
-  static const Color primary50 = Color(0xFFFFEBE5);
-  static const Color primary100 = Color(0xFFFFDBD0); // Stitch primary-fixed
-  static const Color primary200 = Color(0xFFFFC8B7);
-  static const Color primary300 = Color(
-    0xFFFFB59F,
-  ); // Stitch inverse-primary / primary-fixed-dim — dark action
-  static const Color primary400 = Color(0xFFE6A38F); // dark pressed
-  static const Color primary500 = Color(
-    0xFFFF7043,
-  ); // Stitch primary-container — DECORATIVE ONLY, ~2.85:1
-  static const Color primary600 = Color(
-    0xFF641800,
-  ); // Stitch on-primary-container — graphic, 11.9:1
-  static const Color primary700 = Color(
-    0xFFAC3509,
-  ); // Stitch primary — light action, 6.43:1 vs white / 6.10:1 vs bg
-  static const Color primary800 = Color(
-    0xFF852300,
-  ); // Stitch on-primary-fixed-variant — light pressed
-  static const Color primary900 = Color(0xFF3A0A00); // Stitch on-primary-fixed
-
-  static const Color accent50 = Color(0xFFE6F6F3);
-  static const Color accent100 = Color(0xFF89F5E7); // Stitch tertiary-fixed
-  static const Color accent200 = Color(0xFF6BD8CB);
-  static const Color accent300 = Color(
-    0xFF6BD8CB,
-  ); // Stitch tertiary-fixed-dim — dark accent
-  static const Color accent400 = Color(0xFF3AADA0); // Stitch tertiary-container
-  static const Color accent500 = Color(
-    0xFF006A61,
-  ); // Stitch tertiary — light accent, 6.17:1
-  static const Color accent600 = Color(
-    0xFF005049,
-  ); // Stitch on-tertiary-fixed-variant
-  static const Color accent700 = Color(
-    0xFF003B36,
-  ); // Stitch on-tertiary-container
-  static const Color accent800 = Color(0xFF00201D); // Stitch on-tertiary-fixed
-
-  static const Color neutral0 = Color(
-    0xFFFFFFFF,
-  ); // Stitch surface-container-lowest
-  static const Color neutral50 = Color(
-    0xFFF8F9FF,
-  ); // Stitch background/surface, light background
-  static const Color neutral100 = Color(
-    0xFFEFF4FF,
-  ); // Stitch surface-container-low
-  static const Color neutral200 = Color(0xFFE5EEFF); // Stitch surface-container
-  static const Color neutral300 = Color(
-    0xFFDCE9FF,
-  ); // Stitch surface-container-high
-  static const Color neutral400 = Color(
-    0xFFD3E4FE,
-  ); // Stitch surface-container-highest, disabled icons ONLY
-  static const Color neutral500 = Color(0xFF8D7169); // Stitch outline
-  static const Color neutral600 = Color(
-    0xFF59413A,
-  ); // Stitch on-surface-variant — muted text, 8.90:1
-  static const Color neutral700 = Color(0xFF4C3731); // secondary text
+  static const Color primary50 = Color(0xFFFDF2EF);
+  static const Color primary100 = Color(0xFFFAE3DC);
+  static const Color primary200 = Color(0xFFF4CBBE);
+  static const Color primary300 = Color(0xFFEBAD98);
+  static const Color primary400 = Color(0xFFE29378);
+  static const Color primary500 = Color(0xFFD97757);
+  static const Color primary600 = Color(0xFFB6542B);
+  static const Color primary700 = Color(0xFF8A461E);
+  static const Color primary800 = Color(0xFF6A3616);
+  static const Color primary900 = Color(0xFF452611);
+  static const Color accent50 = Color(0xFFEDF7F5);
+  static const Color accent100 = Color(0xFFD5ECE7);
+  static const Color accent200 = Color(0xFFB3DBD2);
+  static const Color accent300 = Color(0xFF80C6B6);
+  static const Color accent400 = Color(0xFF3AA68D);
+  static const Color accent500 = Color(0xFF1F6F5C);
+  static const Color accent600 = Color(0xFF1C6958);
+  static const Color accent700 = Color(0xFF145244);
+  static const Color accent800 = Color(0xFF0E3A30);
+  static const Color neutral0 = Color(0xFFFFFFFF);
+  static const Color neutral50 = Color(0xFFFAF7F2);
+  static const Color neutral100 = Color(0xFFF1EEE9);
+  static const Color neutral200 = Color(0xFFE4DED8);
+  static const Color neutral300 = Color(0xFFCEC7C0);
+  static const Color neutral400 = Color(0xFFA79E95);
+  static const Color neutral500 = Color(0xFF847A71);
+  static const Color neutral600 = Color(0xFF6A6058);
+  static const Color neutral700 = Color(0xFF4F4640);
   static const Color neutral800 = Color(0xFF332D29);
-  static const Color neutral900 = Color(
-    0xFF0B1C30,
-  ); // Stitch on-surface — ink, ~18:1
+  static const Color neutral900 = Color(0xFF1A1A1A);
 
   static const Color darkBackground = Color(0xFF14110F);
   static const Color darkSurface = Color(0xFF1F1A17); // 1.09:1 vs background
@@ -93,11 +47,7 @@ abstract final class AppPalette {
 
 /// AEMET-locked severity hexadecimals. Residents already associate these with
 /// the weather bulletin — they are never adjusted for branding, and are
-/// deliberately NOT touched by the Stitch-derived rebrand in [AppPalette]:
-/// Stitch's own mockup for the alerts screen reused its brand coral
-/// (`primary-container`) as the "orange" severity colour, which is exactly
-/// the marca/severidad collision `docs/design-system.md` rule R1 forbids.
-/// This palette stays as the accessibility-verified source of truth instead.
+/// never adjusted by the municipality branding.
 abstract final class AppSeverityPalette {
   const AppSeverityPalette._();
 
@@ -214,7 +164,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
   final SeverityColors alertOrange;
   final SeverityColors alertRed;
 
-  /// `#FF7043` untouched — surfaces and illustration only. ~2.85:1 on white:
+  /// `#D97757` — surfaces and illustration only. 3.12:1 on white:
   /// never text, never a filled button background.
   final Color brandDecorative;
 
@@ -415,20 +365,15 @@ class BrandPalette {
   final Color darkAction;
   final Color darkActionPressed;
 
-  /// Hand-tuned default sourced straight from Stitch's "Modern Civic Coral"
-  /// tokens: `primary-container` (decorative), `on-primary-container`
-  /// (graphic), `primary` (light action, 6.43:1 vs white / 6.10:1 vs the new
-  /// bone background) and `inverse-primary` (dark action). Verified better
-  /// than the loop's ~4.55:1 worst case — see
-  /// `brand_palette_contrast_test.dart`.
+  /// Hand-tuned Poblex palette; action colours are contrast checked.
   static const BrandPalette poblex = BrandPalette(
     seed: AppPalette.primary500,
     decorative: AppPalette.primary500,
     graphic: AppPalette.primary600,
     lightAction: AppPalette.primary700,
     lightActionPressed: AppPalette.primary800,
-    lightContainer: AppPalette.primary500,
-    onLightContainer: AppPalette.primary600,
+    lightContainer: AppPalette.primary100,
+    onLightContainer: AppPalette.primary700,
     darkAction: AppPalette.primary300,
     darkActionPressed: AppPalette.primary400,
   );

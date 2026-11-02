@@ -8,3 +8,4 @@ export 'src/app_theme.dart';
 export 'src/app_typography.dart';
 export 'src/brand_palette_resolver.dart';
 export 'src/theme_context_extension.dart';
+export 'src/poblex_mark.dart';

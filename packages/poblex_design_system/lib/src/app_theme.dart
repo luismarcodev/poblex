@@ -157,10 +157,6 @@ abstract final class AppTheme {
       splashFactory: InkRipple.splashFactory,
       extensions: <ThemeExtension<dynamic>>[semantic],
 
-      // Every Stitch reference screen colours both the title ("Sollana" /
-      // "Poblex") and the header icons (menu, profile) in the brand action
-      // colour, not plain ink — that's the single most visible brand cue on
-      // every screen, so it's set here once instead of per screen.
       appBarTheme: AppBarTheme(
         backgroundColor: background,
         foregroundColor: primary,

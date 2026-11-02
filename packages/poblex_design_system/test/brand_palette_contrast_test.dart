@@ -85,10 +85,7 @@ void main() {
   test(
     'the hand-tuned Poblex default is not run through the loop, and beats it',
     () {
-      // design-system.md §1 documents primary-700 (Stitch's #AC3509) at
-      // 6.43:1 against pure white and 6.10:1 against the bone background —
-      // both comfortably past the loop's own worst case (~4.55:1, see the
-      // seed table above).
+      // The default is deliberately stronger than the minimum contrast.
       final Color action = BrandPalette.poblex.lightAction;
       expect(
         BrandPalette.contrastRatio(action, AppPalette.neutral0),
@@ -100,4 +97,23 @@ void main() {
       );
     },
   );
+  test('default brand roles remain readable in light and dark themes', () {
+    const brand = BrandPalette.poblex;
+    expect(
+      BrandPalette.contrastRatio(brand.onLightContainer, brand.lightContainer),
+      greaterThanOrEqualTo(4.5),
+    );
+    expect(
+      BrandPalette.contrastRatio(brand.graphic, AppPalette.neutral50),
+      greaterThanOrEqualTo(3),
+    );
+    expect(
+      BrandPalette.contrastRatio(brand.darkAction, AppPalette.darkBackground),
+      greaterThanOrEqualTo(4.5),
+    );
+    expect(
+      BrandPalette.contrastRatio(AppPalette.neutral900, AppPalette.neutral50),
+      greaterThanOrEqualTo(4.5),
+    );
+  });
 }

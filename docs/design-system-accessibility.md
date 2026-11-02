@@ -1,5 +1,7 @@
 # Accesibilidad — checklist de aceptación
 
+> **Aviso de vigencia (2 noviembre 2026):** el tema compartido utiliza la paleta terracota de este documento. Los cálculos de contraste no sustituyen la comprobación de componentes y lectores de pantalla en dispositivos reales. Consulta [branding.md](branding.md) para la identidad y su implantación.
+
 **Versión:** 1.0
 **Fecha:** 9 de agosto de 2026
 **Base legal:** RD 1112/2018 (accesibilidad de sitios web y aplicaciones para dispositivos móviles del sector público) → exige **WCAG 2.1 nivel AA**.

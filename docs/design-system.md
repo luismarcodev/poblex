@@ -1,5 +1,7 @@
 # Design System — Poblex
 
+> **Aviso de vigencia (2 noviembre 2026):** la identidad y sus activos están en [branding.md](branding.md). El tema compartido usa la paleta terracota de las tablas siguientes. La sección 0.1 describe una fase coral histórica, ya sustituida; no debe usarse para implementar nuevos componentes. Los resultados de accesibilidad requieren verificación en dispositivos.
+
 **Versión:** 1.0
 **Fecha:** 9 de agosto de 2026
 **Ámbito:** app móvil Flutter (iOS + Android). El backoffice reutiliza tokens de color y tipografía, pero tiene su propio catálogo de componentes de escritorio y no se cubre aquí.
@@ -23,7 +25,9 @@ Esta sección existe para que `CLAUDE.md` se actualice. Hasta que se actualice, 
 
 **Acción pendiente:** actualizar la tabla "Identidad visual" de `CLAUDE.md` y la sección 6 del PRD con la paleta de este documento.
 
-## 0.1 Rebranding sobre Stitch — "Modern Civic Coral" (12 agosto 2026)
+## 0.1 Histórico: Rebranding sobre Stitch — "Modern Civic Coral" (12 agosto 2026)
+
+**Histórico, sustituido por la paleta terracota.**
 
 El usuario generó cuatro pantallas de referencia con Stitch (IA de diseño de Google) en
 `design/stitch_poblex_civic_connect/`. Se adopta esa paleta y escala tipográfica como
