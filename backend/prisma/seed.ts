@@ -48,7 +48,7 @@ async function main(): Promise<void> {
     // de una ejecución anterior se queda con datos viejos para siempre.
     update: {
       aemetZoneCode: '774604',
-      primaryColor: '#AC3509',
+      primaryColor: null,
     },
     create: {
       id: SOLLANA_ID,
@@ -57,9 +57,14 @@ async function main(): Promise<void> {
       province: 'Valencia',
       // Zona AEMET "Litoral sur de Valencia" — ver cabecera del fichero.
       aemetZoneCode: '774604',
-      // Coral "Modern Civic Coral" (rebrand Stitch, docs/design-system.md
-      // §0.1) — Sollana usa el color por defecto de Poblex, no uno propio.
-      primaryColor: '#AC3509',
+      // Sollana usa el color por defecto de Poblex, no uno propio: null, no
+      // un hex copiado. Un hex literal aquí se queda obsoleto cada vez que
+      // se retoca la paleta de marca (coral → terracota → morado, los tres
+      // en 2026) porque nada lo vuelve a sincronizar con
+      // packages/poblex_design_system — pasó exactamente eso con el
+      // `#AC3509` (acción coral) que había aquí hasta hoy. `null` siempre
+      // sigue al valor por defecto vigente, sea cual sea.
+      primaryColor: null,
       logoUrl: null,
       languages: ['es', 'va'],
       active: true,
