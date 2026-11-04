@@ -1,6 +1,8 @@
 # Identidad de marca de Poblex
 
-**Versión:** 1.0 · **Fecha:** 2 de noviembre de 2026 · **Estado:** identidad aplicada en código y activos; pendiente de validación visual y accesibilidad en dispositivos reales.
+**Versión:** 1.1 · **Fecha:** 2 de noviembre de 2026 · **Estado:** identidad aplicada en código y activos; pendiente de validación visual y accesibilidad en dispositivos reales.
+
+> **Aviso de vigencia (2 de noviembre de 2026, tarde):** el primario pasa de terracota a **morado**, mismo día que el rebrand a terracota de esta mañana. Ver "Paleta de marca" más abajo — la tabla terracota queda marcada como histórica, igual que el coral quedó histórico frente al terracota. El código y `packages/poblex_design_system` ya usan los tokens morados.
 
 ## Qué es Poblex
 
@@ -40,17 +42,32 @@ La paleta elegida conserva los colores fijados para el proyecto. Los valores de 
 
 | Función | Color | Valor | Uso |
 |---|---|---|---|
-| Terracota de marca | Terracota | `#D97757` | Ilustraciones y superficies decorativas; nunca texto o botón primario. |
-| Gráfico de marca | Terracota profundo | `#B6542B` | Iconos y trazos significativos donde el contraste del contexto alcance 3:1. |
-| Acción clara | Tierra | `#8A461E` | Enlaces y botón principal con texto blanco; comprobar cada fondo. |
-| Acción oscura | Terracota claro | `#EBAD98` | Acciones sobre `#14110F`, con texto oscuro. |
-| Acento | Verde Albufera | `#1F6F5C` | Acento secundario y estados positivos con palabra e icono. |
+| Morado de marca | Violeta Poblex | `#955AC8` | Ilustraciones y superficies decorativas; nunca texto o botón primario. |
+| Gráfico de marca | Morado profundo | `#6F33A3` | Iconos y trazos significativos donde el contraste del contexto alcance 3:1. |
+| Acción clara | Morado oscuro | `#55257F` | Enlaces y botón principal con texto blanco; comprobar cada fondo. |
+| Acción oscura | Morado claro | `#C4A0E3` | Acciones sobre `#14110F`, con texto oscuro. |
+| Acento | Verde Albufera | `#1F6F5C` | Acento secundario y estados positivos con palabra e icono. Sin cambios. |
 | Fondo | Hueso | `#FAF7F2` | Fondo de lectura. |
 | Superficie | Blanco | `#FFFFFF` | Tarjetas y zonas de trabajo. |
 | Texto | Tinta | `#1A1A1A` | Texto principal. |
 | Fondo oscuro | Carbón cálido | `#14110F` | Fondo en modo oscuro. |
 
-Ratios WCAG calculados para combinaciones concretas: tinta sobre hueso **16,29:1**; blanco sobre acción **7,06:1**; acción sobre hueso **6,60:1**; verde sobre hueso **5,64:1**; marca decorativa sobre blanco **3,12:1**. El umbral ordinario de texto es 4,5:1; para elementos gráficos esenciales es 3:1 frente a los colores adyacentes. No extrapolar estos resultados a otros fondos, transparencias o estados.
+Ratios WCAG calculados para combinaciones concretas: tinta sobre hueso **16,29:1**; blanco sobre acción **10,73:1**; acción sobre hueso **10,04:1**; acción oscura sobre fondo oscuro **8,49:1**; gráfico sobre hueso **7,34:1**; verde sobre hueso **5,64:1**; marca decorativa sobre blanco **4,59:1**. El umbral ordinario de texto es 4,5:1; para elementos gráficos esenciales es 3:1 frente a los colores adyacentes. No extrapolar estos resultados a otros fondos, transparencias o estados. Calculado con script (fórmula de luminancia relativa WCAG 2.1), no a mano.
+
+**Separación frente a severidad:** distancia perceptual (ΔE00, CIEDE2000) entre cualquier paso del morado y los tres colores de identidad de severidad AEMET (`#E8A33D`/`#D9772B`/`#B3261E`): mínimo 35,4, máximo 70,7. Muy por encima del umbral de confusión plausible (ΔE00 < 10) que motivó la regla R1 con el terracota — el morado no comparte arco de tono con las alertas, así que la separación estructural de §2.7 del design-system sigue aplicando, pero ya no hace falta la deriva de tono hacia siena que el terracota necesitaba en sus pasos oscuros.
+
+### Histórico: paleta terracota (9 ago → 2 nov 2026, tarde)
+
+**Histórico, sustituido por la paleta morada de arriba**, mismo día que se adoptó. Se conserva aquí para trazabilidad, no como referencia de implementación.
+
+| Función | Color | Valor | Uso |
+|---|---|---|---|
+| Terracota de marca | Terracota | `#D97757` | Ilustraciones y superficies decorativas; nunca texto o botón primario. |
+| Gráfico de marca | Terracota profundo | `#B6542B` | Iconos y trazos significativos donde el contraste del contexto alcance 3:1. |
+| Acción clara | Tierra | `#8A461E` | Enlaces y botón principal con texto blanco; comprobar cada fondo. |
+| Acción oscura | Terracota claro | `#EBAD98` | Acciones sobre `#14110F`, con texto oscuro. |
+
+Ratios históricos: tinta sobre hueso 16,29:1; blanco sobre acción 7,06:1; acción sobre hueso 6,60:1; marca decorativa sobre blanco 3,12:1.
 
 **Reserva de seguridad:** amarillo `#E8A33D`, naranja `#D9772B` y rojo `#B3261E` son colores de identidad de severidad, no colores de marca. Son parecidos a algunos tonos terracota: separa las alertas por contenedor, silueta, etiqueta visible y grosor de barra, además del color. Las alertas no llevan color de marca dentro. Sus combinaciones y reglas detalladas están en [accesibilidad](design-system-accessibility.md).
 
@@ -59,6 +76,8 @@ Ratios WCAG calculados para combinaciones concretas: tinta sobre hueso **16,29:1
 **Atkinson Hyperlegible Next** es la familia de interfaz existente. Utilizar los pesos regular, seminegrita y negrita incluidos en el repositorio. El dibujo del logotipo es propio y no sustituye la tipografía de lectura. Tamaño base de cuerpo: 18 sp, sin impedir el escalado del sistema hasta el 200 %. Evitar mayúsculas sostenidas para párrafos, texto sobre imágenes y textos de bajo contraste.
 
 La identidad se expresa con superficies claras, tinta y un acento contenido; no depende de degradados ni ornamentos. Usar fotografías reales del municipio cuando se tenga permiso, con personas y lugares representados con dignidad y sin insinuar que una escena es de Sollana si no lo es. Ilustraciones sencillas y geométricas pueden complementar información, nunca reemplazar etiquetas de acciones o avisos.
+
+**Nota (2 de noviembre de 2026): dos niveles de imagen, no confundir.** Esta mañana se retiraron las fotos de stock genéricas del seed de noticias (`7edf792`) precisamente para no mostrar fotografía de archivo sin relación con el municipio como si fuera contenido real. Esa regla sigue en pie para el **contenido de un municipio** (noticia, evento, instalación): foto real del ayuntamiento o, si no hay, sin imagen — nunca una foto de stock haciendo de sustituta. Pero el **grid de categorías de Inicio** (Noticias, Alertas, Eventos...) no es contenido de ningún municipio: es la iconografía de la funcionalidad misma, igual en Sollana que en cualquier otro pueblo que use Poblex. Para esas nueve imágenes de categoría sí se usa fotografía de stock, con una condición no negociable: **solo licencia CC0 o dominio público**, nunca CC-BY/CC-BY-SA (exigirían mostrar atribución en la app, una superficie que no existe y no se improvisa aquí). Ninguna de esas nueve fotos lleva pie de foto ni insinúa que sea "de" ningún municipio concreto — ver el componente "Mosaico de categoría" en `docs/design-system.md` §8.14.
 
 ## Voz y contenido
 
@@ -70,7 +89,7 @@ Ejemplo: «No se han podido cargar las noticias. Comprueba tu conexión y vuelve
 
 La especificación detallada de componentes, tamaños, estados y alertas está en [design-system.md](design-system.md), con controles de aceptación en [design-system-accessibility.md](design-system-accessibility.md). El paquete compartido `packages/poblex_design_system` contiene la paleta y el símbolo utilizados por las dos aplicaciones. La entrada y el menú de la app, y el acceso y la navegación del backoffice muestran el símbolo. La personalización de cada municipio continúa utilizando su propia semilla y no modifica la severidad.
 
-Los iconos nativos de Android e iOS y los iconos web del backoffice se han generado a partir de [poblex-icono-app.svg](../design/branding/poblex-icono-app.svg), con fondo hueso opaco y margen de seguridad. Los SVG del manual siguen siendo los originales para otros soportes. La antigua paleta coral es histórica; el código usa ahora los tokens terracota de este manual.
+Los iconos nativos de Android e iOS y los iconos web del backoffice se han generado a partir de [poblex-icono-app.svg](../design/branding/poblex-icono-app.svg), con fondo hueso opaco y margen de seguridad. Los SVG del manual siguen siendo los originales para otros soportes — **todavía en terracota**: el símbolo vectorial (`poblex-horizontal-terracota.svg`, `poblex-simbolo.svg`, `lamina-identidad.svg`) no se ha regenerado en morado en este cambio, solo los tokens de color del tema en `packages/poblex_design_system` y los `theme-color` del backoffice web. Pendiente explícito, no un olvido: regenerar los SVG de marca (o renombrarlos) antes de dar la identidad morada por completamente aplicada. La antigua paleta coral sigue histórica frente al terracota, que a su vez queda histórico frente al morado de hoy; el código usa ahora los tokens morados de este manual.
 
 ## Aplicación y validación pendientes
 

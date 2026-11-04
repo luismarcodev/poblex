@@ -1,6 +1,6 @@
 # Design System — Poblex
 
-> **Aviso de vigencia (2 noviembre 2026):** la identidad y sus activos están en [branding.md](branding.md). El tema compartido usa la paleta terracota de las tablas siguientes. La sección 0.1 describe una fase coral histórica, ya sustituida; no debe usarse para implementar nuevos componentes. Los resultados de accesibilidad requieren verificación en dispositivos.
+> **Aviso de vigencia (2 noviembre 2026, tarde):** la identidad y sus activos están en [branding.md](branding.md). El tema compartido usa la paleta **morada** de la sección 2.2, no la terracota de las tablas de la sección 0 — ambas, coral (§0.1) y terracota (§0), son históricas, sustituidas el mismo 2 de noviembre de 2026. Ninguna de las dos debe usarse para implementar nuevos componentes. Los resultados de accesibilidad requieren verificación en dispositivos.
 
 **Versión:** 1.0
 **Fecha:** 9 de agosto de 2026
@@ -82,24 +82,36 @@ De ahí cinco principios que ganan a cualquier consideración estética:
 
 Esto no es una opinión de diseño. Es la fórmula de luminancia relativa de WCAG 2.1, y el RD 1112/2018 la convierte en obligación legal para el sector público. Así que el naranja se queda, pero repartido en tres tonos con roles distintos y verificados.
 
-### 2.2 Rampa primaria — Terracota Poblex
+### 2.2 Rampa primaria — Morado Poblex (2 nov 2026, sustituye a la terracota)
 
-Derivada de `#D97757` (HSL 15°, 63 %, 60 %), que se fija como paso 500. La rampa mantiene el tono en los pasos claros y **deriva hacia siena (22-24°) en los pasos oscuros**: es una decisión deliberada para alejar el extremo profundo de la marca de la banda del rojo de alerta (ver 2.7).
+Derivada de H=272° (violeta), fija en todos los pasos. A diferencia del terracota, **no hace falta derivar el tono hacia otro matiz en los pasos oscuros**: el morado no comparte arco de tono con ninguna alerta AEMET (ver 2.7 actualizado), así que la rampa entera mantiene H=272° y solo varía luminosidad y saturación. Valores recalculados con script (fórmula de luminancia relativa WCAG 2.1 + CIEDE2000), no a mano — ver histórico de la rampa terracota al final de esta sección.
 
 | Token | Hex | Contraste vs blanco | vs hueso | vs fondo oscuro | Uso |
 |---|---|---|---|---|---|
-| `primary-50` | `#FDF2EF` | 1,10 | 1,03 | 17,12 | Fondo de sección de marca sobre blanco |
-| `primary-100` | `#FAE3DC` | 1,23 | 1,15 | 15,30 | Superficie de botón tonal, indicador de navegación activo |
-| `primary-200` | `#F4CBBE` | 1,49 | 1,39 | 12,65 | Bordes suaves, separadores de marca |
-| `primary-300` | `#EBAD98` | 1,92 | 1,79 | **9,82** | **Color de acción en modo oscuro** |
-| `primary-400` | `#E29378` | 2,42 | 2,26 | 7,77 | Estado pulsado en modo oscuro |
-| `primary-500` | `#D97757` | 3,12 | 2,92 | 6,02 | **Solo decorativo.** Ilustración, cabecera, fondo de splash. Nunca texto, nunca borde con significado |
-| `primary-600` | `#B6542B` | **4,89** | **4,58** | 3,84 | **Gráfico con significado**: iconos decorativos que informan, trazos de gráficas, indicadores de progreso |
-| `primary-700` | `#8A461E` | **7,06** | **6,60** | 2,66 | **Color de acción en modo claro**: fondo de botón primario (texto blanco), texto de enlace, icono de navegación activo, borde de botón contorneado |
-| `primary-800` | `#6A3616` | 9,76 | 9,13 | 1,93 | Estado pulsado en modo claro, anillo de foco |
-| `primary-900` | `#452611` | 13,65 | 12,77 | 1,38 | Titulares de marca sobre fondo claro (uso raro) |
+| `primary-50` | `#F7F1FD` | 1,11 | 1,04 | 16,97 | Fondo de sección de marca sobre blanco |
+| `primary-100` | `#ECDEF7` | 1,28 | 1,20 | 14,65 | Superficie de botón tonal, indicador de navegación activo |
+| `primary-200` | `#DBC4EF` | 1,60 | 1,49 | 11,78 | Bordes suaves, separadores de marca |
+| `primary-300` | `#C4A0E3` | 2,21 | 2,07 | **8,49** | **Color de acción en modo oscuro** |
+| `primary-400` | `#AC7CD6` | 3,18 | 2,97 | 5,92 | Estado pulsado en modo oscuro |
+| `primary-500` | `#955AC8` | 4,59 | 4,30 | 4,10 | **Solo decorativo.** Ilustración, cabecera, fondo de splash. Nunca texto, nunca borde con significado |
+| `primary-600` | `#6F33A3` | **7,84** | **7,34** | 2,40 | **Gráfico con significado**: iconos decorativos que informan, trazos de gráficas, indicadores de progreso |
+| `primary-700` | `#55257F` | **10,73** | **10,04** | 1,75 | **Color de acción en modo claro**: fondo de botón primario (texto blanco), texto de enlace, icono de navegación activo, borde de botón contorneado |
+| `primary-800` | `#411E5F` | 13,33 | 12,47 | 1,41 | Estado pulsado en modo claro, anillo de foco |
+| `primary-900` | `#2A163C` | 16,43 | 15,37 | 1,14 | Titulares de marca sobre fondo claro (uso raro) |
 
-**Regla de oro:** `primary-500` es el color que ve el vecino como "el naranja de Poblex", pero **nunca lleva información encima ni por sí mismo**. Es piel, no hueso.
+**Regla de oro:** `primary-500` es el color que ve el vecino como "el morado de Poblex", pero **nunca lleva información encima ni por sí mismo**. Es piel, no hueso.
+
+Nótese que `primary-500` del morado da 4,59:1 sobre blanco — más alto que el 3,12:1 del terracota en el mismo paso. Esto no incumple nada (el paso decorativo no tiene mínimo, solo máximo de uso: nunca texto, nunca botón), pero sí significa que el morado-500 lee como un tono bastante más intenso que el terracota-500 equivalente; es una diferencia estética, documentada aquí para que nadie la confunda con un error de rampa.
+
+#### Histórico: rampa terracota (9 ago → 2 nov 2026, tarde)
+
+**Histórico, sustituido por la rampa morada de arriba.** Conservada por trazabilidad, igual que la rampa coral quedó histórica en §0.1.
+
+| Token | Hex | Contraste vs blanco | vs hueso | vs fondo oscuro |
+|---|---|---|---|---|
+| `primary-500` | `#D97757` | 3,12 | 2,92 | 6,02 |
+| `primary-600` | `#B6542B` | 4,89 | 4,58 | 3,84 |
+| `primary-700` | `#8A461E` | 7,06 | 6,60 | 2,66 |
 
 ### 2.3 Rampa de acento — Verde Albufera
 
@@ -175,22 +187,33 @@ Contrastes clave (tabla completa en el documento de accesibilidad):
 
 Fíjate en el detalle del rojo: **es el único de los tres que invierte el texto del chip** (blanco en vez de tinta, porque la tinta sobre `#B3261E` da 2,66:1 y no pasa). Esa inversión no es un apaño: es un canal más de diferenciación que el vecino percibe sin saber explicarlo.
 
-### 2.7 El problema serio: naranja de marca vs naranja de alerta
+### 2.7 El problema serio (histórico) y por qué el morado ya no lo tiene
 
-**Dejo el diagnóstico antes que la solución, porque el diagnóstico es lo importante.**
+**Dejo el diagnóstico antes que la solución, porque el diagnóstico es lo importante** — y porque, con el morado, el diagnóstico cambia de conclusión aunque las cinco reglas de abajo se mantengan.
 
-`#D97757` (marca) y `#D9772B` (alerta naranja de AEMET) tienen una diferencia perceptual **ΔE00 = 10,5**. Eso es "distinguibles si los pones uno al lado del otro", pero **no** "distinguibles de un vistazo, en la calle, con sol, por una persona mayor". En un sistema que avisa de inundaciones en la Ribera Baixa, confundir marca con alerta no es un fallo estético: es un fallo de seguridad.
+Con el terracota, `#D97757` (marca) y `#D9772B` (alerta naranja de AEMET) tenían una diferencia perceptual **ΔE00 = 10,5**. Eso es "distinguibles si los pones uno al lado del otro", pero **no** "distinguibles de un vistazo, en la calle, con sol, por una persona mayor". En un sistema que avisa de inundaciones en la Ribera Baixa, confundir marca con alerta no era un fallo estético: era un fallo de seguridad.
 
-Matriz de separación perceptual calculada (ΔE00, CIEDE2000; por debajo de 10 la confusión es plausible en condiciones reales):
+Matriz de separación perceptual histórica con terracota (ΔE00, CIEDE2000; por debajo de 10 la confusión es plausible en condiciones reales):
 
-| Token de marca | amarillo id | naranja id | rojo id | amarillo osc. | naranja osc. | rojo osc. |
+| Token de marca (terracota, histórico) | amarillo id | naranja id | rojo id | amarillo osc. | naranja osc. | rojo osc. |
 |---|---|---|---|---|---|---|
 | `primary-500` (decorativo) | 21,7 | **10,5** | 22,0 | 28,2 | 27,7 | 28,9 |
 | `primary-600` (gráfico) | 27,8 | 14,2 | 11,2 | 17,9 | 13,6 | 17,1 |
 | `primary-700` (acción claro) | 35,4 | 23,3 | 13,0 | 11,1 | **6,2** | 14,1 |
 | `primary-300` (acción oscuro) | 19,3 | 18,9 | 35,5 | 38,2 | 43,3 | 44,8 |
 
-Hay dos colisiones reales: `primary-500`↔naranja de alerta (10,5) y `primary-700`↔naranja oscuro de alerta (6,2). **El tono no se puede arreglar solo con tono**: marca y severidad viven en el mismo arco cálido por definición del encargo. Así que la solución es estructural, en cinco reglas, y la primera es la que de verdad resuelve el problema.
+Había dos colisiones reales: `primary-500`↔naranja de alerta (10,5) y `primary-700`↔naranja oscuro de alerta (6,2). Con el terracota, el tono no se podía arreglar solo con tono: marca y severidad vivían en el mismo arco cálido por definición del encargo.
+
+**Con el morado (H=272°), la matriz es otra:**
+
+| Token de marca (morado, vigente) | amarillo id | naranja id | rojo id | amarillo osc. | naranja osc. | rojo osc. |
+|---|---|---|---|---|---|---|
+| `primary-500` (decorativo) | 58,7 | 48,8 | 38,3 | 62,9 | 51,1 | 37,6 |
+| `primary-600` (gráfico) | 66,6 | 54,2 | 37,6 | 70,7 | 58,6 | 42,8 |
+| `primary-700` (acción claro) | 70,4 | 55,8 | 37,7 | 74,6 | 61,5 | 45,4 |
+| `primary-300` (acción oscuro) | 48,1 | 43,1 | 44,9 | 51,4 | 42,9 | 35,4 |
+
+Mínimo de toda la matriz: **35,4** — muy por encima de cualquier par terracota, y a años luz del umbral de 10 que definía una colisión plausible. El violeta no comparte arco de tono con ningún color de severidad AEMET (los tres viven entre 35° y 60° de tono; el morado está en 272°), así que **no existe el problema que motivó esta sección con el terracota**. Aun así, las cinco reglas de abajo se mantienen sin cambios: no son un parche específico del terracota, son la política general de que marca y severidad no comparten nunca contenedor, independientemente de lo lejos que estén en el círculo de tono hoy — una paleta de marca se puede volver a tocar en el futuro, la separación estructural no debería depender de que alguien recuerde recalcular un ΔE00 cada vez.
 
 **R1 — Separación de dominios (la regla que manda).**
 Ningún color de marca aparece dentro de un componente de alerta. Ningún color de severidad aparece fuera de un componente de alerta. No hay excepciones, ni siquiera "un detallito". Un banner de alerta y un botón primario **no comparten nunca contenedor ni contexto**, así que la comparación directa que dispararía la confusión no llega a producirse.
@@ -427,6 +450,8 @@ Cuatro variantes, jerarquía estricta. **Una sola acción primaria por pantalla.
 
 ### 8.3 Tarjeta de noticia
 
+**Imagen de contenido, no de categoría** (ver nota en `docs/branding.md` "dos niveles de imagen"): si la noticia tiene foto, es la del municipio, subida por el gestor. Sin foto real, la tarjeta no lleva imagen — nunca una foto de stock haciendo de sustituta. Esto es distinto del mosaico de categoría de Inicio (§8.14), que sí usa fotografía CC0/dominio público porque no representa a ningún municipio en concreto.
+
 Anatomía: imagen (16:9, opcional) → chip de categoría (contorneado) → titular (`titleLarge`, máx. 3 líneas) → resumen (`bodyMedium`, máx. 2 líneas) → fecha (`labelSmall`, `neutral-600`) + indicador de adjunto.
 
 - Superficie `neutral-0` / `dark-surface`, radio `lg`, espaciado interno `md`, elevación 1 (borde en modo oscuro).
@@ -538,6 +563,32 @@ Cinco destinos máximo: Inicio, Noticias, Eventos, Alertas, Más. Es el nivel 1 
 - **Etiqueta "Consulta no vinculante"** siempre visible como chip `neutral-200` junto a la pregunta. Es un requisito legal del PRD §9.5, no un detalle.
 - Ya votada: barras de resultado con porcentaje **en número además de en longitud de barra**, y la opción propia marcada con comprobación y texto "Tu voto".
 - Cerrada: chip "Cerrada" y botón deshabilitado con explicación debajo.
+
+### 8.14 Mosaico de categoría (grid de Inicio)
+
+**Nuevo (2 nov 2026).** Sustituye a la fila de texto plano que usaba Inicio hasta hoy ("solo texto + flecha, para no parecer un catálogo de iconos" — decisión anterior, ver historial de `home_screen.dart`). El mosaico ahora es imagen-primero: la foto identifica la categoría de un vistazo, igual que pide el PRD para una app visual y moderna.
+
+Anatomía:
+
+```
+┌───────────────────┐
+│                    │
+│   [foto 4:3,       │  ← CC0/dominio público, nunca contenido de
+│    BoxFit.cover]   │    municipio (ver §8.3 y branding.md)
+│                    │
+├────────────────────┤  ← degradado: la foto funde con la barra
+│ Noticias           │  ← barra sólida, SIEMPRE el mismo color
+└────────────────────┘    (`AppPalette.darkBackground`, 16,59:1 con
+                           texto blanco) en claro Y oscuro — el texto
+                           nunca se apoya solo en el contraste de la
+                           foto, que no controlamos
+```
+
+- La franja de texto es una **barra sólida de color fijo**, no texto superpuesto directamente sobre la foto sin más: así el contraste de la etiqueta no depende del contenido de cada foto concreta, que cambia. El degradado entre foto y barra es puramente estético (continuidad visual), no es lo que garantiza la legibilidad.
+- Igual que cualquier icono (§6), **la foto nunca es el único indicador**: la etiqueta de texto siempre está visible en la barra, y `Semantics(button: true, label: ..., hint: ...)` lleva el mismo texto que antes llevaba la fila de solo-texto. La foto es decorativa a efectos de accesibilidad — `ExcludeSemantics` sobre la imagen.
+- Proporción 4:3 fija para la foto; la barra de texto **no** tiene altura fija, crece con el contenido — necesario para que una etiqueta valenciana al 200 % de escala no se recorte (A-12).
+- Tarjeta de categoría destacada (Incidencias, Farmacias): mismo criterio pero en fila horizontal, imagen a la izquierda ocupando todo el alto de la tarjeta, texto (título + descripción) a la derecha sobre la superficie normal de la tarjeta — ahí no hace falta barra de contraste fija porque el texto nunca se apoya sobre la foto.
+- Las nueve fotos (siete tiles + dos tarjetas destacadas) viven en `app/assets/images/home_sections/`, empaquetadas con la app — no son una llamada de red, así que no dependen de conexión ni cuentan como "contenido" a efectos de la regla de "sin persistencia offline" (esa regla es sobre datos de municipio, no sobre los propios assets de la app).
 
 ---
 

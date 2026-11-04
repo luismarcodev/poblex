@@ -28,7 +28,7 @@ abstract final class AppTheme {
       outline: AppPalette.neutral500,
       // The municipality's brand has to reach the widgets too, not just the
       // ColorScheme: otherwise a town with its own colour still shows the
-      // Poblex terracotta in every decorative accent. The alert* fields are
+      // Poblex purple in every decorative accent. The alert* fields are
       // deliberately NOT touched — severity is immune to branding, which is
       // what keeps rule R1 standing with a foreign brand.
       semantic: AppSemanticColors.light.copyWith(

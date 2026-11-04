@@ -4,16 +4,22 @@ import 'package:flutter/material.dart';
 abstract final class AppPalette {
   const AppPalette._();
 
-  static const Color primary50 = Color(0xFFFDF2EF);
-  static const Color primary100 = Color(0xFFFAE3DC);
-  static const Color primary200 = Color(0xFFF4CBBE);
-  static const Color primary300 = Color(0xFFEBAD98);
-  static const Color primary400 = Color(0xFFE29378);
-  static const Color primary500 = Color(0xFFD97757);
-  static const Color primary600 = Color(0xFFB6542B);
-  static const Color primary700 = Color(0xFF8A461E);
-  static const Color primary800 = Color(0xFF6A3616);
-  static const Color primary900 = Color(0xFF452611);
+  // Purple/violet primary ramp (2 Nov 2026 rebrand, replaces terracota).
+  // H=272 fixed across every step — no hue drift toward the alert band is
+  // needed here, unlike terracota's dark-end shift to siena, because violet
+  // sits nowhere near the 0-45 degree warm hue band the AEMET severity
+  // colours occupy (closest measured ΔE00 to any severity tone is 35.4,
+  // versus terracota's 6.2-10.5 — see docs/design-system.md §2.7).
+  static const Color primary50 = Color(0xFFF7F1FD);
+  static const Color primary100 = Color(0xFFECDEF7);
+  static const Color primary200 = Color(0xFFDBC4EF);
+  static const Color primary300 = Color(0xFFC4A0E3);
+  static const Color primary400 = Color(0xFFAC7CD6);
+  static const Color primary500 = Color(0xFF955AC8);
+  static const Color primary600 = Color(0xFF6F33A3);
+  static const Color primary700 = Color(0xFF55257F);
+  static const Color primary800 = Color(0xFF411E5F);
+  static const Color primary900 = Color(0xFF2A163C);
   static const Color accent50 = Color(0xFFEDF7F5);
   static const Color accent100 = Color(0xFFD5ECE7);
   static const Color accent200 = Color(0xFFB3DBD2);
@@ -164,7 +170,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
   final SeverityColors alertOrange;
   final SeverityColors alertRed;
 
-  /// `#D97757` — surfaces and illustration only. 3.12:1 on white:
+  /// `#955AC8` — surfaces and illustration only. 4.59:1 on white:
   /// never text, never a filled button background.
   final Color brandDecorative;
 

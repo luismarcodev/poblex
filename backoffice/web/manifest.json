@@ -4,7 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#FAF7F2",
-  "theme_color": "#8A461E",
+  "theme_color": "#55257F",
   "description": "Panel municipal de Poblex",
   "orientation": "any",
   "prefer_related_applications": false,
