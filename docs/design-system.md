@@ -573,7 +573,7 @@ Anatomía:
 ```
 ┌───────────────────┐
 │                    │
-│   [foto 4:3,       │  ← CC0/dominio público, nunca contenido de
+│   [foto 1:1,       │  ← CC0/dominio público, nunca contenido de
 │    BoxFit.cover]   │    municipio (ver §8.3 y branding.md)
 │                    │
 ├────────────────────┤  ← degradado: la foto funde con la barra
@@ -586,9 +586,9 @@ Anatomía:
 
 - La franja de texto es una **barra sólida de color fijo**, no texto superpuesto directamente sobre la foto sin más: así el contraste de la etiqueta no depende del contenido de cada foto concreta, que cambia. El degradado entre foto y barra es puramente estético (continuidad visual), no es lo que garantiza la legibilidad.
 - Igual que cualquier icono (§6), **la foto nunca es el único indicador**: la etiqueta de texto siempre está visible en la barra, y `Semantics(button: true, label: ..., hint: ...)` lleva el mismo texto que antes llevaba la fila de solo-texto. La foto es decorativa a efectos de accesibilidad — `ExcludeSemantics` sobre la imagen.
-- Proporción 4:3 fija para la foto; la barra de texto **no** tiene altura fija, crece con el contenido — necesario para que una etiqueta valenciana al 200 % de escala no se recorte (A-12).
-- Tarjeta de categoría destacada (Incidencias, Farmacias): mismo criterio pero en fila horizontal, imagen a la izquierda ocupando todo el alto de la tarjeta, texto (título + descripción) a la derecha sobre la superficie normal de la tarjeta — ahí no hace falta barra de contraste fija porque el texto nunca se apoya sobre la foto.
-- Las nueve fotos (siete tiles + dos tarjetas destacadas) viven en `app/assets/images/home_sections/`, empaquetadas con la app — no son una llamada de red, así que no dependen de conexión ni cuentan como "contenido" a efectos de la regla de "sin persistencia offline" (esa regla es sobre datos de municipio, no sobre los propios assets de la app).
+- Proporción 1:1 fija para la foto (`AspectRatio`); la barra de texto **no** tiene altura fija, crece con el contenido — necesario para que una etiqueta valenciana al 200 % de escala no se recorte (A-12).
+- **Sin tarjeta destacada.** Las nueve secciones (incluidas Incidencias y Farmacias, que antes tenían tratamiento aparte en fila ancha) usan ahora exactamente la misma tarjeta cuadrada en el mismo grid a dos columnas — decisión deliberada: un trato visual uniforme, no una jerarquía de "esta sección importa más". Nunca tres columnas: tarjetas grandes y visuales es el objetivo, no encajar más secciones por fila.
+- Las nueve fotos viven en `app/assets/images/home_sections/`, empaquetadas con la app — no son una llamada de red, así que no dependen de conexión ni cuentan como "contenido" a efectos de la regla de "sin persistencia offline" (esa regla es sobre datos de municipio, no sobre los propios assets de la app).
 
 ---
 
