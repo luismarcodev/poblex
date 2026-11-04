@@ -68,6 +68,12 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
+  # Solo para live-inspección con flutter_driver_command via dart mcp-server
+  # (lib/main_driver.dart). Nunca se empaqueta en producción: ese entrypoint
+  # no es el que usan los builds de tienda.
+  flutter_driver:
+    sdk: flutter
+
   # Dobles de prueba SIN generación de código. mockito exige build_runner.
   mocktail: ^1.0.5
 
