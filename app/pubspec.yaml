@@ -79,6 +79,13 @@ flutter:
   # A-53/A-54 de accesibilidad exigen que toda cadena venga de ficheros ARB.
   generate: true
 
+  assets:
+    # Imágenes genéricas de categoría para el grid de Inicio — representan la
+    # funcionalidad, no un municipio concreto. CC0/dominio público, ver
+    # docs/branding.md. Nunca contenido real de un municipio (eso sigue
+    # viniendo de la API, ver NewsItem.imageUrl).
+    - assets/images/home_sections/
+
   fonts:
     # El nombre de familia debe ser exactamente este, sin espacios: es el
     # literal de AppTypography.fontFamily.

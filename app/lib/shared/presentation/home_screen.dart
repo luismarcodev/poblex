@@ -18,13 +18,17 @@ import 'app_drawer.dart';
 
 class _Section {
   const _Section({
-    required this.icon,
+    required this.imageAsset,
     required this.label,
     required this.description,
     required this.path,
   });
 
-  final IconData icon;
+  /// Bundled, generic category artwork (CC0/public domain — see
+  /// docs/branding.md "Iconografía de categoría"), never municipality
+  /// content. Replaces the old [IconData]: the home grid is photo-led now,
+  /// not an icon catalogue.
+  final String imageAsset;
   final String label;
   final String description;
   final String path;
@@ -75,64 +79,64 @@ class HomeScreen extends ConsumerWidget {
         : newsWithImages.first;
     final locale = ref.watch(sessionViewModelProvider).valueOrNull?.locale;
 
-    // "Avisos" (report an issue) gets the featured wide card — it's the one
-    // action a vecino is most likely to arrive at Home specifically to do.
-    // Duty pharmacies gets its own wide CTA at the bottom, same treatment
-    // Stitch's mockup gives it. Everything else is a compact grid tile.
-    final _Section featured = _Section(
-      icon: Icons.report_problem_outlined,
-      label: l10n.sectionIncidents,
-      description: l10n.sectionIncidentsDescription,
-      path: '/incidents',
-    );
-    final _Section pharmacies = _Section(
-      icon: Icons.local_pharmacy_outlined,
-      label: l10n.sectionPharmacies,
-      description: l10n.sectionPharmaciesDescription,
-      path: '/pharmacies',
-    );
-    final List<_Section> gridSections = <_Section>[
+    // Un único grid, mismo trato visual para todas las secciones — nada de
+    // tarjeta "destacada" aparte. El único elemento no-grid que puede
+    // aparecer o no es el banner de alerta roja de arriba, que ya depende
+    // de lo que el gestor publique desde el backoffice.
+    final List<_Section> sections = <_Section>[
       _Section(
-        icon: Icons.newspaper_outlined,
+        imageAsset: 'assets/images/home_sections/incidents.jpg',
+        label: l10n.sectionIncidents,
+        description: l10n.sectionIncidentsDescription,
+        path: '/incidents',
+      ),
+      _Section(
+        imageAsset: 'assets/images/home_sections/news.jpg',
         label: l10n.sectionNews,
         description: l10n.sectionNewsDescription,
         path: '/news',
       ),
       _Section(
-        icon: Icons.warning_amber_outlined,
+        imageAsset: 'assets/images/home_sections/alerts.jpg',
         label: l10n.sectionAlerts,
         description: l10n.sectionAlertsDescription,
         path: '/alerts',
       ),
       _Section(
-        icon: Icons.event_outlined,
+        imageAsset: 'assets/images/home_sections/events.jpg',
         label: l10n.sectionEvents,
         description: l10n.sectionEventsDescription,
         path: '/events',
       ),
       _Section(
-        icon: Icons.poll_outlined,
+        imageAsset: 'assets/images/home_sections/surveys.jpg',
         label: l10n.sectionSurveys,
         description: l10n.sectionSurveysDescription,
         path: '/surveys',
       ),
       _Section(
-        icon: Icons.description_outlined,
+        imageAsset: 'assets/images/home_sections/forms.jpg',
         label: l10n.sectionForms,
         description: l10n.sectionFormsDescription,
         path: '/forms',
       ),
       _Section(
-        icon: Icons.storefront_outlined,
+        imageAsset: 'assets/images/home_sections/businesses.jpg',
         label: l10n.sectionBusinesses,
         description: l10n.sectionBusinessesDescription,
         path: '/businesses',
       ),
       _Section(
-        icon: Icons.stadium_outlined,
+        imageAsset: 'assets/images/home_sections/facilities.jpg',
         label: l10n.sectionFacilities,
         description: l10n.sectionFacilitiesDescription,
         path: '/facilities',
+      ),
+      _Section(
+        imageAsset: 'assets/images/home_sections/pharmacies.jpg',
+        label: l10n.sectionPharmacies,
+        description: l10n.sectionPharmaciesDescription,
+        path: '/pharmacies',
       ),
     ];
 
@@ -148,42 +152,24 @@ class HomeScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.xl),
               children: <Widget>[
-                Semantics(
-                  header: true,
-                  child: Text(
-                    l10n.homeGreeting,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                ),
                 if (activeRedAlerts.isNotEmpty) ...<Widget>[
                   _ActiveRedAlertBanner(alert: activeRedAlerts.first),
                   const SizedBox(height: AppSpacing.xl),
-                ] else
-                  const SizedBox(height: AppSpacing.xl),
+                ],
                 if (latestNewsWithImage != null && locale != null) ...<Widget>[
                   _LatestNewsHero(item: latestNewsWithImage, locale: locale),
                   const SizedBox(height: AppSpacing.xl),
                 ],
-                Semantics(
-                  header: true,
-                  child: Text(
-                    l10n.homeSectionsHeading,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                _FeaturedSectionCard(section: featured),
-                const SizedBox(height: AppSpacing.sm),
-                // LayoutBuilder + a computed tile width, NOT a GridView with
-                // a fixed aspect ratio: a cell height tuned for Spanish
-                // overflows at 200% text scale in Valencian, which tends to
-                // run 10-20% longer (A-12). Each tile's height stays
-                // intrinsic — only the width is laid out as columns — so a
-                // long translated label just grows the tile instead of
-                // clipping.
+                // LayoutBuilder + a computed tile width, NOT a GridView con
+                // aspect ratio fijo: la altura de cada celda queda
+                // intrínseca — solo el ancho se reparte en columnas — para
+                // que una etiqueta larga en valenciano al 200% (A-12) crezca
+                // la tarjeta en vez de recortarse. Dos columnas siempre,
+                // nunca tres: tarjetas grandes y visuales es el objetivo,
+                // no encajar más secciones por fila.
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                    final int columns = constraints.maxWidth >= 520 ? 3 : 2;
+                    const int columns = 2;
                     const double spacing = AppSpacing.sm;
                     final double tileWidth =
                         (constraints.maxWidth - spacing * (columns - 1)) /
@@ -192,7 +178,7 @@ class HomeScreen extends ConsumerWidget {
                       spacing: spacing,
                       runSpacing: spacing,
                       children: <Widget>[
-                        for (final _Section section in gridSections)
+                        for (final _Section section in sections)
                           SizedBox(
                             width: tileWidth,
                             child: _SectionTile(section: section),
@@ -201,8 +187,6 @@ class HomeScreen extends ConsumerWidget {
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                _FeaturedSectionCard(section: pharmacies, tinted: true),
               ],
             ),
           ),
@@ -212,81 +196,23 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// The wide, high-emphasis row card: used once for the featured "report an
-/// issue" shortcut and once for duty pharmacies at the bottom, matching the
-/// two full-width CTAs in the Stitch home mockup.
-class _FeaturedSectionCard extends StatelessWidget {
-  const _FeaturedSectionCard({required this.section, this.tinted = false});
+/// Caption-bar background for every image tile below. Deliberately the same
+/// fixed token in light AND dark theme — [AppPalette.darkBackground] is
+/// already verified at 16.59:1 against white/[AppPalette.darkOnSurface]
+/// (see docs/design-system.md §2.5), so white label text over it clears AA
+/// by a wide margin regardless of what the photo above it looks like. A
+/// gradient over the raw photo alone can't give that guarantee for
+/// arbitrary stock images, so the label always sits on this solid strip,
+/// never directly on pixels we don't control.
+const Color _imageCaptionBar = AppPalette.darkBackground;
+const Color _imageCaptionText = AppPalette.darkOnSurface;
 
-  final _Section section;
-  final bool tinted;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: tinted ? context.semantic.sunkenSurface : null,
-      shape: RoundedRectangleBorder(
-        borderRadius: AppRadius.lgAll,
-        side: tinted
-            ? BorderSide(
-                color: context.semantic.brandGraphic.withValues(alpha: 0.25),
-              )
-            : BorderSide.none,
-      ),
-      child: InkWell(
-        borderRadius: AppRadius.lgAll,
-        onTap: () => context.go(section.path),
-        child: Semantics(
-          button: true,
-          label: section.label,
-          hint: section.description,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: AppSize.comfortableTouchTarget,
-            ),
-            child: Padding(
-              padding: AppSpacing.cardPadding,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 4,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: context.semantic.brandGraphic,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          section.label,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: AppSpacing.xxs),
-                        Text(
-                          section.description,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const ExcludeSemantics(child: Icon(Icons.chevron_right)),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Text-led shortcut. The label and description carry the meaning; the arrow
-/// is the only icon, so the home screen feels more like a town guide than an
-/// icon catalogue.
+/// Image-led shortcut: a representative photo with the label captioned
+/// below it on a solid bar, replacing the old text-only row. The photo
+/// identifies the category at a glance; the visible caption and the
+/// `Semantics` label/hint still carry the full meaning, same as before —
+/// an image is never the only indicator of what a tile does (A-39 extends
+/// the "never an icon alone" rule to photos).
 class _SectionTile extends StatelessWidget {
   const _SectionTile({required this.section});
 
@@ -295,9 +221,9 @@ class _SectionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(borderRadius: AppRadius.lgAll),
       child: InkWell(
-        borderRadius: AppRadius.lgAll,
         onTap: () => context.go(section.path),
         child: Semantics(
           button: true,
@@ -305,35 +231,59 @@ class _SectionTile extends StatelessWidget {
           hint: section.description,
           child: ConstrainedBox(
             constraints: const BoxConstraints(
-              minHeight: AppSize.comfortableTouchTarget * 1.4,
+              minHeight: AppSize.comfortableTouchTarget * 2.6,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          section.label,
-                          style: Theme.of(context).textTheme.titleMedium,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      ExcludeSemantics(
+                        child: Image.asset(
+                          section.imageAsset,
+                          fit: BoxFit.cover,
                         ),
-                        const SizedBox(height: AppSpacing.xxs),
-                        Text(
-                          section.description,
-                          style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      // Fades the photo into the caption bar's own colour so
+                      // the seam between image and caption reads as one
+                      // continuous surface, not two stacked rectangles.
+                      const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              Colors.transparent,
+                              _imageCaptionBar,
+                            ],
+                            stops: <double>[0.72, 1.0],
+                          ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                ColoredBox(
+                  color: _imageCaptionBar,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.md,
+                    ),
+                    child: Text(
+                      section.label,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: _imageCaptionText,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.xs),
-                  const ExcludeSemantics(
-                    child: Icon(Icons.arrow_forward_rounded),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -475,15 +425,6 @@ class _LatestNewsHero extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            l10n.homeLatestNewsHeading.toUpperCase(),
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  letterSpacing: 1.2,
-                                ),
-                          ),
-                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             title.text,
                             maxLines: 3,
