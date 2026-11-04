@@ -27,8 +27,12 @@ Thumbs.db
 # Claude Code local settings (personal, not shared with team)
 .claude/settings.local.json
 
+# Codex CLI local config (personal, not shared with team)
+.codex/
+
 # Generated output
 **/dist/
 **/coverage/
 *.tsbuildinfo
 **/.tool-home/
+**/build/
