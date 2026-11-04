@@ -60,6 +60,11 @@ propios (8090 API, 8091 backoffice), sin TLS — es un despliegue de
 En cuanto exista dominio, el `Caddyfile` pasa a bloques con hostname (TLS
 automático) y el compose vuelve a publicar 80/443.
 
+**Acceso y guía operativa del VPS: `docs/despliegue-vps.md`.** Ahí está la IP,
+el usuario SSH, la ruta de la clave, cómo desplegar (`deploy/deploy.sh`) y
+cómo sembrar los datos de Sollana en producción (`docker exec poblex_api npm
+run db:seed`). No se repite aquí para no tener dos fuentes de verdad.
+
 ---
 
 # Arquitectura del backend (NestJS)
@@ -350,29 +355,29 @@ Obligación legal (RD 1112/2018, WCAG 2.1 nivel AA) y petición expresa del alca
 
 # Identidad visual
 
-**El primario es coral cálido (familia Stitch "Modern Civic Coral"), no verde.** El acento teal queda como secundario. Paleta rebrandeada el 12 de agosto de 2026 a partir de las pantallas generadas con Stitch en `design/stitch_poblex_civic_connect/`; motivo y comparativa completa en `docs/design-system.md` §0.1. Detalle completo, rampas y ratios en `docs/design-system.md`; los tokens vivos están en `packages/poblex_design_system/lib/src/` (reexportados desde `app/lib/core/theme/`).
+**El primario es morado/violeta (H=272°), no coral ni terracota.** Tercer rebrand de 2026 (coral del mockup Stitch original → terracota del 9 de agosto → morado del 2 de noviembre, tarde); los dos anteriores quedan históricos y ninguno llegó a estar vigente en `packages/poblex_design_system/lib/src/` a la vez que este documento, así que no los reutilices de aquí. El acento teal/verde Albufera queda como secundario, sin cambios en ningún rebrand. Detalle completo, rampas y ratios en `docs/design-system.md` §2.2 y §2.7, y en `docs/branding.md`; los tokens vivos están en `packages/poblex_design_system/lib/src/` (reexportados desde `app/lib/core/theme/`).
 
 | Elemento | Valor | Uso |
 |---|---|---|
-| Coral marca (decorativo) | `#FF7043` | Superficies e ilustración. **~2,85:1 sobre blanco: nunca lleva texto encima ni es fondo de botón** |
-| Coral gráfico | `#641800` | Iconos y bordes con significado (11,9:1) |
-| Coral acción (claro) | `#AC3509` | Texto de enlace y fondo de botón primario (6,43:1 sobre blanco, 6,10:1 sobre fondo) |
-| Coral acción (oscuro) | `#FFB59F` | Equivalente en modo oscuro |
-| Teal (acento) | `#006A61` | Secundario |
-| Fondo | `#F8F9FF` | |
-| Tinta (texto) | `#0B1C30` | |
-| Alerta amarilla | `#E8A33D` | Solo chip sólido de severidad. 2,16:1: jamás lleva texto encima ni va sin borde |
+| Morado marca (decorativo) | `#955AC8` | Superficies e ilustración. **4,59:1 sobre blanco: nunca lleva texto encima ni es fondo de botón** |
+| Morado gráfico | `#6F33A3` | Iconos y bordes con significado (7,84:1) |
+| Acción (claro) | `#55257F` | Texto de enlace y fondo de botón primario (10,73:1 sobre blanco) |
+| Acción (oscuro) | `#C4A0E3` | Equivalente en modo oscuro (8,49:1 sobre fondo oscuro) |
+| Verde Albufera (acento) | `#1F6F5C` | Secundario, sin cambios |
+| Fondo (hueso) | `#FAF7F2` | |
+| Superficie | `#FFFFFF` | |
+| Tinta (texto) | `#1A1A1A` | |
+| Fondo oscuro | `#14110F` | |
+| Alerta amarilla | `#E8A33D` | Solo chip sólido de severidad. Jamás lleva texto encima ni va sin borde |
 | Alerta naranja | `#D9772B` | Solo chip sólido de severidad |
 | Alerta roja | `#B3261E` | Solo chip sólido de severidad |
 
-**Las alertas de severidad NUNCA usan el coral de marca**, aunque ambos sean tonos cálidos cercanos: la pantalla de alertas generada por Stitch reutilizaba su `primary-container` como color de "alerta naranja", y se descartó deliberadamente ese punto del mockup por chocar con la regla de abajo.
-
-**El coral de marca y el naranja de alerta son tonos cálidos vecinos, y con el rebrand a Stitch el de marca es más saturado que la terracota anterior — más parecido al naranja de alerta, no menos.** (La cifra ΔE00 = 10,5 que documentaba esto era específica del hexadecimal `#D97757` anterior; no se ha recalculado para `#FF7043` y no debe reutilizarse.) Un vecino mayor, en la calle y con sol, no los distingue por color. La separación es estructural, no cromática:
+**Las alertas de severidad NUNCA usan el color de marca**, con o sin parecido cromático. Con el terracota (y antes, el coral) marca y severidad vivían en el mismo arco cálido (ΔE00 mínimo 6,2, colisión real). **El morado ya no tiene ese problema**: H=272° no comparte arco con ningún tono de severidad (ΔE00 mínimo 35,4, máximo 70,7 frente a los tres colores AEMET — ver `docs/design-system.md` §2.7). Aun así, las reglas de separación siguen siendo estructurales, no cromáticas, porque la paleta de marca puede volver a tocarse en el futuro:
 
 - Ningún color de marca dentro de una alerta; ningún color de severidad fuera de ella. Nunca comparten contenedor.
 - Relleno sólido cálido = severidad. Contorno = marca. Los chips de categoría son contorneados; los de severidad, sólidos.
 - La severidad se comunica por **cuatro canales redundantes**: color, silueta de icono, palabra visible ("Aviso naranja · Nivel 2") y grosor de barra lateral. Se lee en blanco y negro.
-- El naranja de marca nunca es banda horizontal a ancho completo. Radio 8 dp = alerta; 16 dp = contenido.
+- Ningún color de severidad es banda horizontal a ancho completo. Radio 8 dp = alerta; 16 dp = contenido.
 
 Cada municipio puede sobreescribir color primario y logo desde el backoffice. El override pasa por `BrandPalette.fromSeed()`, que reancla la luminosidad hasta cumplir 4,5:1 y **nunca toca los tokens de severidad**: un ayuntamiento no puede romper la accesibilidad ni confundir su marca con un aviso meteorológico eligiendo mal el color.
 
